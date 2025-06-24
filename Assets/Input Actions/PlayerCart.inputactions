@@ -1,0 +1,74 @@
+{
+    "name": "PlayerCart",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "dd27d95f-1160-483a-86a4-5a2574e352f0",
+            "actions": [
+                {
+                    "name": "Drive",
+                    "type": "Value",
+                    "id": "178e23b4-82af-405f-b0e0-ee5368345c9e",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "UseItem",
+                    "type": "Button",
+                    "id": "b6b6517e-041d-4232-8161-97a99d311149",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwapRoles",
+                    "type": "Button",
+                    "id": "93d16556-accc-4ce7-875d-1620d459cfe4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "d8ecd3f4-bead-479b-ba9f-b0beff8ce24a",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Drive",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1d65f3cf-8075-4ce7-8882-11e02427e144",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UseItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dbef17f9-5299-435b-800d-7a229836c003",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwapRoles",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
