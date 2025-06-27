@@ -2,32 +2,31 @@ using UnityEngine;
 
 public class Cart : MonoBehaviour
 {
-    private Vector2 driveInput;
-    public Rigidbody rb;
-    public float speed = 1000f;
-    public float turnSpeed = 150f;
+    [Header("Seat Positions")]
     public Transform driverSeat;
     public Transform passengerSeat;
 
-    public void SetDriveInput(Vector2 input)
-    {
-        driveInput = input;
-    }
+    [Header("Cart Properties")]
+    [SerializeField] private string cartName = "Player Cart";
+    [SerializeField] private int cartID = 0; // AI later
 
+    [Header("Ref Components")]
+    private CartPhysics cartPhysics;
+    private CartPlayerInput[] playerInputs;
+
+    public string CartName => cartName;
+    public int CartID => cartID;
+    public CartPhysics CartPhysics => cartPhysics;
+
+    private void Awake()
+    {
+        cartPhysics = GetComponent<CartPhysics>();
+        playerInputs = GetComponentsInChildren<CartPlayerInput>();
+    }
     public void UseItem()
     {
-        Debug.Log("Using item");
+        ItemManager.Instance.UseItem(this);
+        // Debug.Log("Using item");
     }
 
-    void FixedUpdate()
-    {
-        Vector3 forward = transform.forward * driveInput.y * speed * Time.fixedDeltaTime;
-        rb.AddForce(forward);
-
-        if (Mathf.Abs(driveInput.y) > 0.1f)
-        {
-            float turn = driveInput.x * turnSpeed * Time.fixedDeltaTime;
-            rb.AddTorque(Vector3.up * turn);
-        }  
-    }
 }
