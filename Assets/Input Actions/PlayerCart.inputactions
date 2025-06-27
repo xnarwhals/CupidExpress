@@ -6,10 +6,10 @@
             "id": "dd27d95f-1160-483a-86a4-5a2574e352f0",
             "actions": [
                 {
-                    "name": "Drive",
+                    "name": "Steer",
                     "type": "Value",
                     "id": "178e23b4-82af-405f-b0e0-ee5368345c9e",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -31,17 +31,44 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Brake",
+                    "type": "Button",
+                    "id": "8c3dc8df-ef25-42cb-853e-c7895f5ab2e6",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Accelerate",
+                    "type": "Button",
+                    "id": "bad5b2a8-8d4f-443b-b30d-b0ded0da8e7b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "StartGame",
+                    "type": "Button",
+                    "id": "13d43976-184d-4334-9204-7c4ad6a72366",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "",
                     "id": "d8ecd3f4-bead-479b-ba9f-b0beff8ce24a",
-                    "path": "<Gamepad>/leftStick",
+                    "path": "<Gamepad>/leftStick/x",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Drive",
+                    "action": "Steer",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -64,6 +91,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "SwapRoles",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d4f7249e-c0df-4948-aa55-988293b26c0d",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Brake",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f988a956-1764-45cb-b7aa-458c776f3466",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Accelerate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "267e5569-6aaa-49c6-8d0e-a3753942e132",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StartGame",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

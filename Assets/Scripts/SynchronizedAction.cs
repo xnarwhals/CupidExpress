@@ -14,12 +14,13 @@ public class SynchronizedAction
     public bool showFeedback = true;
 
     private HashSet<int> playersPressed = new HashSet<int>();
+    private int firstPlayerIndex = -1;
     private bool isActive = false;
     private float timer = 0f;
     private int requiredPlayers = 2;
 
     // events 
-    public event Action OnSyncStarted;
+    public event Action<int> OnSyncStarted;
     public event Action OnSyncSuccess;
     public event Action OnSyncFailed;
     public event Action<float> OnSyncProgress; // 0-1
@@ -36,7 +37,12 @@ public class SynchronizedAction
 
         playersPressed.Add(playerIndex);
 
-        if (!isActive) StartSync();
+        if (!isActive)
+        {
+            firstPlayerIndex = playerIndex; // who initiated the sync
+            StartSync();
+        }
+
         Debug.Log($"Player {playerIndex + 1} joined sync ({playersPressed.Count}/{requiredPlayers})");
         if (playersPressed.Count >= requiredPlayers)
         {
@@ -62,7 +68,7 @@ public class SynchronizedAction
     {
         isActive = true;
         timer = 0f;
-        OnSyncStarted?.Invoke();
+        OnSyncStarted?.Invoke(firstPlayerIndex);
         Debug.Log("Synchronization started");
     }
 

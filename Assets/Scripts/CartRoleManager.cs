@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityEngine.InputSystem.Composites;
 
 public class CartRoleManager : MonoBehaviour
 {
+    private RoleSwapUI swapUI;
     public static CartRoleManager Instance { get; private set; }
     private List<CartPlayerInput> joinedPlayers = new List<CartPlayerInput>();
 
@@ -21,6 +19,8 @@ public class CartRoleManager : MonoBehaviour
         roleSwapSync.OnSyncStarted += OnRoleSwapStarted;
         roleSwapSync.OnSyncSuccess += OnRoleSwapSuccess;
         roleSwapSync.OnSyncFailed += OnRoleSwapFailed;
+
+        swapUI = GetComponent<RoleSwapUI>();
     }
 
     private void Update()
@@ -31,6 +31,7 @@ public class CartRoleManager : MonoBehaviour
     public void RegisterPlayer(CartPlayerInput player)
     {
         joinedPlayers.Add(player);
+
         if (joinedPlayers.Count == 1)
         {
             player.AssignRole(CartRole.Driver);
@@ -52,11 +53,24 @@ public class CartRoleManager : MonoBehaviour
         roleSwapSync.TryActivate(playerIndex);
     }
 
-    private void OnRoleSwapStarted()
+    private void OnRoleSwapStarted(int firstPlayerIndex)
     {
-        Debug.Log("Role swap started"); // one player pressed Y
-        if (roleSwapSync.showFeedback)
+        // Debug.Log("Role swap started"); // one player pressed Y
+
+        if (roleSwapSync.showFeedback && swapUI != null)
         {
+            if (firstPlayerIndex < joinedPlayers.Count) {
+                var firstPlayer = joinedPlayers[firstPlayerIndex];
+
+                if (firstPlayer.role == CartRole.Driver)
+                {
+                    swapUI.DriverRequestSwap(true);
+                }
+                else if (firstPlayer.role == CartRole.Passenger)
+                {
+                    swapUI.PassengerRequestSwap(true);
+                }
+            }
             // change UI color, play sound, etc.
         }
     }
@@ -74,11 +88,15 @@ public class CartRoleManager : MonoBehaviour
         p2.AssignRole(r1);
 
         // apply mini boost here?
+ 
+        swapUI.SwapIcons();
+        swapUI.Reset();
         Debug.Log("Roles swapped: " + joinedPlayers[0].role + " <-> " + joinedPlayers[1].role);
     }
 
     private void OnRoleSwapFailed()
-    {
+    {   
+        swapUI.Reset();
         Debug.Log("Role swap sync failed");
     }
 

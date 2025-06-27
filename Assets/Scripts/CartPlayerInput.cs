@@ -11,12 +11,14 @@ public class CartPlayerInput : MonoBehaviour
 {
     public CartRole role;
     public Cart cart;
+    private CartPhysics cartPhysics; 
     private PlayerCart input; // bad name, "CartPlayerControls"
     [SerializeField] private int playerIndex = 0; // distinguish players using same script
 
     private void Awake()
     {
         input = new PlayerCart();
+        cartPhysics = cart.GetComponent<CartPhysics>();
     }
 
     private void OnEnable()
@@ -44,13 +46,27 @@ public class CartPlayerInput : MonoBehaviour
     {
         if (role == CartRole.Driver)
         {
-            Vector2 move = input.Player.Drive.ReadValue<Vector2>();
-            cart.SetDriveInput(move);
+            // Left-stick X controls steering
+            float steer = input.Player.Steer.ReadValue<float>();
+
+            // east btn accelerates, south btn brakes/reverses
+            float throttle = 0f;
+            if (input.Player.Accelerate.IsPressed()) throttle += 1f;
+            if (input.Player.Brake.IsPressed()) throttle -= 1f;
+
+            cartPhysics.SetSteer(steer);
+            cartPhysics.SetThrottle(throttle);
         }
 
         if (role == CartRole.Passenger && input.Player.UseItem.triggered)
         {
             cart.UseItem();
+        }
+
+        if (input.Player.StartGame.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.WaitingToStart)
+        {
+            Debug.Log("Game started");
+            GameManager.Instance.StartRace();
         }
     }
 
