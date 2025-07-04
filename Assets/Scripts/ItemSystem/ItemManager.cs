@@ -22,10 +22,10 @@ public class ItemManager : MonoBehaviour
 
         if (itemQueue.Count < 2)
         {
-            // UI animation or sound for pickup here?
             itemQueue.Enqueue(item); // add item 
             OnItemAdded?.Invoke(cart); // notify listeners that item was added
-            // Debug.Log($"{cart.name} received item: {item.itemName}");
+            cart.OnItemAdded();
+
         }
         else
         {
@@ -34,12 +34,13 @@ public class ItemManager : MonoBehaviour
 
     }
 
-    public void UseItem(Cart cart)
+    public void UseItem(Cart cart, bool throwBackward)
     {
         if (heldItems.ContainsKey(cart) && heldItems[cart].Count > 0)
         {
             var item = heldItems[cart].Dequeue();
-            item.Use(cart);
+            item.Use(cart, throwBackward); 
+            cart.OnItemUsed();
             OnItemUsed?.Invoke(cart); // notify listeners that item was used
         }
     }

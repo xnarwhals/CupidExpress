@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
+
 using TMPro;
 
 
@@ -7,6 +7,7 @@ public class LapUI : MonoBehaviour
 {
     [Header("UI Ref")]
     public TextMeshProUGUI lapText;
+    public TextMeshProUGUI endTimeText;
 
     [Header("Cart Ref")]
     public Cart playerCart;
@@ -17,12 +18,15 @@ public class LapUI : MonoBehaviour
     public Color normalColor = Color.white;
     public Color finalLapColor = Color.yellow;
 
+    private int countdownNumber = -1;
+
     private void Start()
     {
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnCartLapCompleted += OnLapCompleted;
             GameManager.Instance.OnRaceStateChanged += OnRaceStateChanged;
+            GameManager.Instance.OnCountdownUpdate += OnCountdownUpdate;
         }
 
         UpdateLapUI();
@@ -34,6 +38,7 @@ public class LapUI : MonoBehaviour
         {
             GameManager.Instance.OnCartLapCompleted -= OnLapCompleted;
             GameManager.Instance.OnRaceStateChanged -= OnRaceStateChanged;
+            GameManager.Instance.OnCountdownUpdate -= OnCountdownUpdate;
         }
     }
 
@@ -53,10 +58,8 @@ public class LapUI : MonoBehaviour
 
     private void UpdateLapUI()
     {
-        if (lapText == null || playerCart == null || GameManager.Instance == null)
-        {
-            return;
-        }
+        if (lapText == null || playerCart == null || GameManager.Instance == null) return;
+
 
         int curLap = GameManager.Instance.GetCartLap(playerCart);
         int totalLaps = GameManager.Instance.totalLaps;
@@ -70,20 +73,20 @@ public class LapUI : MonoBehaviour
                 break;
 
             case GameManager.RaceState.CountDown:
-                lapText.text = "Countdown...";
+                lapText.text = countdownNumber.ToString();
                 lapText.color = normalColor;
                 break;
 
             case GameManager.RaceState.Racing:
                 int displayLap = Mathf.Min(curLap, totalLaps);
                 lapText.text = string.Format(lapTextFormat, displayLap, totalLaps);
-
                 lapText.color = (curLap == totalLaps) ? finalLapColor : normalColor;
                 break;
 
             case GameManager.RaceState.Finished:
                 lapText.text = "Finished!";
                 lapText.color = finalLapColor;
+                endTimeText.text = "Time: " + GameManager.Instance.GetCartRaceTime(playerCart).ToString("F2") + "s";
                 break;
 
             case GameManager.RaceState.Paused:
@@ -91,6 +94,12 @@ public class LapUI : MonoBehaviour
                 lapText.color = Color.gray;
                 break;
         }
+    }
+
+    private void OnCountdownUpdate(int number)
+    {
+        countdownNumber = number;
+        UpdateLapUI();
     }
 
 }

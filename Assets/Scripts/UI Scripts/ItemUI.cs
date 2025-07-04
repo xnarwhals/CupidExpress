@@ -33,8 +33,6 @@ public class ItemUI : MonoBehaviour
         }
     }
 
-
-
     private void UpdateItemUI()
     {
         var items = ItemManager.Instance.GetCartItems(playerCart);

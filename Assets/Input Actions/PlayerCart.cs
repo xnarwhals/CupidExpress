@@ -171,6 +171,17 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""972fb821-56b3-444f-be34-dca13c028f6d"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""dbef17f9-5299-435b-800d-7a229836c003"",
                     ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",

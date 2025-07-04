@@ -60,12 +60,15 @@ public class CartPlayerInput : MonoBehaviour
 
         if (role == CartRole.Passenger && input.Player.UseItem.triggered)
         {
-            cart.UseItem();
+            // Same action (use item) two inputs
+            InputControl itemTrigger = input.Player.UseItem.activeControl;
+            bool itemCanBeUsedBehind = itemTrigger?.path.Contains("rightShoulder") ?? false;
+            cart.UseItem(itemCanBeUsedBehind);
         }
 
         if (input.Player.StartGame.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.WaitingToStart)
         {
-            Debug.Log("Game started");
+            // Debug.Log("Game started");
             GameManager.Instance.StartRace();
         }
     }

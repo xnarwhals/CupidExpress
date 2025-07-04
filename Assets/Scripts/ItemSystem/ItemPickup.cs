@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
@@ -39,21 +36,13 @@ public class ItemPickup : MonoBehaviour
         {
             CollectItem(cart);
             // if (!ItemManager.Instance.CartHasMaxItems(cart))
-            // {
-            //     CollectItem(cart);
-            // }
-            // else
-            // {
-            //     Debug.Log("Max Items Reached");
-            // }
-            
         }
     }
 
     private void CollectItem(Cart cart)
     {
         KartItem randomItem = spawner.GenerateRandomItem();
-        Debug.Log($"Collected item: {randomItem.itemName}");
+        // Debug.Log($"Collected item: {randomItem.itemName}");
         ItemManager.Instance.AssignItemToCart(cart, randomItem); // cart has item
 
         spawner.OnItemCollected(spawnPoint); // notify spawner that item was collected

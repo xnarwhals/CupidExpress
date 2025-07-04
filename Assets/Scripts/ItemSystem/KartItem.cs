@@ -6,9 +6,10 @@ public abstract class KartItem : ScriptableObject
     public Sprite icon;
     public GameObject visualPrefab;
 
-    public abstract void Use(Cart cartUsingItem);
-
-    public virtual bool ShouldAIUse(Cart cartUsingItem) => true;
+    // [Range(1, 100)] // ex 2 [tomato, boost] --> [60%, 40%]
+    // public int rarity;
+    
+    public abstract void Use(Cart cartUsingItem, bool throwBackward);
 }
 
 

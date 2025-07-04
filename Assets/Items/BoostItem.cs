@@ -6,12 +6,12 @@ public class BoostItem : KartItem
 {
     public float boostForce = 1500f;
 
-    public override void Use(Cart cartUsingItem)
+    public override void Use(Cart cartUsingItem, bool throwBackward)
     {
         if (cartUsingItem != null)
         {
             // add force logic 
-            Debug.Log($"{cartUsingItem.name} used {itemName}");
+            // Debug.Log($"{cartUsingItem.name} used {itemName}");
         }
     }
 
