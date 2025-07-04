@@ -1,80 +1,109 @@
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class CartPhysics : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] private float acceleration = 35f; // N/kg
-    [SerializeField] private float maxSpeed = 25f; // m/s 
-    [SerializeField] private float breakForce = 50f; // N/kg
-    [SerializeField] private float steerPower = 4f; // rad/s
+    [SerializeField] private float breakForce = 200f; // N/kg
+    [SerializeField] private float maxSpeed = 15f; // m/s 
+    [SerializeField] private float reverseSpeed = 8f;
+    [SerializeField] private float steerSpeed = 150f;
+    [SerializeField] private float acceleration = 800f;
+    [SerializeField] private float drag = 0.95f;
 
-    [Header("Grip")]
-    [SerializeField] private float traction = 4f; // increase for snappy handling
-    [SerializeField] private float tractionDrift = 2f; // hold less when drift
-    [SerializeField] AnimationCurve driftSteerCurve = AnimationCurve.Linear(0,1,1,0.2f);
+    public float downforce = 2f; // Downforce multiplier
 
     // runtime state
-    float steerInput; // -1 to 1, left to right
-    float throttleInput; // -1 to 1, reverse to forward
-    bool isDrifting = false;
+    private float steerInput; // -1 to 1, left to right
+    private float throttleInput; // -1 to 1, reverse to forward
+    private float curSpeed;
 
     Rigidbody rb;
-    float curTraction;
 
-    // API
+    // Called by driver
     public void SetSteer(float steer) => steerInput = Mathf.Clamp(steer, -1f, 1f);
     public void SetThrottle(float throttle) => throttleInput = Mathf.Clamp(throttle, -1f, 1f);
-    public void Drift(bool on) => isDrifting = on;
+
+    public void SetInputs(float steer, float throttle)
+    {
+        SetSteer(steer);
+        SetThrottle(throttle);
+    }
 
     // life cycle 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        rb.centerOfMass += Vector3.down * 0.3f; // Set center of mass to the center of the cart
-        curTraction = traction;
+        rb.centerOfMass = new Vector3(0, -0.5f, 0f);
     }
 
     // physics
     void FixedUpdate()
     {
-        float dt = Time.fixedDeltaTime; // we love delta time
-
-        // thrust forward / backward
-        Vector3 forward = transform.forward * throttleInput * acceleration * rb.mass;
-        rb.AddForce(forward, ForceMode.Acceleration); 
-
-        // cap speed
-        Vector3 flatVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-        if (flatVelocity.magnitude > maxSpeed)
-        {
-            rb.velocity = flatVelocity.normalized * maxSpeed + Vector3.up * rb.velocity.y; // maintain y velocity   
-        }
-
-        // apply braking force
-        if (throttleInput < 0)
-        {
-            rb.AddForce(-flatVelocity.normalized * breakForce * rb.mass, ForceMode.Acceleration);
-        }
-
-        // steering
-        float speedFactor = Mathf.InverseLerp(0, maxSpeed, flatVelocity.magnitude); // 0 to 1 based on speed
-        float steerStrength = steerPower * speedFactor; // harder to steer at high speeds
-
-        // maybe
-        if (isDrifting) steerStrength *= driftSteerCurve.Evaluate(speedFactor); // reduce steer strength when drifting
-
-        rb.AddTorque(Vector3.up * steerInput * steerStrength * rb.mass, ForceMode.Acceleration);
-
-        curTraction = Mathf.Lerp(curTraction, isDrifting ? tractionDrift : traction, dt * 3); // lerp traction based on speed
-
-        Vector3 localVelocity = transform.InverseTransformDirection(rb.velocity);
-        localVelocity.x *= Mathf.Pow(1f - curTraction * dt, 10f);
-        rb.velocity = transform.TransformDirection(localVelocity); 
-    
-
+        HandleThrottle();
+        HandleSteering();
+        ApplyDownforce();
+        ApplyDrag();
     }
 
+    void HandleThrottle()
+    {
+        curSpeed = Vector3.Dot(rb.velocity, transform.forward); // m/s
 
+        if (throttleInput > 0)
+        {
+            if (curSpeed < maxSpeed)
+            {
+                float speedRatio = curSpeed / maxSpeed;
+                float accelerationCurve = 1f - (speedRatio * speedRatio); // Quadratic reduction
+
+                float finalAcceleration = acceleration * accelerationCurve * throttleInput; // Reduce acceleration at high speeds
+                rb.AddForce(transform.forward * finalAcceleration, ForceMode.Acceleration);
+            }
+        }
+        else if (throttleInput < 0)
+        {
+            if (curSpeed > 0.1f) // break
+            {
+                rb.AddForce(-transform.forward * breakForce * Mathf.Abs(throttleInput), ForceMode.Acceleration);
+            }
+            else if (curSpeed > -reverseSpeed) // reverse
+            {
+                rb.AddForce(transform.forward * throttleInput * acceleration * 0.5f, ForceMode.Acceleration);
+            }
+        }
+    }
+
+    void HandleSteering()
+    {
+        if (Mathf.Abs(curSpeed) > 0.5f)
+        {
+            float steerAmount = steerInput * steerSpeed * Time.fixedDeltaTime;
+            float speedFactor = Mathf.Clamp01(Mathf.Abs(curSpeed) / maxSpeed); // 0 to 1 based on speed
+            steerAmount *= Mathf.Lerp(1f, 0.4f, speedFactor); // reduce steering at high speeds
+
+            if (curSpeed < 0) steerAmount = -steerAmount;
+
+            transform.Rotate(0, steerAmount, 0);
+        }
+    }
+
+    void ApplyDownforce()
+    {
+        float speedRatio = Mathf.Clamp01(curSpeed / maxSpeed);
+        rb.AddForce(-transform.up * downforce * speedRatio, ForceMode.Acceleration); // Downforce proportional to speed
+    }
+
+    void ApplyDrag()
+    {
+        rb.velocity *= drag; // Apply drag to slow down over time
+    }
+
+    #region Getters
+    public float GetCurrentSpeed() => curSpeed;
+    public float GetMaxSpeed() => maxSpeed;
+
+    #endregion
 }
+
+

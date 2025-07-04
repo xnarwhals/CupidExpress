@@ -21,12 +21,12 @@ public class GameManager : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool debugMode = false;
 
-    [Header("Countdown Settings")]
+    [Header("Countdown Settings")] // we hate coroutines
     public float countDownDuration = 3f;
     private float countdownTimer;
-    private int lastCountdownNumber = -1; // 
+    private int lastCountdownNumber = -1; 
 
-    public enum RaceState
+    public enum RaceState // add more if needed later
     {
         WaitingToStart,
         CountDown,
@@ -39,8 +39,8 @@ public class GameManager : MonoBehaviour
     private float raceStartTime;
     private float currentRaceTime;
 
-    // track carts
-    private Dictionary<Cart, CartRaceData> cartRaceData = new Dictionary<Cart, CartRaceData>();
+    // Track all carts
+    private Dictionary<Cart, CartRaceData> cartRaceData = new Dictionary<Cart, CartRaceData>(); // Each cart has it's race data
     private List<Cart> finishedCarts = new List<Cart>();
 
     // Event section
@@ -48,7 +48,10 @@ public class GameManager : MonoBehaviour
     public Action<Cart, int> OnCartLapCompleted;
     public Action<Cart, int> OnCartFinished;
     public Action<float> OnRaceTimeUpdate;
-    public Action onRaceFinished;
+    public Action OnRaceFinished;
+    public Action<int> OnCountdownUpdate; // For UI 
+    public Action CountdownGO;
+
 
     private void Awake()
     {
@@ -70,7 +73,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (currentRaceState == RaceState.CountDown)
+        if (currentRaceState == RaceState.CountDown) 
         {
             UpdateCountdown();
         }
@@ -95,29 +98,26 @@ public class GameManager : MonoBehaviour
         if (currentNum != lastCountdownNumber && currentNum > 0)
         {
             lastCountdownNumber = currentNum;
+            OnCountdownUpdate?.Invoke(currentNum);
         }
 
         if (countdownTimer <= 0f)
         {
+            CountdownGO?.Invoke();
             SetRaceState(RaceState.Racing);
             raceStartTime = Time.time;
         }
     }
 
     #region Race Control
-
     public void StartRace()
     {
-        if (currentRaceState != RaceState.WaitingToStart) return;
+        if (currentRaceState != RaceState.WaitingToStart) return; // state progression WaitingToStart -> CountDown 
 
         SetRaceState(RaceState.CountDown);
         countdownTimer = countDownDuration;
         lastCountdownNumber = -1;
-
-        Debug.Log("Countdown");
     }
-
-
 
     public void PauseRace()
     {
@@ -141,13 +141,14 @@ public class GameManager : MonoBehaviour
     {
         currentRaceState = newState;
         OnRaceStateChanged?.Invoke(currentRaceState);
-        Debug.Log($"Race State: {currentRaceState}");
+        // Debug.Log($"Race State: {currentRaceState}");
     }
 
 
     #endregion
 
     #region Cart Management
+    // Register player and AI carts with their data
     private void RegisterCart(Cart cart)
     {
         if (!cartRaceData.ContainsKey(cart))
@@ -163,14 +164,13 @@ public class GameManager : MonoBehaviour
 
         }
     }
-
     public void OnCartPassedCheckpoint(Cart cart, int checkpointIndex)
     {
-        if (!cartRaceData.ContainsKey(cart) || currentRaceState != RaceState.Racing) return;
+        if (!cartRaceData.ContainsKey(cart) || currentRaceState != RaceState.Racing) return; // not racing or cart not registered
 
-        var data = cartRaceData[cart];
+        var data = cartRaceData[cart]; // who passed the checkpoint?
 
-        if (checkpointIndex == data.nextCheckpointIndex) // passed the expected next checkpoint?
+        if (checkpointIndex == data.nextCheckpointIndex) // passed in order?
         {
             data.nextCheckpointIndex = (checkpointIndex + 1) % checkpoints.Length; // wrap 
 
@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour
             {
                 CompleteLap(cart); // lap complete?
             }
-            else if (checkpointIndex == 0 && data.firstLoopCheck)
+            else if (checkpointIndex == 0 && data.firstLoopCheck) // ignore
             {
                 CompleteLap(cart); 
             }
@@ -200,7 +200,7 @@ public class GameManager : MonoBehaviour
         OnCartLapCompleted?.Invoke(cart, data.curLap);
         // Debug.Log($"{cart.CartName} completed lap {data.curLap - 1}! Total laps: {data.curLap - 1}/{totalLaps}");
 
-        // Check if finished
+        // Check if finished + leaderboard stuff later
         if (data.curLap > totalLaps)
         {
             FinishRace(cart);
@@ -210,11 +210,12 @@ public class GameManager : MonoBehaviour
     private void FinishRace(Cart cart)
     {
         var data = cartRaceData[cart];
-        if (data.isFinished) return;
+
+        if (data.isFinished) return; // player or bot already won 
 
         data.isFinished = true;
         data.finishTime = Time.time - data.raceStartTime;
-        finishedCarts.Add(cart);
+        finishedCarts.Add(cart); // use for leaderboard
 
         int position = finishedCarts.Count; // 1st, 2nd, 3rd, etc.
         OnCartFinished?.Invoke(cart, position);
@@ -225,7 +226,7 @@ public class GameManager : MonoBehaviour
 
     #region Race Info
 
-    public RaceState GetCurrentRaceState()
+    public RaceState GetCurrentRaceState() 
     {
         return currentRaceState;
     }
@@ -237,11 +238,19 @@ public class GameManager : MonoBehaviour
     public float GetCartRaceTime(Cart cart)
     {
         if (!cartRaceData.ContainsKey(cart)) return 0f;
-        return Time.time - cartRaceData[cart].raceStartTime;
+        var data = cartRaceData[cart];
+
+        if (data.isFinished)
+        {
+            return data.finishTime;
+        }
+      
+        return Time.time - data.raceStartTime;
     }
 
     public List<Cart> GetCartLeaderboard()
-    {
+    {   
+        // first filter finished carts, then order by lap and checkpoint
         return cartRaceData.Keys
             .Where(cart => !cartRaceData[cart].isFinished)
             .OrderByDescending(cart => cartRaceData[cart].curLap)
@@ -256,6 +265,7 @@ public class GameManager : MonoBehaviour
             return finishedCarts.IndexOf(cart) + 1;
         }
 
+        // use leaderboard if not finished
         var leaderboard = GetCartLeaderboard();
         return leaderboard.IndexOf(cart) + 1;
     }
@@ -282,7 +292,7 @@ public class GameManager : MonoBehaviour
         currentRaceTime = Time.time - raceStartTime;
         OnRaceTimeUpdate?.Invoke(currentRaceTime);
 
-        if (maxRaceTime > 0 && currentRaceTime >= maxRaceTime) SetRaceState(RaceState.Finished);
+        if (maxRaceTime > 0 && currentRaceTime >= maxRaceTime) SetRaceState(RaceState.Finished); 
     }
 
     private void CheckForRaceCompletion()
@@ -290,7 +300,7 @@ public class GameManager : MonoBehaviour
         if (finishedCarts.Count == cartRaceData.Count || (maxRaceTime > 0 && currentRaceTime >= maxRaceTime))
         {
             SetRaceState(RaceState.Finished);
-            onRaceFinished?.Invoke();
+            OnRaceFinished?.Invoke();
         }
     }
 

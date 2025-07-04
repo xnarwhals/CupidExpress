@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class Cart : MonoBehaviour
 {
-    [Header("Seat Positions")]
+    [Header("Positions")]
     public Transform driverSeat;
     public Transform passengerSeat;
+    public Transform itemSlot;
 
     [Header("Cart Properties")]
     [SerializeField] private string cartName = "Player Cart";
@@ -23,10 +24,48 @@ public class Cart : MonoBehaviour
         cartPhysics = GetComponent<CartPhysics>();
         playerInputs = GetComponentsInChildren<CartPlayerInput>();
     }
-    public void UseItem()
+
+    public void OnItemAdded()
     {
-        ItemManager.Instance.UseItem(this);
-        // Debug.Log("Using item");
+        UpdateItemVisuals();
     }
+
+    public void OnItemUsed()
+    {
+        UpdateItemVisuals();
+    }
+
+    private void UpdateItemVisuals()
+    {
+        var items = ItemManager.Instance.GetCartItems(this);
+        ClearItemSlot();
+        if (items.Count > 0)
+        {
+            KartItem curItem = items[0];
+            GameObject itemVisual = Instantiate(curItem.visualPrefab, itemSlot);
+            itemVisual.transform.localPosition = Vector3.zero; // Adjust as needed
+            itemVisual.transform.localRotation = Quaternion.identity; // Reset rotation
+        }
+    }
+
+    private void ClearItemSlot()
+    {
+        foreach (Transform child in itemSlot)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    public void UseItem(bool itemCanBeUsedBehind)
+    {
+        ItemManager.Instance.UseItem(this, itemCanBeUsedBehind);
+    }
+
+    #region Cart Methods
+
+    #endregion
+
+    
+
 
 }
