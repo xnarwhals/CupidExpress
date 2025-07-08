@@ -20,13 +20,10 @@ public class ArduinoTest : MonoBehaviour
         sp = new SerialPort("COM3", 9600);
         sp.Open();
 
-        sp.ReadTimeout = 1;
         while (true)
         {
             incomingMsg = sp.ReadExisting();
 
-            test++;
-            incomingMsg = "" + test;
             Thread.Sleep(arduinoDelay);
         }
     }
@@ -46,7 +43,7 @@ public class ArduinoTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        print(sp.ReadLine());
+        print(incomingMsg);
         
         /*string rawData = incomingMsg;
         string[] cutData = rawData.Split(", ");
