@@ -60,10 +60,13 @@ public class CartPlayerInput : MonoBehaviour
             //print("steering: " + ((messageHandler.input1 - messageHandler.input0) / cartPhysics.maxPress).ToString());
 
 
-            if (steer == 0.0f)
+            if (steer == 0.0f) //if no arduino input, use controller
             {
                 steer = input.Player.Steer.ReadValue<float>();
             }
+
+            //drift
+            cartPhysics.Drift(input.Player.Drift.IsPressed());
 
             // east btn accelerates, south btn brakes/reverses
             float throttle = 0f;

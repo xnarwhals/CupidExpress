@@ -7213,9 +7213,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceleration: 1
-  maxSpeed: 7.5
+  maxSpeed: 15
   breakForce: 0.5
-  steerPower: 0.75
+  steerPower: 3
   maxPress: 150
   deadzone: 0.45
   deadzoneScale: 0
@@ -7227,17 +7227,17 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: 0
-      outSlope: -0.8
+      inSlope: -0.7795264
+      outSlope: -0.7795264
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.17500001
     - serializedVersion: 3
-      time: 1
-      value: 0.2
+      time: 0.9750061
+      value: 0.19435425
       inSlope: -0.8
-      outSlope: 0
+      outSlope: -0.8
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
