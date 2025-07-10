@@ -15,10 +15,14 @@ public class CartPlayerInput : MonoBehaviour
     private PlayerCart input; // bad name, "CartPlayerControls"
     [SerializeField] private int playerIndex = 0; // distinguish players using same script
 
+    testMessageHandler messageHandler;
+
     private void Awake()
     {
         input = new PlayerCart();
         cartPhysics = cart.GetComponent<CartPhysics>();
+
+        messageHandler = GameObject.FindAnyObjectByType<testMessageHandler>();
     }
 
     private void OnEnable()
@@ -46,8 +50,20 @@ public class CartPlayerInput : MonoBehaviour
     {
         if (role == CartRole.Driver)
         {
-            // Left-stick X controls steering
-            float steer = input.Player.Steer.ReadValue<float>();
+            // Left-stick X or force sensors control steering
+            float left = messageHandler.input0;
+            float right = messageHandler.input1;
+            print("raw vals: " + left + ", " + right);
+
+            float steer = Mathf.Clamp((right - left) / cartPhysics.maxPress, -1.0f, 1.0f);
+            if (Mathf.Abs(steer) < cartPhysics.deadzone) steer *= cartPhysics.deadzoneScale;
+            //print("steering: " + ((messageHandler.input1 - messageHandler.input0) / cartPhysics.maxPress).ToString());
+
+
+            if (steer == 0.0f)
+            {
+                steer = input.Player.Steer.ReadValue<float>();
+            }
 
             // east btn accelerates, south btn brakes/reverses
             float throttle = 0f;

@@ -10,10 +10,17 @@ public class CartPhysics : MonoBehaviour
     [SerializeField] private float breakForce = 50f; // N/kg
     [SerializeField] private float steerPower = 4f; // rad/s
 
+    [Header("Arduino")]
+    [SerializeField] public float maxPress = 45.0f;
+    [SerializeField] public float deadzone = 0.2f;
+    [SerializeField] public float deadzoneScale = 0.2f;
+
     [Header("Grip")]
     [SerializeField] private float traction = 4f; // increase for snappy handling
     [SerializeField] private float tractionDrift = 2f; // hold less when drift
     [SerializeField] AnimationCurve driftSteerCurve = AnimationCurve.Linear(0,1,1,0.2f);
+
+
 
     // runtime state
     float steerInput; // -1 to 1, left to right
@@ -42,7 +49,11 @@ public class CartPhysics : MonoBehaviour
         float dt = Time.fixedDeltaTime; // we love delta time
 
         // thrust forward / backward
-        Vector3 forward = transform.forward * throttleInput * acceleration * rb.mass;
+        float accellMagnitude = acceleration; //if forward, use forward accell
+        if (throttleInput < 0) accellMagnitude = -breakForce; //if breaking, use breakforce
+        else if (throttleInput == 0) accellMagnitude = 0; //else don't accellerate
+
+        Vector3 forward = transform.forward * accellMagnitude * rb.mass;
         rb.AddForce(forward, ForceMode.Acceleration); 
 
         // cap speed
@@ -55,7 +66,7 @@ public class CartPhysics : MonoBehaviour
         // apply braking force
         if (throttleInput < 0)
         {
-            rb.AddForce(-flatVelocity.normalized * breakForce * rb.mass, ForceMode.Acceleration);
+           // rb.AddForce(-flatVelocity.normalized * breakForce * rb.mass, ForceMode.Acceleration);
         }
 
         // steering
