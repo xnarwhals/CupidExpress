@@ -6,9 +6,8 @@ public class ItemManager : MonoBehaviour
 {
     public static ItemManager Instance { get; private set; }
     private Dictionary<Cart, Queue<KartItem>> heldItems = new Dictionary<Cart, Queue<KartItem>>();
-    public System.Action<Cart> OnItemAdded;
-    public System.Action<Cart> OnItemUsed;
-
+    public event System.Action<Cart> OnItemPickup;
+    public event System.Action<Cart> OnItemUse;
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -23,9 +22,8 @@ public class ItemManager : MonoBehaviour
         if (itemQueue.Count < 2)
         {
             itemQueue.Enqueue(item); // add item 
-            OnItemAdded?.Invoke(cart); // notify listeners that item was added
-            cart.OnItemAdded();
-
+            UpdateItemVisuals(cart, cart.itemSlot); 
+            OnItemPickup?.Invoke(cart);
         }
         else
         {
@@ -39,9 +37,10 @@ public class ItemManager : MonoBehaviour
         if (heldItems.ContainsKey(cart) && heldItems[cart].Count > 0)
         {
             var item = heldItems[cart].Dequeue();
-            item.Use(cart, throwBackward); 
-            cart.OnItemUsed();
-            OnItemUsed?.Invoke(cart); // notify listeners that item was used
+            item.Use(cart, throwBackward);
+
+            UpdateItemVisuals(cart, cart.itemSlot); 
+            OnItemUse?.Invoke(cart);
         }
     }
 
@@ -49,7 +48,7 @@ public class ItemManager : MonoBehaviour
     {
         if (heldItems.ContainsKey(cart))
         {
-            return heldItems[cart].Count >= 2; // Assuming max items is 2
+            return heldItems[cart].Count >= 2; // 2 item max
         }
         return false;
     }
@@ -67,10 +66,33 @@ public class ItemManager : MonoBehaviour
     {
         if (heldItems.ContainsKey(cart))
         {
-            return heldItems[cart].ToList(); 
+            return heldItems[cart].ToList();
         }
         return new List<KartItem>();
     }
 
+    #region Item Display (In-Game)
 
+    public void UpdateItemVisuals(Cart cart, Transform itemSlot)
+    {
+        var items = GetCartItems(cart);
+        ClearItemSlot(itemSlot);
+        if (items.Count > 0)
+        {
+            KartItem curItem = items[0];
+            GameObject itemVisual = Instantiate(curItem.visualPrefab, itemSlot);
+            itemVisual.transform.localPosition = Vector3.zero;
+            itemVisual.transform.localRotation = Quaternion.identity;
+        }
+    }
+
+    private void ClearItemSlot(Transform itemSlot)
+    {
+        foreach (Transform child in itemSlot)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+    
+    #endregion
 }

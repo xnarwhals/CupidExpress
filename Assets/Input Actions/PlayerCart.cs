@@ -223,6 +223,17 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                     ""action"": ""StartGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""76e92cfb-4c28-4a8e-9114-adadd4ac62c8"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StartGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }

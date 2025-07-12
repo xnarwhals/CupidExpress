@@ -63,7 +63,7 @@ public class CartPlayerInput : MonoBehaviour
             // Same action (use item) two inputs
             InputControl itemTrigger = input.Player.UseItem.activeControl;
             bool itemCanBeUsedBehind = itemTrigger?.path.Contains("rightShoulder") ?? false;
-            cart.UseItem(itemCanBeUsedBehind);
+            ItemManager.Instance.UseItem(cart, itemCanBeUsedBehind);
         }
 
         if (input.Player.StartGame.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.WaitingToStart)

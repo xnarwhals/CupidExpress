@@ -15,7 +15,7 @@ public class Tomato : KartItem
     public float splatSlowdownEffect = 0.5f; // Percent velocity reduction
 
     // Tomato Hit Player
-    public float blooperEffectDuration = 3f;
+    public float spinOutDuration = 1f;
 
     public override void Use(Cart cartUsingItem, bool throwBackward)
     {
