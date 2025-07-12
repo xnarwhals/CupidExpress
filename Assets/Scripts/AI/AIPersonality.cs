@@ -6,11 +6,10 @@ public class AIPersonality : ScriptableObject
     [Header("Basic Behavior")]
     [Tooltip("higher impacts maxSpeed, acceleration, turnSpeed, cornering behavior")]
     [Range(0f, 1f)]
-    public float aggressiveness = 0.5f;
+    public float aggressiveness = 0.5f; // 0 = passive, 1 = beefer mode
 
     [Header("Driving Style")]
-    [Tooltip("0 = Center, 1 = Left, 2 = Right")]
-    public DrivingLane drivingLane = DrivingLane.Center; 
+    public DrivingLane drivingLane = DrivingLane.Center;
 
     [Tooltip("Offset from center path in meters")]
     [Range(0f, 8f)]
@@ -20,12 +19,11 @@ public class AIPersonality : ScriptableObject
     [Range(0f, 1f)]
     public float laneCommitment = 0.7f;
 
-    [Header("Proximity Behavior")]
-    [Range(1f, 10f)]
-    public float proximityDetectionRange = 5f; // 5 meters
+    [Header("Item Behavior")]
     [Range(0f, 1f)]
-    public float proximityAggression = 0.5f; // Behavior change when near other carts
-
+    [Tooltip("Chance to use an item when available 0% vs 100%")]
+    public float chanceToUseItem = 0.5f;
+    public float proximityRadius = 5f; // what counts as another cart "close enough" to do an item check roll
 }
 
 public enum DrivingLane

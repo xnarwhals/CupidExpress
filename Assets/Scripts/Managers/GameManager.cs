@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -235,6 +236,13 @@ public class GameManager : MonoBehaviour
         return cartRaceData.ContainsKey(cart) ? cartRaceData[cart].curLap : 0;
     }
 
+    public bool PlayerCartWon()
+    {
+        Cart finishedCarts = GetCartLeaderboard().FirstOrDefault();
+        return finishedCarts != null && finishedCarts.CartID == 0; // player
+
+    }
+
     public float GetCartRaceTime(Cart cart)
     {
         if (!cartRaceData.ContainsKey(cart)) return 0f;
@@ -244,7 +252,7 @@ public class GameManager : MonoBehaviour
         {
             return data.finishTime;
         }
-      
+
         return Time.time - data.raceStartTime;
     }
 

@@ -65,7 +65,15 @@ public class TomatoProjectile : MonoBehaviour
     {
         hasHit = true;
         Debug.Log($"Tomato hit {hitCart.CartName}!");
-        // Blooper
+
+        // player vs AI onHit behavior
+        if (hitCart.CartID == 0)
+        {
+            hitCart.StartKetchupEffect(); 
+        }
+
+        hitCart.SpinOut(tomato.spinOutDuration);
+
         Destroy(gameObject);
     }
 
@@ -73,7 +81,7 @@ public class TomatoProjectile : MonoBehaviour
     {
         hasHit = true;
         CreateKetchupSplat(transform.position);
-        Debug.Log("Tomato on floor alert");
+        // Debug.Log("Tomato on floor alert");
         Destroy(gameObject);
     }
 

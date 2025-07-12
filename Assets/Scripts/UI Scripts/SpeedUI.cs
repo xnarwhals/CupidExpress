@@ -10,7 +10,7 @@ public class SpeedUI : MonoBehaviour
     public Cart playerCart;
 
     [Header("Display Settings")]
-    public string speedFormat = "{0} MPH";
+    public string speedFormat = "{0} m/s";
 
     [Tooltip("lower = more update calls")]
     [Range(0.1f, 1f)]
@@ -48,7 +48,7 @@ public class SpeedUI : MonoBehaviour
         float speedMPS = GetCurSpeed(); // m/s 
         float speedMPH = speedMPS * 2.23694f; // for my fellow Americans 
 
-        speedText.text = string.Format(speedFormat, Mathf.RoundToInt(speedMPH));
+        speedText.text = string.Format(speedFormat, Mathf.RoundToInt(speedMPS));
 
         if (speedMPH > highSpeedThreshold)
         {

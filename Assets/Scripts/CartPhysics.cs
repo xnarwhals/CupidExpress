@@ -8,15 +8,22 @@ public class CartPhysics : MonoBehaviour
     [SerializeField] private float maxSpeed = 15f; // m/s 
     [SerializeField] private float reverseSpeed = 8f;
     [SerializeField] private float steerSpeed = 150f;
-    [SerializeField] private float acceleration = 800f;
-    [SerializeField] private float drag = 0.95f;
-
-    public float downforce = 2f; // Downforce multiplier
+    [SerializeField] private float acceleration = 800f; // N/kg
 
     // runtime state
     private float steerInput; // -1 to 1, left to right
     private float throttleInput; // -1 to 1, reverse to forward
     private float curSpeed;
+
+    // spin out 
+    private bool isSpinningOut = false;
+    private float spinOutTimer = 0f;
+    private float spinOutDuration = 2f;
+    private Quaternion originalRotation;
+    private bool isRecoveringRotation = false;
+    private float recoverTimer = 0f;
+    private float recoverTime = 0.5f;
+    
 
     Rigidbody rb;
 
@@ -37,16 +44,43 @@ public class CartPhysics : MonoBehaviour
         rb.centerOfMass = new Vector3(0, -0.5f, 0f);
     }
 
-    // physics
+
     void FixedUpdate()
     {
-        HandleThrottle();
-        HandleSteering();
-        ApplyDownforce();
-        ApplyDrag();
+        if (isSpinningOut)
+        {
+            spinOutTimer += Time.fixedDeltaTime;
+            if (spinOutTimer >= spinOutDuration)
+            {
+                isSpinningOut = false; // Reset after duration
+                spinOutTimer = 0f;
+
+                // restore rotation
+                isRecoveringRotation = true;
+                recoverTimer = 0f;
+                rb.angularVelocity = Vector3.zero;
+            }
+        }
+        else
+        {
+            HandleThrottle();
+            HandleSteering();
+        }
+
+        if (isRecoveringRotation)
+        {
+            recoverTimer += Time.fixedDeltaTime;
+            float t = recoverTimer / recoverTime;
+            if (t >= 1f)
+            {
+                t = 1f;
+                isRecoveringRotation = false;
+            }
+            transform.rotation = Quaternion.Slerp(transform.rotation, originalRotation, t);
+        }
     }
 
-    void HandleThrottle()
+    private void HandleThrottle()
     {
         curSpeed = Vector3.Dot(rb.velocity, transform.forward); // m/s
 
@@ -54,11 +88,7 @@ public class CartPhysics : MonoBehaviour
         {
             if (curSpeed < maxSpeed)
             {
-                float speedRatio = curSpeed / maxSpeed;
-                float accelerationCurve = 1f - (speedRatio * speedRatio); // Quadratic reduction
-
-                float finalAcceleration = acceleration * accelerationCurve * throttleInput; // Reduce acceleration at high speeds
-                rb.AddForce(transform.forward * finalAcceleration, ForceMode.Acceleration);
+                rb.AddForce(transform.forward * acceleration * throttleInput, ForceMode.Acceleration);
             }
         }
         else if (throttleInput < 0)
@@ -74,7 +104,7 @@ public class CartPhysics : MonoBehaviour
         }
     }
 
-    void HandleSteering()
+    private void HandleSteering()
     {
         if (Mathf.Abs(curSpeed) > 0.5f)
         {
@@ -82,26 +112,30 @@ public class CartPhysics : MonoBehaviour
             float speedFactor = Mathf.Clamp01(Mathf.Abs(curSpeed) / maxSpeed); // 0 to 1 based on speed
             steerAmount *= Mathf.Lerp(1f, 0.4f, speedFactor); // reduce steering at high speeds
 
-            if (curSpeed < 0) steerAmount = -steerAmount;
+            if (curSpeed < 0) steerAmount = -steerAmount; // reverse steer 
 
             transform.Rotate(0, steerAmount, 0);
         }
     }
 
-    void ApplyDownforce()
+    public void SpinOut(float duration = 2f)
     {
-        float speedRatio = Mathf.Clamp01(curSpeed / maxSpeed);
-        rb.AddForce(-transform.up * downforce * speedRatio, ForceMode.Acceleration); // Downforce proportional to speed
-    }
+        if (isSpinningOut) return; // I have mercy --> no stacking
+        isSpinningOut = true;
+        spinOutTimer = 0f;
+        spinOutDuration = duration;
 
-    void ApplyDrag()
-    {
-        rb.velocity *= drag; // Apply drag to slow down over time
+        originalRotation = transform.rotation; 
+
+        Vector3 ySpin = transform.up * Random.Range(-1f, 1f);
+        rb.AddTorque(ySpin * 1000f, ForceMode.VelocityChange); // Apply a strong torque to spin out
+
     }
 
     #region Getters
     public float GetCurrentSpeed() => curSpeed;
     public float GetMaxSpeed() => maxSpeed;
+    public bool IsSpinningOut() => isSpinningOut;
 
     #endregion
 }
