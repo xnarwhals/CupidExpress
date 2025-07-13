@@ -39,14 +39,25 @@ public class CartPhysics : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        rb.centerOfMass += Vector3.down * 0.3f; // Set center of mass to the center of the cart
         curTraction = traction;
+
+        setup();
+    }
+
+    public virtual void setup()
+    {
+        rb.centerOfMass += Vector3.down * 0.3f; // Set center of mass to the center of the cart
     }
 
     // physics
     void FixedUpdate()
     {
         float dt = Time.fixedDeltaTime; // we love delta time
+        Movement(rb, dt, acceleration, maxSpeed, steerPower, breakForce, throttleInput, steerInput);
+    }
+
+    public virtual void Movement(Rigidbody rigidbody, float dt, float accell, float maxVel, float steerPow, float breakingForce, float throttle, float steerIn)
+    {
 
         // thrust forward / backward
         float accellMagnitude = acceleration; //if forward, use forward accell
@@ -54,7 +65,7 @@ public class CartPhysics : MonoBehaviour
         else if (throttleInput == 0) accellMagnitude = 0; //else don't accellerate
 
         Vector3 forward = transform.forward * accellMagnitude * rb.mass;
-        rb.AddForce(forward, ForceMode.Acceleration); 
+        rb.AddForce(forward, ForceMode.Acceleration);
 
         // cap speed
         Vector3 flatVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
@@ -66,7 +77,7 @@ public class CartPhysics : MonoBehaviour
         // apply braking force
         if (throttleInput < 0)
         {
-           // rb.AddForce(-flatVelocity.normalized * breakForce * rb.mass, ForceMode.Acceleration);
+            // rb.AddForce(-flatVelocity.normalized * breakForce * rb.mass, ForceMode.Acceleration);
         }
 
         // steering
@@ -82,10 +93,6 @@ public class CartPhysics : MonoBehaviour
 
         Vector3 localVelocity = transform.InverseTransformDirection(rb.velocity);
         localVelocity.x *= Mathf.Pow(1f - curTraction * dt, 10f);
-        rb.velocity = transform.TransformDirection(localVelocity); 
-    
-
+        rb.velocity = transform.TransformDirection(localVelocity);
     }
-
-
 }

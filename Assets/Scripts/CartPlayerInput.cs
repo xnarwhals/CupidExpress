@@ -21,6 +21,7 @@ public class CartPlayerInput : MonoBehaviour
     {
         input = new PlayerCart();
         cartPhysics = cart.GetComponent<CartPhysics>();
+        if (cartPhysics == null ) cartPhysics = cart.GetComponentInChildren<BallKart>();
 
         messageHandler = GameObject.FindAnyObjectByType<testMessageHandler>();
     }
@@ -51,14 +52,18 @@ public class CartPlayerInput : MonoBehaviour
         if (role == CartRole.Driver)
         {
             // Left-stick X or force sensors control steering
-            float left = messageHandler.input0;
-            float right = messageHandler.input1;
-            print("raw vals: " + left + ", " + right);
+            float steer = 0.0f;
 
-            float steer = Mathf.Clamp((right - left) / cartPhysics.maxPress, -1.0f, 1.0f);
-            if (Mathf.Abs(steer) < cartPhysics.deadzone) steer *= cartPhysics.deadzoneScale;
-            //print("steering: " + ((messageHandler.input1 - messageHandler.input0) / cartPhysics.maxPress).ToString());
+            if (messageHandler != null)
+            {
+                float left = messageHandler.input0;
+                float right = messageHandler.input1;
+                print("raw vals: " + left + ", " + right);
 
+                steer = Mathf.Clamp((right - left) / cartPhysics.maxPress, -1.0f, 1.0f);
+                if (Mathf.Abs(steer) < cartPhysics.deadzone) steer *= cartPhysics.deadzoneScale;
+                //print("steering: " + ((messageHandler.input1 - messageHandler.input0) / cartPhysics.maxPress).ToString());
+            }
 
             if (steer == 0.0f) //if no arduino input, use controller
             {
