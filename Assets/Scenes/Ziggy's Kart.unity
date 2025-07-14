@@ -645,7 +645,6 @@ Transform:
   - {fileID: 629404992}
   - {fileID: 1429928812}
   - {fileID: 677106334}
-  - {fileID: 1134441308}
   m_Father: {fileID: 802838734}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &414024610
@@ -1637,6 +1636,8 @@ GameObject:
   - component: {fileID: 938322935}
   - component: {fileID: 938322937}
   - component: {fileID: 938322936}
+  - component: {fileID: 938322939}
+  - component: {fileID: 938322938}
   m_Layer: 0
   m_Name: Collider - The Real Kart
   m_TagString: Untagged
@@ -1725,7 +1726,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  kartModel: {fileID: 1716109187}
 --- !u!54 &938322937
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1753,6 +1753,53 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &938322938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938322932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: b0e51a535666a4ee0a641794a2ef0eb5,
+    type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 113220475}
+--- !u!114 &938322939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938322932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35d54d9ec1ada44d6b3b7d65b0e1e65d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  driverSeat: {fileID: 1995651461}
+  passengerSeat: {fileID: 1006870457}
+  cartName: Player Cart
+  cartID: 0
 --- !u!1001 &967276564
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1981,7 +2028,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   role: 1
-  cart: {fileID: 1858964115}
+  cart: {fileID: 938322939}
   playerIndex: 0
 --- !u!136 &1006205120
 CapsuleCollider:
@@ -2228,7 +2275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   role: 0
-  cart: {fileID: 1858964115}
+  cart: {fileID: 938322939}
   playerIndex: 1
 --- !u!136 &1117847490
 CapsuleCollider:
@@ -2314,7 +2361,7 @@ GameObject:
   - component: {fileID: 1134441308}
   - component: {fileID: 1134441309}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: ^GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2328,12 +2375,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1134441307}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 397745728}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1134441309
 MonoBehaviour:
@@ -3603,8 +3650,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1858964116}
-  - component: {fileID: 1858964115}
-  - component: {fileID: 1858964114}
   m_Layer: 0
   m_Name: Kart
   m_TagString: Untagged
@@ -3612,53 +3657,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1858964114
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1858964112}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: b0e51a535666a4ee0a641794a2ef0eb5,
-    type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 113220475}
---- !u!114 &1858964115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1858964112}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35d54d9ec1ada44d6b3b7d65b0e1e65d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  driverSeat: {fileID: 1995651461}
-  passengerSeat: {fileID: 1006870457}
-  cartName: Player Cart
-  cartID: 0
 --- !u!4 &1858964116
 Transform:
   m_ObjectHideFlags: 0
@@ -4069,3 +4067,4 @@ SceneRoots:
   - {fileID: 1858964116}
   - {fileID: 1519779837}
   - {fileID: 802838734}
+  - {fileID: 1134441308}

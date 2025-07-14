@@ -5,10 +5,10 @@ using UnityEngine;
 public class CartPhysics : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] private float acceleration = 35f; // N/kg
-    [SerializeField] private float maxSpeed = 25f; // m/s 
-    [SerializeField] private float breakForce = 50f; // N/kg
-    [SerializeField] private float steerPower = 4f; // rad/s
+    [SerializeField] protected float acceleration = 35f; // N/kg
+    [SerializeField] protected float maxSpeed = 25f; // m/s 
+    [SerializeField] protected float breakForce = 50f; // N/kg
+    [SerializeField] protected float steerPower = 4f; // rad/s
 
     [Header("Arduino")]
     [SerializeField] public float maxPress = 45.0f;
@@ -16,19 +16,19 @@ public class CartPhysics : MonoBehaviour
     [SerializeField] public float deadzoneScale = 0.2f;
 
     [Header("Grip")]
-    [SerializeField] private float traction = 4f; // increase for snappy handling
-    [SerializeField] private float tractionDrift = 2f; // hold less when drift
+    [SerializeField] protected float traction = 4f; // increase for snappy handling
+    [SerializeField] protected float tractionDrift = 2f; // hold less when drift
     [SerializeField] AnimationCurve driftSteerCurve = AnimationCurve.Linear(0,1,1,0.2f);
 
 
 
     // runtime state
-    float steerInput; // -1 to 1, left to right
-    float throttleInput; // -1 to 1, reverse to forward
-    bool isDrifting = false;
+    protected float steerInput; // -1 to 1, left to right
+    protected float throttleInput; // -1 to 1, reverse to forward
+    protected bool isDrifting = false;
 
-    Rigidbody rb;
-    float curTraction;
+    protected Rigidbody rb;
+    protected float curTraction;
 
     // API
     public void SetSteer(float steer) => steerInput = Mathf.Clamp(steer, -1f, 1f);
@@ -36,28 +36,18 @@ public class CartPhysics : MonoBehaviour
     public void Drift(bool on) => isDrifting = on;
 
     // life cycle 
-    void Awake()
+    public virtual void Awake()
     {
         rb = GetComponent<Rigidbody>();
         curTraction = traction;
 
-        setup();
-    }
-
-    public virtual void setup()
-    {
         rb.centerOfMass += Vector3.down * 0.3f; // Set center of mass to the center of the cart
     }
 
     // physics
-    void FixedUpdate()
+    public virtual void FixedUpdate()
     {
         float dt = Time.fixedDeltaTime; // we love delta time
-        Movement(rb, dt, acceleration, maxSpeed, steerPower, breakForce, throttleInput, steerInput);
-    }
-
-    public virtual void Movement(Rigidbody rigidbody, float dt, float accell, float maxVel, float steerPow, float breakingForce, float throttle, float steerIn)
-    {
 
         // thrust forward / backward
         float accellMagnitude = acceleration; //if forward, use forward accell

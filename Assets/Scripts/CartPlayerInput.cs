@@ -20,8 +20,7 @@ public class CartPlayerInput : MonoBehaviour
     private void Awake()
     {
         input = new PlayerCart();
-        cartPhysics = cart.GetComponent<CartPhysics>();
-        if (cartPhysics == null ) cartPhysics = cart.GetComponentInChildren<BallKart>();
+        cartPhysics = FindAnyObjectByType<CartPhysics>();
 
         messageHandler = GameObject.FindAnyObjectByType<testMessageHandler>();
     }

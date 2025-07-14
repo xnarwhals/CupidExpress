@@ -13,7 +13,7 @@ public class ArduinoTest : MonoBehaviour
     static string incomingMsg = "";
     const int arduinoDelay = 200;
 
-    static int test = 0;
+    //static int test = 0;
 
     static void DataThread()
     {
