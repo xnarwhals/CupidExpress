@@ -2203,6 +2203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   driverSeat: {fileID: 1995651461}
   passengerSeat: {fileID: 1006870457}
+  itemSlot: {fileID: 0}
   cartName: Player Cart
   cartID: 0
 --- !u!1001 &967276564
@@ -3876,7 +3877,6 @@ GameObject:
   - component: {fileID: 1638321968}
   - component: {fileID: 1638321967}
   - component: {fileID: 1638321966}
-  - component: {fileID: 1638321969}
   m_Layer: 3
   m_Name: KartModel
   m_TagString: Untagged
@@ -3950,19 +3950,6 @@ Transform:
   - {fileID: 218704514}
   m_Father: {fileID: 135133920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1638321969
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1638321965}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d48a94c2c3eb4441801674ca7d6865b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sphere: {fileID: 0}
 --- !u!4 &1675883432 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: efba677eee7724a3c8daba660223af80,
@@ -4068,7 +4055,6 @@ GameObject:
   - component: {fileID: 1716109188}
   - component: {fileID: 1716109190}
   - component: {fileID: 1716109189}
-  - component: {fileID: 1716109191}
   m_Layer: 0
   m_Name: Kart Model
   m_TagString: Untagged
@@ -4141,19 +4127,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1716109187}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1716109191
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1716109187}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d48a94c2c3eb4441801674ca7d6865b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sphere: {fileID: 0}
 --- !u!1001 &1759461471
 PrefabInstance:
   m_ObjectHideFlags: 0
