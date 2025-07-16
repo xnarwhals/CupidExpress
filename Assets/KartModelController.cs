@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class KartModelController : MonoBehaviour
 {
+    public GameObject sphere;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -13,6 +15,6 @@ public class KartModelController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //transform.rotation.y = 
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -21,11 +22,10 @@ public class CartPhysics : MonoBehaviour
     [SerializeField] AnimationCurve driftSteerCurve = AnimationCurve.Linear(0,1,1,0.2f);
 
 
-
     // runtime state
-    protected float steerInput; // -1 to 1, left to right
+    [DoNotSerialize] public float steerInput; // -1 to 1, left to right
     protected float throttleInput; // -1 to 1, reverse to forward
-    protected bool isDrifting = false;
+    [DoNotSerialize] public bool isDrifting = false;
 
     protected Rigidbody rb;
     protected float curTraction;
