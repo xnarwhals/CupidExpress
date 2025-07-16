@@ -78,6 +78,8 @@ public class BallKart : CartPhysics
         if (grounded) //if grounded, do gravity
         rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration); //also rb gravity exists
 
+        print(grounded);
+
         kartTransform.eulerAngles = Vector3.Lerp(kartTransform.eulerAngles, new Vector3(0, kartTransform.eulerAngles.y + currentRotate, 0), dt * steerAcceleration2);
 
         //AIR CONTROL!!!!!!
