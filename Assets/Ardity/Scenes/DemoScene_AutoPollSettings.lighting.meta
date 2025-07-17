@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Asset Store/wheel/Material/WheelMaterial.mat.meta
+guid: 0e64be05a01f7e04a9048540f80ff93f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+========
+guid: cf72fa75d40bad441b4f750fc11b930c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 4890085278179872738
+>>>>>>>> hardware:Assets/Ardity/Scenes/DemoScene_AutoPollSettings.lighting.meta
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
