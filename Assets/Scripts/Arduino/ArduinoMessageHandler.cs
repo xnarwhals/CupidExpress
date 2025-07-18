@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class testMessageHandler : MonoBehaviour
+public class ArduinoMessageHandler : MonoBehaviour
 {
     //public int delay = 200;
     [DoNotSerialize] public int input0 = 0;

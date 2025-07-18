@@ -15,14 +15,14 @@ public class CartPlayerInput : MonoBehaviour
     private PlayerCart input; // bad name, "CartPlayerControls"
     [SerializeField] private int playerIndex = 0; // distinguish players using same script
 
-    testMessageHandler messageHandler;
+    ArduinoMessageHandler messageHandler;
 
     private void Awake()
     {
         input = new PlayerCart();
         cartPhysics = FindAnyObjectByType<CartPhysics>();
 
-        messageHandler = GameObject.FindAnyObjectByType<testMessageHandler>();
+        messageHandler = GameObject.FindAnyObjectByType<ArduinoMessageHandler>();
     }
 
     private void OnEnable()
@@ -57,10 +57,19 @@ public class CartPlayerInput : MonoBehaviour
             {
                 float left = messageHandler.input0;
                 float right = messageHandler.input1;
-                print("raw vals: " + left + ", " + right);
 
-                steer = Mathf.Clamp((right - left) / cartPhysics.maxPress, -1.0f, 1.0f);
-                if (Mathf.Abs(steer) < cartPhysics.deadzone) steer *= cartPhysics.deadzoneScale;
+                if (left > cartPhysics.maxPress && right > cartPhysics.maxPress) steer = 0.0f; //if both on, go forward
+                else
+                {
+                    steer = Mathf.Clamp((right - left) / cartPhysics.maxPress, -1.0f, 1.0f);
+                    if (Mathf.Abs(steer) < cartPhysics.deadzone) steer *= cartPhysics.deadzoneScale;
+                }
+
+
+
+                print("raw vals: " + left + ", " + right + " | Steer: " + steer);
+
+
                 //print("steering: " + ((messageHandler.input1 - messageHandler.input0) / cartPhysics.maxPress).ToString());
             }
 
