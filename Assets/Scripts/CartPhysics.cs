@@ -1,4 +1,3 @@
-using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -19,33 +18,20 @@ public class CartPhysics : MonoBehaviour
     [Header("Grip")]
     [SerializeField] protected float traction = 4f; // increase for snappy handling
     [SerializeField] protected float tractionDrift = 2f; // hold less when drift
-    [SerializeField] AnimationCurve driftSteerCurve = AnimationCurve.Linear(0,1,1,0.2f);
 
     // spin out 
-    private bool isSpinningOut = false;
-    private float spinOutTimer = 0f;
-    private float spinOutDuration = 2f;
-    private Quaternion originalRotation;
-    private bool isRecoveringRotation = false;
-    private float recoverTimer = 0f;
-    private float recoverTime = 0.5f;
-    
-
-    Rigidbody rb;
+    // private bool isSpinningOut = false;
+    // private float spinOutTimer = 0f;
+    // private float spinOutDuration = 2f;
+    // private Quaternion originalRotation;
+    // private bool isRecoveringRotation = false;
+    // private float recoverTimer = 0f;
+    // private float recoverTime = 0.5f;
 
     // runtime state
     [DoNotSerialize] public float steerInput; // -1 to 1, left to right
     protected float throttleInput; // -1 to 1, reverse to forward
     [DoNotSerialize] public bool isDrifting = false;
-
-    // spin out 
-    private bool isSpinningOut = false;
-    private float spinOutTimer = 0f;
-    private float spinOutDuration = 2f;
-    private Quaternion originalRotation;
-    private bool isRecoveringRotation = false;
-    private float recoverTimer = 0f;
-    private float recoverTime = 0.5f;
     
     protected Rigidbody rb;
     protected float curTraction;
@@ -60,46 +46,12 @@ public class CartPhysics : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         curTraction = traction;
-
-    void FixedUpdate()
-    {
-        if (isSpinningOut)
-        {
-            spinOutTimer += Time.fixedDeltaTime;
-            if (spinOutTimer >= spinOutDuration)
-            {
-                isSpinningOut = false; // Reset after duration
-                spinOutTimer = 0f;
-
-                // restore rotation
-                isRecoveringRotation = true;
-                recoverTimer = 0f;
-                rb.angularVelocity = Vector3.zero;
-            }
-        }
-        else
-        {
-            HandleThrottle();
-            HandleSteering();
-        }
-
-        if (isRecoveringRotation)
-        {
-            recoverTimer += Time.fixedDeltaTime;
-            float t = recoverTimer / recoverTime;
-            if (t >= 1f)
-            {
-                t = 1f;
-                isRecoveringRotation = false;
-            }
-            transform.rotation = Quaternion.Slerp(transform.rotation, originalRotation, t);
-        }
     }
 
-    private void HandleThrottle()
-    {
-        curSpeed = Vector3.Dot(rb.velocity, transform.forward); // m/s
-    }
+    // private void HandleThrottle()
+    // {
+    //     curSpeed = Vector3.Dot(rb.velocity, transform.forward); // m/s
+    // }
 
 
     public virtual void FixedUpdate()
