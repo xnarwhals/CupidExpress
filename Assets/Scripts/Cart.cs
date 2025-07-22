@@ -36,7 +36,7 @@ public class Cart : MonoBehaviour
     {
         if (cartID == 0)
         {
-            if (cartPhysics != null) cartPhysics.SpinOut(duration);
+            //if (cartPhysics != null) cartPhysics.SpinOut(duration);
         }
         else
         {
