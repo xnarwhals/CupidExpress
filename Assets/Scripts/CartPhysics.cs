@@ -54,9 +54,9 @@ public class CartPhysics : MonoBehaviour
     }
 
 
-    void FixedUpdate()
+    public virtual void FixedUpdate()
     {
-        if (isSpinningOut)
+        /*if (isSpinningOut)
         {
             spinOutTimer += Time.fixedDeltaTime;
             if (spinOutTimer >= spinOutDuration)
@@ -86,10 +86,10 @@ public class CartPhysics : MonoBehaviour
                 isRecoveringRotation = false;
             }
             transform.rotation = Quaternion.Slerp(transform.rotation, originalRotation, t);
-        }
+        }*/
     }
 
-    private void HandleThrottle()
+    /*private void HandleThrottle()
     {
         curSpeed = Vector3.Dot(rb.velocity, transform.forward); // m/s
 
@@ -161,5 +161,5 @@ public class CartPhysics : MonoBehaviour
     public float GetMaxSpeed() => maxSpeed;
     public bool IsSpinningOut() => isSpinningOut;
 
-    #endregion
+    #endregion*/
 }
