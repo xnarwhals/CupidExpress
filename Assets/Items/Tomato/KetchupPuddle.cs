@@ -2,33 +2,35 @@ using UnityEngine;
 
 public class KetchupPuddle : MonoBehaviour
 {
-    private float slowdownEffect;
     private float puddleDuration;
+    private float spinOutDuration;
 
-    public void Initialize(float slowdown, float duration)
+    public void Initialize(float puddleSpinOutDuration, float duration)
     {
-        slowdownEffect = slowdown;
         puddleDuration = duration;
-
+        spinOutDuration = puddleSpinOutDuration;
         GetComponent<Collider>().isTrigger = true;
         Destroy(gameObject, puddleDuration); // Destroy after duration
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Cart hitCart = other.GetComponent<Cart>();
-        if (hitCart != null)
-        {
+        if (!other.CompareTag("Cart")) return;
 
+        Cart hitCart = other.GetComponent<Cart>();
+        if (hitCart != null && !hitCart.IsSpinningOut())
+        {
+            hitCart.SpinOut(spinOutDuration);
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        Cart hitCart = other.GetComponent<Cart>();
-        if (hitCart != null)
-        {
+    // first thought was slowdown but nah
+    // private void OnTriggerExit(Collider other)
+    // {
+    //     Cart hitCart = other.GetComponent<Cart>();
+    //     if (hitCart != null)
+    //     {
 
-        }
-    }
+    //     }
+    // }
 }

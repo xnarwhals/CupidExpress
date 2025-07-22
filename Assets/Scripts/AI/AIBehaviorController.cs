@@ -5,23 +5,21 @@ public class AIBehaviorController : MonoBehaviour
 {
     [SerializeField] private AIPersonality personality; // scriptable object
 
+    [Header("Corner Detection")]
+    public SplineCornerDetector cornerDetector;
+    [Range(0.05f, 0.2f)]
+    public float cornerLookAhead = 0.1f; // How far ahead to check for corners
+
     [Header("Corner Settings")]
     [Range(5f, 30f)]
-    public float distanceBeforeSlowDown = 10f; // 10 meters 
+    public float distanceBeforeSlowDown = 10f;
     [Range(0.3f, 0.8f)]
-    public float slowDownFactor = 0.6f; // 60% slower when approaching corners 
-
-    [Header("Proximity Check Frequency")]
-    [Tooltip("How often to check for nearby carts, rolls useItemCheck() if cart found (in seconds)")]
-    [Range(1f, 20f)]
-    public float proximityCheckFrequency = 6f; 
+    public float slowDownFactor = 0.6f;
 
     private AIDriver aiDriver;
-    private int lastWayPointIndex = -1;
-    private float lastProximityCheckTime = 0f;
-
-    private bool cartInProximity = false;
-    private Cart curCartInProximity = null;
+    private float baseMaxSpeed;
+    private float baseAcceleration;
+    private float baseTurnSpeed;
 
     private void Awake()
     {
@@ -30,6 +28,11 @@ public class AIBehaviorController : MonoBehaviour
 
     private void Start()
     {
+        // Store original values before personality modifications
+        baseMaxSpeed = aiDriver.maxSpeed;
+        baseAcceleration = aiDriver.acceleration;
+        baseTurnSpeed = aiDriver.turnSpeed;
+        
         ApplyPersonalityValues();
     }
 
@@ -37,53 +40,75 @@ public class AIBehaviorController : MonoBehaviour
     {
         if (personality == null) return;
 
-        aiDriver.maxSpeed += personality.aggressiveness * 5f; // 5 m/s increase based on aggressiveness
-        aiDriver.acceleration *= Mathf.Lerp(0.6f, 1.3f, personality.aggressiveness); // 60% to 130% of base acceleration
-        aiDriver.turnSpeed *= Mathf.Lerp(0.8f, 1.5f, personality.aggressiveness); // 80% to 120% of base turn speed
+        // Apply personality modifiers to base values
+        aiDriver.maxSpeed = baseMaxSpeed + (personality.aggressiveness * 5f);
+        aiDriver.acceleration = baseAcceleration * Mathf.Lerp(0.6f, 1.3f, personality.aggressiveness);
+        aiDriver.turnSpeed = baseTurnSpeed * Mathf.Lerp(0.8f, 1.5f, personality.aggressiveness);
+        
+        Debug.Log($"AI Personality Applied: Speed={aiDriver.maxSpeed:F1}, Accel={aiDriver.acceleration:F1}, Turn={aiDriver.turnSpeed:F1}");
     }
 
-    #region Driving
-
-    private void UpdateTargetWithOffset()
+    private void Update()
     {
-        Vector3 baseTarget = aiDriver.GetCurrentWaypointPosition();
-        Vector3 offsetTarget = CalculateOffsetPosition(baseTarget);
-        aiDriver.SetTarget(offsetTarget);
-
+        if (personality == null || aiDriver == null) return;
+        
+        // Apply lane offset based on personality
+        ApplyLaneOffset();
     }
 
-    private Vector3 CalculateOffsetPosition(Vector3 baseWaypoint)
+    private void ApplyLaneOffset()
     {
-        if (personality == null) return baseWaypoint;
+        if (personality == null) return;
+        
+        // Get current spline progress
+        float currentProgress = aiDriver.GetCurrentSplineProgress();
+        
+        // Calculate lane offset vector
+        Vector3 offsetVector = CalculateLaneOffsetVector(currentProgress);
+        
+        // Apply offset to AIDriver
+        aiDriver.SetTargetOffset(offsetVector);
+    }
 
-        Vector3 trackDirection = GetTrackDirection();
-        Vector3 LRDirection = Vector3.Cross(trackDirection, Vector3.up).normalized;
-
-        Vector3 offset;
-
+    private Vector3 CalculateLaneOffsetVector(float progress)
+    {
+        // No offset for center lane or zero offset
+        if (personality.drivingLane == DrivingLane.Center || personality.laneOffset <= 0f)
+            return Vector3.zero;
+        
+        // Calculate track direction at this progress point
+        Vector3 trackDirection = GetSplineDirection(progress);
+        
+        // Get perpendicular direction (right side of track)
+        Vector3 rightDirection = Vector3.Cross(trackDirection, Vector3.up).normalized;
+        
+        // Calculate offset vector based on lane preference
+        Vector3 offsetVector = Vector3.zero;
         switch (personality.drivingLane)
         {
             case DrivingLane.Left:
-                offset = -LRDirection * personality.laneOffset;
+                offsetVector = -rightDirection * personality.laneOffset; // Negative = left
                 break;
             case DrivingLane.Right:
-                offset = LRDirection * personality.laneOffset;
-                break;
-            case DrivingLane.Center:
-            default:
-                offset = Vector3.zero;
+                offsetVector = rightDirection * personality.laneOffset; // Positive = right
                 break;
         }
-
-        return baseWaypoint + offset * personality.laneCommitment;
+        
+        // Apply lane commitment (how strictly to follow the offset)
+        offsetVector *= personality.laneCommitment;
+        
+        return offsetVector;
     }
 
-    private Vector3 GetTrackDirection()
+    private Vector3 GetSplineDirection(float progress)
     {
-        if (aiDriver.waypoints.Length <= 1) return transform.forward;
-
-        Vector3 currentPos = aiDriver.GetCurrentWaypointPosition();
-        Vector3 nextPos = aiDriver.GetNextWaypointPosition();
+        // Sample two points close together to calculate direction
+        float sampleDistance = 0.01f; // 1% of spline
+        float nextProgress = Mathf.Min(1f, progress + sampleDistance);
+        
+        Vector3 currentPos = aiDriver.spline.EvaluatePosition(progress);
+        Vector3 nextPos = aiDriver.spline.EvaluatePosition(nextProgress);
+        
         return (nextPos - currentPos).normalized;
     }
 
@@ -246,43 +271,37 @@ public class AIBehaviorController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (aiDriver == null) return;
+        if (aiDriver == null || cornerDetector == null) return;
 
-        Vector3 curTarget = aiDriver.CurTarget;
-        float distanceToCorner = Vector3.Distance(transform.position, curTarget);
-        Vector3 directionToTarget = (curTarget - transform.position).normalized;
-
-        Gizmos.color = distanceToCorner <= distanceBeforeSlowDown ? Color.red : Color.green;
-        Gizmos.DrawRay(transform.position, directionToTarget * distanceToCorner);
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(transform.position, directionToTarget * distanceBeforeSlowDown); // slowdown threshold
-
-        // Slowdown threshold sphere
-        Gizmos.color = Color.blue;
-        Vector3 slowdownPoint = transform.position + (directionToTarget * distanceBeforeSlowDown);
-        Gizmos.DrawWireSphere(slowdownPoint, 0.8f);
-
-        // Speed modifier visualization
-        float speedMod = CalculateSpeedModifer(distanceToCorner);
-        Gizmos.color = Color.Lerp(Color.red, Color.green, speedMod);
-        Gizmos.DrawWireCube(transform.position + Vector3.up * 2f, Vector3.one * speedMod);
-
-        // proximity check visualization
-        Cart nearbyCart = FindClosestCart(out float proximityDistance);
-        Gizmos.color = nearbyCart != null ? Color.magenta : Color.gray; // Magenta if nearby cart exists
-        Gizmos.DrawWireSphere(transform.position, personality.proximityRadius);
-
-
+        float currentProgress = aiDriver.GetCurrentSplineProgress();
+        bool cornerAhead = cornerDetector.IsCornerAhead(currentProgress, cornerLookAhead);
+        
+        // Draw corner detection range
+        Gizmos.color = cornerAhead ? Color.red : Color.green;
+        Gizmos.DrawWireSphere(transform.position, 3f);
+        
+        // Draw personality info
+        if (personality != null)
+        {
+            // Lane indicator cube above car
+            Vector3 cubePos = transform.position + Vector3.up * 3f;
+            Gizmos.color = personality.drivingLane == DrivingLane.Left ? Color.red : 
+                          personality.drivingLane == DrivingLane.Right ? Color.blue : Color.white;
+            Gizmos.DrawWireCube(cubePos, Vector3.one * 0.5f);
+            
 #if UNITY_EDITOR
-        // Draw text labels in editor
-        UnityEditor.Handles.Label(transform.position + Vector3.up * 3f,
-        $"Distance: {distanceToCorner:F1}m\nSpeed: {speedMod:F2}");
-
-        UnityEditor.Handles.Label(slowdownPoint + Vector3.up,
-            $"Slowdown Threshold\n{distanceBeforeSlowDown:F1}m");
+            string laneInfo = personality.drivingLane == DrivingLane.Center ? "Center" :
+                             personality.drivingLane == DrivingLane.Left ? $"Left ({personality.laneOffset:F1}m)" :
+                             $"Right ({personality.laneOffset:F1}m)";
+            
+            UnityEditor.Handles.Label(transform.position + Vector3.up * 4f,
+                $"Personality: {personality.name}\n" +
+                $"Aggressiveness: {personality.aggressiveness:F2}\n" +
+                $"Lane: {laneInfo}\n" +
+                $"Commitment: {personality.laneCommitment:F2}\n" +
+                $"Speed: {aiDriver.maxSpeed:F1} / {baseMaxSpeed:F1}\n" +
+                $"Corner Ahead: {cornerAhead}");
 #endif
+        }
     }
-
-
 }

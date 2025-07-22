@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Kart Item/Boost")]
@@ -10,8 +9,7 @@ public class BoostItem : KartItem
     {
         if (cartUsingItem != null)
         {
-            // add force logic 
-            // Debug.Log($"{cartUsingItem.name} used {itemName}");
+            cartUsingItem.ApplyBoost(boostForce);
         }
     }
 

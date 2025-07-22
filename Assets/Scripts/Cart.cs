@@ -34,19 +34,26 @@ public class Cart : MonoBehaviour
 
     public void SpinOut(float duration)
     {
-        if (cartID == 0)
-        {
-            //if (cartPhysics != null) cartPhysics.SpinOut(duration);
-        }
-        else
-        {
-            if (aiDriver != null) aiDriver.SpinOut(duration);
-        }
+        if (cartID == 0) if (cartPhysics != null) cartPhysics.SpinOut(duration);
+        // else if (aiDriver != null) aiDriver.SpinOut(duration);
     }
 
     public void StartKetchupEffect()
     {
         if (ketchupEffect != null) ketchupEffect.StartKetchupEffect();
+    }
+
+    public bool IsSpinningOut()
+    {
+        if (cartID == 0) return cartPhysics != null && cartPhysics.IsSpinningOut();
+        // else return aiDriver != null && aiDriver.IsSpinningOut();
+        return false;
+    }
+
+    public void ApplyBoost(float force)
+    {
+        if (cartID == 0) cartPhysics.ApplyBoost(force);
+        // else aiDriver.ApplyBoost(force);
     }
 
     #endregion
