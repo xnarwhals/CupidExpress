@@ -22,6 +22,9 @@ public class BallKart : CartPhysics
     [SerializeField] float modelSteerOffset = 15f;
     [SerializeField] float modelSteerOffsetSmoothing = 0.2f;
 
+    [Header("Controls")]
+    [SerializeField] bool invertSteering = false;
+
 
     [Header("Other")]
     [SerializeField] float rampSmoothing = 8.0f;
@@ -45,6 +48,7 @@ public class BallKart : CartPhysics
     private void Update()
     {
         float dt = Time.deltaTime;
+        if (invertSteering) steerInput = -steerInput;
 
         //setting inputs to be used in fixed
         inputSpeed = maxSpeed * throttleInput; //in case we want a more dynamic throttle system
@@ -78,7 +82,7 @@ public class BallKart : CartPhysics
         if (grounded) //if grounded, do gravity
         rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration); //also rb gravity exists
 
-        print(grounded);
+        //print(grounded);
 
         kartTransform.eulerAngles = Vector3.Lerp(kartTransform.eulerAngles, new Vector3(0, kartTransform.eulerAngles.y + currentRotate, 0), dt * steerAcceleration2);
 

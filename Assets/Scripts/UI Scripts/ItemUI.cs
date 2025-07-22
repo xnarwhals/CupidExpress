@@ -6,30 +6,31 @@ public class ItemUI : MonoBehaviour
     [Header("UI References")]
     public Image firstItemSlot;
     public Image secondItemSlot;
-
     public Cart playerCart;
 
     private void Start()
     {
-        ItemManager.Instance.OnItemAdded += onItemChanged;
-        ItemManager.Instance.OnItemUsed += onItemChanged;
-        UpdateItemUI();
-    }
-
-    private void OnDestroy()
-    {
         if (ItemManager.Instance != null)
         {
-            ItemManager.Instance.OnItemAdded -= onItemChanged;
-            ItemManager.Instance.OnItemUsed -= onItemChanged;
+            ItemManager.Instance.OnItemPickup += HandleItemsChanged;
+            ItemManager.Instance.OnItemUse += HandleItemsChanged;
         }
+        UpdateItemUI();
+  
     }
 
-    private void onItemChanged(Cart cart)
+    private void OnDisable()
     {
-        if (cart == playerCart) // AI carts don't have a UI
+        ItemManager.Instance.OnItemPickup -= HandleItemsChanged;
+        ItemManager.Instance.OnItemUse -= HandleItemsChanged;
+    }
+
+    private void HandleItemsChanged(Cart cart)
+    {
+        if (cart == playerCart) // Only update UI for player cart
         {
             UpdateItemUI();
+            // AudioManager.Instance.PlaySFX(AudioManager.Instance.itemPickupSound, 0.8f);
         }
     }
 
@@ -37,6 +38,7 @@ public class ItemUI : MonoBehaviour
     {
         var items = ItemManager.Instance.GetCartItems(playerCart);
 
+        // First item slot
         if (items.Count > 0)
         {
             firstItemSlot.sprite = items[0].icon;
@@ -48,6 +50,7 @@ public class ItemUI : MonoBehaviour
             firstItemSlot.enabled = false;
         }
 
+        // Second item slot
         if (items.Count > 1)
         {
             secondItemSlot.sprite = items[1].icon;
@@ -59,6 +62,4 @@ public class ItemUI : MonoBehaviour
             secondItemSlot.enabled = false;
         }
     }
-
-    
 }

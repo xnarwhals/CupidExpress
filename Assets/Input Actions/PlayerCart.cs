@@ -235,12 +235,12 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""18e41856-5125-48fc-96e6-62d80c559547"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""id"": ""76e92cfb-4c28-4a8e-9114-adadd4ac62c8"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Drift"",
+                    ""action"": ""StartGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
