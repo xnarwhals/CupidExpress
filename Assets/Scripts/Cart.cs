@@ -24,6 +24,7 @@ public class Cart : MonoBehaviour
     private void Awake()
     {
         cartPhysics = GetComponent<CartPhysics>();
+        if (cartPhysics == null ) print((CartPhysics)GetComponent<BallKart>());
         playerInputs = GetComponentsInChildren<CartPlayerInput>();
         ketchupEffect = GetComponent<KetchupEffect>();
         aiDriver = GetComponent<AIDriver>();
