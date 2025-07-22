@@ -66,7 +66,6 @@ public class TomatoProjectile : MonoBehaviour
         hasHit = true;
         Debug.Log($"Tomato hit {hitCart.CartName}!");
 
-        // only player gets UI effect
         if (hitCart.CartID == 0)
         {
             hitCart.StartKetchupEffect(); 

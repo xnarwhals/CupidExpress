@@ -5706,6 +5706,7 @@ MonoBehaviour:
   cornerLookAhead: 0.1
   distanceBeforeSlowDown: 10
   slowDownFactor: 0.3
+  proximityCheckFrequency: 6
 --- !u!114 &2123353936
 MonoBehaviour:
   m_ObjectHideFlags: 0

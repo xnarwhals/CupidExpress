@@ -3,6 +3,7 @@ using UnityEngine.Splines;
 using Unity.Mathematics;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Cart))]
 public class AIDriver : MonoBehaviour
 {
     [Header("Drive Settings")]
@@ -25,9 +26,21 @@ public class AIDriver : MonoBehaviour
     // Lane offset
     private Vector3 currentOffset = Vector3.zero;
     
+    // Refs
+    private Rigidbody rb;
+    private Vector3 curTarget;
+    private Cart thisCart;
+
+    // other
+    private float curSpeedModifer = 1f; 
+    private bool isSpinningOut = false;
+    private float spinOutTimer = 0f;
+    private float spinOutDuration = 2f; // placeholder 2s
+    private Quaternion originalRotation;
 
     private void Awake()
     {
+        thisCart = GetComponent<Cart>();
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = new Vector3(0, -0.5f, 0); // Lower center of mass for stability
     }
@@ -44,6 +57,7 @@ public class AIDriver : MonoBehaviour
             Debug.LogError("No valid spline assigned to AIDriver!");
             return;
         }
+
 
         splineLength = spline.CalculateLength();
 
@@ -96,8 +110,20 @@ public class AIDriver : MonoBehaviour
     }
 
 
-
     #region Public Methods
+    
+    public void SpinOut(float duration)
+    {
+        if (isSpinningOut) return;
+
+        isSpinningOut = true;
+        spinOutTimer = 0f;
+        spinOutDuration = duration;
+
+        originalRotation = transform.rotation;
+        Vector3 ySpin = Vector3.up * Random.Range(-1f, 1f); 
+        rb.AddTorque(ySpin * 1000f, ForceMode.VelocityChange); // Random spin force
+    }
 
     public float GetCurrentSplineProgress()
     {

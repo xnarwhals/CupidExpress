@@ -1,19 +1,25 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class CartPhysics : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] private float breakForce = 200f; // N/kg
-    [SerializeField] private float maxSpeed = 15f; // m/s 
-    [SerializeField] private float reverseSpeed = 8f;
-    [SerializeField] private float steerSpeed = 150f;
-    [SerializeField] private float acceleration = 800f; // N/kg
+    [SerializeField] protected float acceleration = 35f; // N/kg
+    [SerializeField] protected float maxSpeed = 25f; // m/s 
+    [SerializeField] protected float breakForce = 50f; // N/kg
+    [SerializeField] protected float steerPower = 4f; // rad/s
 
-    // runtime state
-    private float steerInput; // -1 to 1, left to right
-    private float throttleInput; // -1 to 1, reverse to forward
-    private float curSpeed;
+    [Header("Arduino")]
+    [SerializeField] public float maxPress = 45.0f;
+    [SerializeField] public float deadzone = 0.2f;
+    [SerializeField] public float deadzoneScale = 0.2f;
+
+    [Header("Grip")]
+    [SerializeField] protected float traction = 4f; // increase for snappy handling
+    [SerializeField] protected float tractionDrift = 2f; // hold less when drift
+    [SerializeField] AnimationCurve driftSteerCurve = AnimationCurve.Linear(0,1,1,0.2f);
 
     // spin out 
     private bool isSpinningOut = false;
@@ -27,23 +33,33 @@ public class CartPhysics : MonoBehaviour
 
     Rigidbody rb;
 
-    // Called by driver
+    // runtime state
+    [DoNotSerialize] public float steerInput; // -1 to 1, left to right
+    protected float throttleInput; // -1 to 1, reverse to forward
+    [DoNotSerialize] public bool isDrifting = false;
+
+    // spin out 
+    private bool isSpinningOut = false;
+    private float spinOutTimer = 0f;
+    private float spinOutDuration = 2f;
+    private Quaternion originalRotation;
+    private bool isRecoveringRotation = false;
+    private float recoverTimer = 0f;
+    private float recoverTime = 0.5f;
+    
+    protected Rigidbody rb;
+    protected float curTraction;
+
+    // API
     public void SetSteer(float steer) => steerInput = Mathf.Clamp(steer, -1f, 1f);
     public void SetThrottle(float throttle) => throttleInput = Mathf.Clamp(throttle, -1f, 1f);
-
-    public void SetInputs(float steer, float throttle)
-    {
-        SetSteer(steer);
-        SetThrottle(throttle);
-    }
+    public void Drift(bool on) => isDrifting = on;
 
     // life cycle 
-    void Awake()
+    public virtual void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        rb.centerOfMass = new Vector3(0, -0.5f, 0f);
-    }
-
+        curTraction = traction;
 
     void FixedUpdate()
     {
@@ -83,25 +99,81 @@ public class CartPhysics : MonoBehaviour
     private void HandleThrottle()
     {
         curSpeed = Vector3.Dot(rb.velocity, transform.forward); // m/s
+    }
 
-        if (throttleInput > 0)
+
+    public virtual void FixedUpdate()
+    {
+        /*if (isSpinningOut)
+        {
+            spinOutTimer += Time.fixedDeltaTime;
+            if (spinOutTimer >= spinOutDuration)
+            {
+                isSpinningOut = false; // Reset after duration
+                spinOutTimer = 0f;
+
+                // restore rotation
+                isRecoveringRotation = true;
+                recoverTimer = 0f;
+                rb.angularVelocity = Vector3.zero;
+            }
+        }
+        else
+        {
+            HandleThrottle();
+            HandleSteering();
+        }
+
+        if (isRecoveringRotation)
+        {
+            recoverTimer += Time.fixedDeltaTime;
+            float t = recoverTimer / recoverTime;
+            if (t >= 1f)
+            {
+                t = 1f;
+                isRecoveringRotation = false;
+            }
+            transform.rotation = Quaternion.Slerp(transform.rotation, originalRotation, t);
+        }*/
+    }
+
+    /*private void HandleThrottle()
+    {
+        curSpeed = Vector3.Dot(rb.velocity, transform.forward); // m/s
+
+        Vector3 forward = transform.forward * accellMagnitude * rb.mass;
+        rb.AddForce(forward, ForceMode.Acceleration);
+
+        // cap speed
+        Vector3 flatVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        if (flatVelocity.magnitude > maxSpeed)
         {
             if (curSpeed < maxSpeed)
             {
                 rb.AddForce(transform.forward * acceleration * throttleInput, ForceMode.Acceleration);
             }
         }
-        else if (throttleInput < 0)
+
+        // apply braking force
+        if (throttleInput < 0)
         {
-            if (curSpeed > 0.1f) // break
-            {
-                rb.AddForce(-transform.forward * breakForce * Mathf.Abs(throttleInput), ForceMode.Acceleration);
-            }
-            else if (curSpeed > -reverseSpeed) // reverse
-            {
-                rb.AddForce(transform.forward * throttleInput * acceleration * 0.5f, ForceMode.Acceleration);
-            }
+            // rb.AddForce(-flatVelocity.normalized * breakForce * rb.mass, ForceMode.Acceleration);
         }
+
+        // steering
+        float speedFactor = Mathf.InverseLerp(0, maxSpeed, flatVelocity.magnitude); // 0 to 1 based on speed
+        float steerStrength = steerPower * speedFactor; // harder to steer at high speeds
+
+        // maybe
+        if (isDrifting) steerStrength *= driftSteerCurve.Evaluate(speedFactor); // reduce steer strength when drifting
+
+        rb.AddTorque(Vector3.up * steerInput * steerStrength * rb.mass, ForceMode.Acceleration);
+
+        curTraction = Mathf.Lerp(curTraction, isDrifting ? tractionDrift : traction, dt * 3); // lerp traction based on speed
+
+        Vector3 localVelocity = transform.InverseTransformDirection(rb.velocity);
+        localVelocity.x *= Mathf.Pow(1f - curTraction * dt, 10f);
+        rb.velocity = transform.TransformDirection(localVelocity);
     }
 
     private void HandleSteering()
@@ -142,7 +214,5 @@ public class CartPhysics : MonoBehaviour
     public float GetMaxSpeed() => maxSpeed;
     public bool IsSpinningOut() => isSpinningOut;
 
-    #endregion
+    #endregion*/
 }
-
-
