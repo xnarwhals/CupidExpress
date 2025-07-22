@@ -4483,6 +4483,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4777742908161267060, guid: 92d78431170f7e34d8c4c7c421f82764,
         type: 3}
+      propertyPath: airGravity
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4777742908161267060, guid: 92d78431170f7e34d8c4c7c421f82764,
+        type: 3}
       propertyPath: deadzoneScale
       value: 1
       objectReference: {fileID: 0}
