@@ -129,7 +129,12 @@ public class CartPhysics : MonoBehaviour
 
         Vector3 ySpin = transform.up * Random.Range(-1f, 1f);
         rb.AddTorque(ySpin * 1000f, ForceMode.VelocityChange); // Apply a strong torque to spin out
+    }
 
+    public void ApplyBoost(float force)
+    {
+        if (isSpinningOut) return; 
+        rb.AddForce(transform.forward * force, ForceMode.VelocityChange);
     }
 
     #region Getters
