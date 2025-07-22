@@ -14,9 +14,6 @@ public class AIDriver : MonoBehaviour
 
     [Header("Spline Path")]
     public SplineContainer spline;
-
-    // Components
-    private Rigidbody rb;
     
     // Spline tracking
     private float splineProgress = 0f;
@@ -28,15 +25,16 @@ public class AIDriver : MonoBehaviour
     
     // Refs
     private Rigidbody rb;
-    private Vector3 curTarget;
     private Cart thisCart;
 
     // other
-    private float curSpeedModifer = 1f; 
     private bool isSpinningOut = false;
     private float spinOutTimer = 0f;
     private float spinOutDuration = 2f; // placeholder 2s
     private Quaternion originalRotation;
+
+    // getters 
+    public Cart ThisCart => thisCart;
 
     private void Awake()
     {
@@ -121,7 +119,7 @@ public class AIDriver : MonoBehaviour
         spinOutDuration = duration;
 
         originalRotation = transform.rotation;
-        Vector3 ySpin = Vector3.up * Random.Range(-1f, 1f); 
+        Vector3 ySpin = Vector3.up * UnityEngine.Random.Range(-1f, 1f); 
         rb.AddTorque(ySpin * 1000f, ForceMode.VelocityChange); // Random spin force
     }
 

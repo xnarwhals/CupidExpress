@@ -16,10 +16,18 @@ public class AIBehaviorController : MonoBehaviour
     [Range(0.3f, 0.8f)]
     public float slowDownFactor = 0.6f;
 
+    [Header("Proximity")]
+    [Range(0.5f, 5f)]
+    public float proximityCheckFrequency = 1f; // Distance to check for nearby carts
+
     private AIDriver aiDriver;
     private float baseMaxSpeed;
     private float baseAcceleration;
     private float baseTurnSpeed;
+
+    private bool cartInProximity = false;
+    private Cart curCartInProximity = null; 
+    private float lastProximityCheckTime = 0f; 
 
     private void Awake()
     {
@@ -51,9 +59,15 @@ public class AIBehaviorController : MonoBehaviour
     private void Update()
     {
         if (personality == null || aiDriver == null) return;
-        
+
         // Apply lane offset based on personality
         ApplyLaneOffset();
+
+        if (Time.time - lastProximityCheckTime >= proximityCheckFrequency)
+        {
+            CheckProximityState();
+            lastProximityCheckTime = Time.time;
+        }
     }
 
     private void ApplyLaneOffset()
@@ -112,45 +126,43 @@ public class AIBehaviorController : MonoBehaviour
         return (nextPos - currentPos).normalized;
     }
 
-    private void SlowDownOnCorner()
-    {
-        Vector3 curTarget = aiDriver.CurTarget;
+    // private void SlowDownOnCorner()
+    // {
+    //     Vector3 curTarget = aiDriver.CurTarget;
 
-        if (aiDriver.NextWaypointIsCorner() == false) return;
+    //     if (aiDriver.NextWaypointIsCorner() == false) return;
 
-        float distanceToCorner = Vector3.Distance(transform.position, curTarget);
+    //     float distanceToCorner = Vector3.Distance(transform.position, curTarget);
 
-        float speedModifier = CalculateSpeedModifer(distanceToCorner); // without personality range (0.6 - 1)
-        speedModifier = ApplyPersonalityToCornerSpeed(speedModifier); // with personality :D range (0.3 - 1.2)
+    //     float speedModifier = CalculateSpeedModifer(distanceToCorner); // without personality range (0.6 - 1)
+    //     speedModifier = ApplyPersonalityToCornerSpeed(speedModifier); // with personality :D range (0.3 - 1.2)
 
-        aiDriver.SetSpeedModifier(speedModifier);
-    }
+    //     aiDriver.SetSpeedModifier(speedModifier);
+    // }
 
-    private float CalculateSpeedModifer(float distanceToCorner)
-    {
-        if (distanceToCorner > distanceBeforeSlowDown)
-            return 1f; // No slowdown when far enough
+    // private float CalculateSpeedModifer(float distanceToCorner)
+    // {
+    //     if (distanceToCorner > distanceBeforeSlowDown)
+    //         return 1f; // No slowdown when far enough
 
-        // interpolate full speed to slow down
-        float distanceRatio = distanceToCorner / distanceBeforeSlowDown;
-        return Mathf.Lerp(slowDownFactor, 1f, distanceRatio); 
-    }
+    //     // interpolate full speed to slow down
+    //     float distanceRatio = distanceToCorner / distanceBeforeSlowDown;
+    //     return Mathf.Lerp(slowDownFactor, 1f, distanceRatio); 
+    // }
 
-    private float ApplyPersonalityToCornerSpeed(float baseSpeedModifier)
-    {
-        if (personality == null) return baseSpeedModifier; // (0.6 - 1)
+    // private float ApplyPersonalityToCornerSpeed(float baseSpeedModifier)
+    // {
+    //     if (personality == null) return baseSpeedModifier; // (0.6 - 1)
 
-        float agroBonous = personality.aggressiveness * 0.22f; // agro levels .9+ hit the clamp
-        return Mathf.Clamp(baseSpeedModifier + agroBonous, 0.3f, 1.2f); // 30% to 120% of base speed modifier
-    }
+    //     float agroBonous = personality.aggressiveness * 0.22f; // agro levels .9+ hit the clamp
+    //     return Mathf.Clamp(baseSpeedModifier + agroBonous, 0.3f, 1.2f); // 30% to 120% of base speed modifier
+    // }
 
-    #endregion
 
     #region Item Usage
 
     // Based on personality, useItem check is done in two cases
     // 1. When close to other carts (proximity detection)
-    // 2. When reached a waypoint
 
     public void UseItemCheck()
     {
@@ -217,28 +229,6 @@ public class AIBehaviorController : MonoBehaviour
 
 
     #endregion
-
-
-    private void Update()
-    {
-        if (personality == null || aiDriver == null) return;
-
-        if (aiDriver.CurrentWaypointIndex != lastWayPointIndex)
-        {
-            UpdateTargetWithOffset();
-            lastWayPointIndex = aiDriver.CurrentWaypointIndex;
-            UseItemCheck();
-        }
-
-        if (Time.time - lastProximityCheckTime > proximityCheckFrequency) // Check every x seconds
-        {
-            CheckProximityState(); // note it does not care if there is more than one cart in proximity 
-            lastProximityCheckTime = Time.time;
-        }
-
-
-        SlowDownOnCorner();
-    }
 
     // item roll check once per proximity check
     // if cart is nearby useItem is rolled once, only roll again if the cart leaves and re-enters proximity
