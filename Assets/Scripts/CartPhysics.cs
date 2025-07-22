@@ -21,6 +21,17 @@ public class CartPhysics : MonoBehaviour
     [SerializeField] protected float tractionDrift = 2f; // hold less when drift
     [SerializeField] AnimationCurve driftSteerCurve = AnimationCurve.Linear(0,1,1,0.2f);
 
+    // spin out 
+    private bool isSpinningOut = false;
+    private float spinOutTimer = 0f;
+    private float spinOutDuration = 2f;
+    private Quaternion originalRotation;
+    private bool isRecoveringRotation = false;
+    private float recoverTimer = 0f;
+    private float recoverTime = 0.5f;
+    
+
+    Rigidbody rb;
 
     // runtime state
     [DoNotSerialize] public float steerInput; // -1 to 1, left to right
@@ -50,7 +61,44 @@ public class CartPhysics : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         curTraction = traction;
 
-        rb.centerOfMass += Vector3.down * 0.3f; // Set center of mass to the center of the cart
+    void FixedUpdate()
+    {
+        if (isSpinningOut)
+        {
+            spinOutTimer += Time.fixedDeltaTime;
+            if (spinOutTimer >= spinOutDuration)
+            {
+                isSpinningOut = false; // Reset after duration
+                spinOutTimer = 0f;
+
+                // restore rotation
+                isRecoveringRotation = true;
+                recoverTimer = 0f;
+                rb.angularVelocity = Vector3.zero;
+            }
+        }
+        else
+        {
+            HandleThrottle();
+            HandleSteering();
+        }
+
+        if (isRecoveringRotation)
+        {
+            recoverTimer += Time.fixedDeltaTime;
+            float t = recoverTimer / recoverTime;
+            if (t >= 1f)
+            {
+                t = 1f;
+                isRecoveringRotation = false;
+            }
+            transform.rotation = Quaternion.Slerp(transform.rotation, originalRotation, t);
+        }
+    }
+
+    private void HandleThrottle()
+    {
+        curSpeed = Vector3.Dot(rb.velocity, transform.forward); // m/s
     }
 
 
@@ -153,7 +201,12 @@ public class CartPhysics : MonoBehaviour
 
         Vector3 ySpin = transform.up * Random.Range(-1f, 1f);
         rb.AddTorque(ySpin * 1000f, ForceMode.VelocityChange); // Apply a strong torque to spin out
+    }
 
+    public void ApplyBoost(float force)
+    {
+        if (isSpinningOut) return; 
+        rb.AddForce(transform.forward * force, ForceMode.VelocityChange);
     }
 
     #region Getters
