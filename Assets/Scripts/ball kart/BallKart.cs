@@ -11,7 +11,8 @@ public class BallKart : CartPhysics
     [SerializeField] Transform kartModel; //the actual model
 
     [Header("Movement Settings")]
-    [SerializeField] float gravity = 25f;
+    [SerializeField] float floorGravity = 25f;
+    [SerializeField] float airGravity = 25f;
     [SerializeField] float steerAccelleration = 4f;
     [SerializeField] float steerAcceleration2 = 5f;
     [SerializeField] float idleDecelleration = 1.0f;
@@ -79,7 +80,9 @@ public class BallKart : CartPhysics
 
         bool grounded = hitGravCheck.collider;
 
-        if (grounded) //if grounded, do gravity
+        float gravity = airGravity;
+        if (grounded) gravity = floorGravity;
+
         rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration); //also rb gravity exists
 
         //print(grounded);
