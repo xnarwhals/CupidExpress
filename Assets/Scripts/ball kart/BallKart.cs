@@ -20,16 +20,17 @@ public class BallKart : CartPhysics
     [SerializeField] float reverseMaxSpeed = 15.0f;
     [SerializeField] float maxAngularVelocity = 7.0f;
 
-    [Header("Model SubSteering")]
+    [Header("Visual Stuff")]
     [SerializeField] float modelSteerOffset = 15f;
     [SerializeField] float modelSteerOffsetSmoothing = 0.2f;
+    [SerializeField] float rampSmoothing = 8.0f;
+    [SerializeField] float airSmoothing = 4.0f;
 
     [Header("Controls")]
     [SerializeField] bool invertSteering = false;
 
 
     [Header("Other")]
-    [SerializeField] float rampSmoothing = 8.0f;
     [SerializeField] LayerMask floorLayerMask;
 
     float currentSpeed = 0.0f;
@@ -94,17 +95,18 @@ public class BallKart : CartPhysics
 
         //AIR CONTROL!!!!!!
 
-        //kart puppeting
-        if (grounded)
-        {
-            RaycastHit hitNear;
-            Physics.Raycast(kartTransform.position + (kartTransform.up * .1f), Vector3.down, out hitNear, 2.0f, floorLayerMask); //find floor
 
+        //kart puppeting
+        RaycastHit hitNear;
+        Physics.Raycast(kartTransform.position + (kartTransform.up * .1f), Vector3.down, out hitNear, 2.0f, floorLayerMask); //find floor
+        if (hitNear.collider) //if hit ground
+        {
             kartNormal.up = Vector3.Lerp(kartNormal.up, hitNear.normal, dt * rampSmoothing); //correct rotation
         }
         else
         {
-            kartNormal.up = Vector3.Lerp(kartNormal.up, new Vector3(0, 0, 0), dt * rampSmoothing * 0.5f); //correct rotation
+            print("ungrounded");
+            kartNormal.up = Vector3.Lerp(kartNormal.up, new Vector3(0, 1, 0), dt * airSmoothing); //correct rotation
         }
         kartNormal.Rotate(0, kartTransform.eulerAngles.y, 0);
     }
