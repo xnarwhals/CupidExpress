@@ -23,8 +23,10 @@ public class BallKart : CartPhysics
     [Header("Visual Stuff")]
     [SerializeField] float modelSteerOffset = 15f;
     [SerializeField] float modelSteerOffsetSmoothing = 0.2f;
+    [SerializeField] float kartOrientationRayLength = 1.0f;
     [SerializeField] float rampSmoothing = 8.0f;
-    [SerializeField] float airSmoothing = 4.0f;
+    [SerializeField] float airSmoothing = 0.2f;
+
 
     [Header("Controls")]
     [SerializeField] bool invertSteering = false;
@@ -98,7 +100,7 @@ public class BallKart : CartPhysics
 
         //kart puppeting
         RaycastHit hitNear;
-        Physics.Raycast(kartTransform.position + (kartTransform.up * .1f), Vector3.down, out hitNear, 2.0f, floorLayerMask); //find floor
+        Physics.Raycast(kartTransform.position + (kartTransform.up * .1f), Vector3.down, out hitNear, kartOrientationRayLength, floorLayerMask); //find floor
         if (hitNear.collider) //if hit ground
         {
             kartNormal.up = Vector3.Lerp(kartNormal.up, hitNear.normal, dt * rampSmoothing); //correct rotation
