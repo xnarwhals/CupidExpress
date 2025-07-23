@@ -65,7 +65,14 @@ public class TomatoProjectile : MonoBehaviour
     {
         hasHit = true;
         Debug.Log($"Tomato hit {hitCart.CartName}!");
-        // Blooper
+
+        if (hitCart.CartID == 0)
+        {
+            hitCart.StartKetchupEffect(); 
+        }
+
+        hitCart.SpinOut(tomato.directHitSpinOutDuration);
+
         Destroy(gameObject);
     }
 
@@ -73,7 +80,7 @@ public class TomatoProjectile : MonoBehaviour
     {
         hasHit = true;
         CreateKetchupSplat(transform.position);
-        Debug.Log("Tomato on floor alert");
+        // Debug.Log("Tomato on floor alert");
         Destroy(gameObject);
     }
 
@@ -88,7 +95,7 @@ public class TomatoProjectile : MonoBehaviour
         splat.transform.localScale = new Vector3(tomato.splatRadius * 2, 0.1f, tomato.splatRadius * 2);
 
         KetchupPuddle puddle = splat.GetComponent<KetchupPuddle>();
-        puddle.Initialize(tomato.splatSlowdownEffect, tomato.splatDuration);
+        puddle.Initialize(tomato.enterKetchupSpinOutDuration, tomato.splatDuration);
     }
         
     

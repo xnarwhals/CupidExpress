@@ -11,16 +11,21 @@ public class BallKart : CartPhysics
     [SerializeField] Transform kartModel; //the actual model
 
     [Header("Movement Settings")]
-    [SerializeField] float gravity = 25f;
+    [SerializeField] float floorGravity = 25f;
+    [SerializeField] float airGravity = 25f;
     [SerializeField] float steerAccelleration = 4f;
     [SerializeField] float steerAcceleration2 = 5f;
     [SerializeField] float idleDecelleration = 1.0f;
     [SerializeField] float reverseAcceleration = 2.0f;
     [SerializeField] float reverseMaxSpeed = 15.0f;
+    [SerializeField] float maxAngularVelocity = 7.0f;
 
     [Header("Model SubSteering")]
     [SerializeField] float modelSteerOffset = 15f;
     [SerializeField] float modelSteerOffsetSmoothing = 0.2f;
+
+    [Header("Controls")]
+    [SerializeField] bool invertSteering = false;
 
 
     [Header("Other")]
@@ -44,7 +49,12 @@ public class BallKart : CartPhysics
 
     private void Update()
     {
+        //temp??
+        rb.maxAngularVelocity = maxAngularVelocity;
+
+        //Update()
         float dt = Time.deltaTime;
+        if (invertSteering) steerInput = -steerInput;
 
         //setting inputs to be used in fixed
         inputSpeed = maxSpeed * throttleInput; //in case we want a more dynamic throttle system
@@ -75,10 +85,10 @@ public class BallKart : CartPhysics
 
         bool grounded = hitGravCheck.collider;
 
-        if (grounded) //if grounded, do gravity
-        rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration); //also rb gravity exists
+        float gravity = airGravity;
+        if (grounded) gravity = floorGravity;
 
-        print(grounded);
+        rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration); //also rb gravity exists
 
         kartTransform.eulerAngles = Vector3.Lerp(kartTransform.eulerAngles, new Vector3(0, kartTransform.eulerAngles.y + currentRotate, 0), dt * steerAcceleration2);
 

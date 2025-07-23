@@ -13,6 +13,8 @@ public class Cart : MonoBehaviour
 
     [Header("Ref Components")]
     private CartPhysics cartPhysics;
+    private KetchupEffect ketchupEffect; // player
+    private AIDriver aiDriver; // AI
     private CartPlayerInput[] playerInputs;
 
     public string CartName => cartName;
@@ -24,49 +26,41 @@ public class Cart : MonoBehaviour
         cartPhysics = GetComponent<CartPhysics>();
         if (cartPhysics == null ) print((CartPhysics)GetComponent<BallKart>());
         playerInputs = GetComponentsInChildren<CartPlayerInput>();
-    }
-
-    public void OnItemAdded()
-    {
-        UpdateItemVisuals();
-    }
-
-    public void OnItemUsed()
-    {
-        UpdateItemVisuals();
-    }
-
-    private void UpdateItemVisuals()
-    {
-        var items = ItemManager.Instance.GetCartItems(this);
-        ClearItemSlot();
-        if (items.Count > 0)
-        {
-            KartItem curItem = items[0];
-            GameObject itemVisual = Instantiate(curItem.visualPrefab, itemSlot);
-            itemVisual.transform.localPosition = Vector3.zero; // Adjust as needed
-            itemVisual.transform.localRotation = Quaternion.identity; // Reset rotation
-        }
-    }
-
-    private void ClearItemSlot()
-    {
-        foreach (Transform child in itemSlot)
-        {
-            Destroy(child.gameObject);
-        }
-    }
-
-    public void UseItem(bool itemCanBeUsedBehind)
-    {
-        ItemManager.Instance.UseItem(this, itemCanBeUsedBehind);
+        ketchupEffect = GetComponent<KetchupEffect>();
+        aiDriver = GetComponent<AIDriver>();
     }
 
     #region Cart Methods
 
+    public void SpinOut(float duration)
+    {
+        Debug.Log("spin out");
+        // if (cartID == 0) if (cartPhysics != null) cartPhysics.SpinOut(duration);
+        // else if (aiDriver != null) aiDriver.SpinOut(duration);
+    }
+
+    public void StartKetchupEffect()
+    {
+        if (ketchupEffect != null) ketchupEffect.StartKetchupEffect();
+    }
+
+    public bool IsSpinningOut()
+    {
+        // if (cartID == 0) return cartPhysics != null && cartPhysics.IsSpinningOut();
+        // else return aiDriver != null && aiDriver.IsSpinningOut();
+        return false;
+    }
+
+    public void ApplyBoost(float force)
+    {   
+        Debug.Log("apply boost");
+        // if (cartID == 0) cartPhysics.ApplyBoost(force);
+        // else aiDriver.ApplyBoost(force);
+    }
+
     #endregion
 
-    
+
 
 
 }

@@ -1,115 +1,179 @@
 using UnityEngine;
+using UnityEngine.Splines;
+using Unity.Mathematics;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Cart))]
 public class AIDriver : MonoBehaviour
 {
     [Header("Drive Settings")]
-    public float maxSpeed = 15f; // 15 m/s
-    public float acceleration = 10f; // 10 m/s^2
-    public float turnSpeed = 2f;
-    public float distanceThreshold = 1f; // 1 meter threshold for waypoint switching
+    public float maxSpeed = 20f;
+    public float acceleration = 10f;  
+    public float turnSpeed = 5f;
+    public float lookAheadDistance = 5f;
 
-    [Header("Waypoint Path")]
-    [Tooltip("Waypoints that all CPU will follow in order")]
-    public Transform[] waypoints; // all CPUs follow this center path + behavioral variation 
-    private int curWaypointIndex = 0;
-
-    // Stuff
+    [Header("Spline Path")]
+    public SplineContainer spline;
+    
+    // Spline tracking
+    private float splineProgress = 0f;
+    private float splineLength;
+    private bool isInitialized = false;
+    
+    // Lane offset
+    private Vector3 currentOffset = Vector3.zero;
+    
+    // Refs
     private Rigidbody rb;
-    private Vector3 curTarget;
-    private float curSpeedModifer = 1f;
+    private Cart thisCart;
 
-    // Getters
-    public int CurrentWaypointIndex => curWaypointIndex;
-    public Vector3 CurTarget => curTarget;
-    public Transform[] Waypoints => waypoints;
+    // other
+    private bool isSpinningOut = false;
+    private float spinOutTimer = 0f;
+    private float spinOutDuration = 2f; // placeholder 2s
+    private Quaternion originalRotation;
+
+    // getters 
+    public Cart ThisCart => thisCart;
 
     private void Awake()
     {
+        thisCart = GetComponent<Cart>();
         rb = GetComponent<Rigidbody>();
-        rb.centerOfMass = new Vector3(0, -0.2f, 0); // Lower center of mass for stability
+        rb.centerOfMass = new Vector3(0, -0.5f, 0); // Lower center of mass for stability
     }
 
     private void Start()
     {
-        if (waypoints.Length > 0) curTarget = waypoints[0].position;
-        else Debug.LogWarning("No waypoints assigned to AIDriver!");
+        InitializeSpline();
+    }
+    
+    private void InitializeSpline()
+    {
+        if (spline == null || spline.Spline == null || spline.Spline.Count < 2) 
+        {
+            Debug.LogError("No valid spline assigned to AIDriver!");
+            return;
+        }
+
+
+        splineLength = spline.CalculateLength();
+
+        // t is the normalized progress along the spline (0 to 1)
+        SplineUtility.GetNearestPoint(spline.Spline, transform.position, out float3 closestPoint, out float t);
+        splineProgress = t / spline.Spline.Count;
+        isInitialized = true;
     }
 
     private void FixedUpdate()
     {
-        if (waypoints.Length == 0 || rb == null) return;
-        if (GameManager.Instance.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
-
-        // Move Logic
-        Vector3 direction = (curTarget - transform.position).normalized;
-
-        // "Steer"
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.fixedDeltaTime);
-
-        // Speed control
-        float altMaxSpeed = maxSpeed * curSpeedModifer;
-        if (rb.velocity.magnitude < altMaxSpeed)
-        {
-            rb.AddForce(direction * acceleration, ForceMode.Acceleration);
-        }
-
-        // Waypoint progression
-        float distanceToTarget = Vector3.Distance(transform.position, curTarget);
-        if (distanceToTarget < distanceThreshold) // 1 meter threshold
-        {
-            curWaypointIndex = (curWaypointIndex + 1) % waypoints.Length; // Loop through waypoints
-        }
+        if (!isInitialized) return;
+        MoveAlongSpline();
     }
+
+    private void MoveAlongSpline()
+    {
+        // Simple constant progress along spline
+        float progressSpeed = maxSpeed / splineLength; // progress per second
+        splineProgress += progressSpeed * Time.fixedDeltaTime;
+        
+        // loop
+        if (splineProgress > 1f)
+        {
+            splineProgress = spline.Spline.Closed ? 0f : 1f;
+        }
+        
+        // current vector3 with offset applied
+        Vector3 curSplinePosition = spline.EvaluatePosition(splineProgress);
+        Vector3 curOffsetPosition = curSplinePosition + currentOffset;
+        
+        // Get target position slightly ahead
+        float targetProgress = splineProgress + (lookAheadDistance / splineLength);
+        if (targetProgress > 1f)
+        {
+            targetProgress = spline.Spline.Closed ? targetProgress - 1f : 1f;
+        }
+
+        Vector3 nextSplinePosition = spline.EvaluatePosition(targetProgress);
+        Vector3 nextOffsetPosition = nextSplinePosition + currentOffset;
+        
+        // Point toward target
+        Vector3 directionToTarget = (nextOffsetPosition - transform.position).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.fixedDeltaTime);
+        
+        // Move toward current spline position at constant speed
+        Vector3 directionToSpline = (curOffsetPosition - transform.position).normalized;
+        rb.velocity = directionToSpline * maxSpeed;
+    }
+
 
     #region Public Methods
-    public Vector3 GetCurrentWaypointPosition()
+    
+    public void SpinOut(float duration)
     {
-        if (curWaypointIndex < 0 || curWaypointIndex >= waypoints.Length)
-            return Vector3.zero;
+        if (isSpinningOut) return;
 
-        return waypoints[curWaypointIndex].position;
+        isSpinningOut = true;
+        spinOutTimer = 0f;
+        spinOutDuration = duration;
+
+        originalRotation = transform.rotation;
+        Vector3 ySpin = Vector3.up * UnityEngine.Random.Range(-1f, 1f); 
+        rb.AddTorque(ySpin * 1000f, ForceMode.VelocityChange); // Random spin force
     }
 
-    public Vector3 GetNextWaypointPosition()
+    public float GetCurrentSplineProgress()
     {
-        int nextIndex = (curWaypointIndex + 1) % waypoints.Length; // loop
-        return waypoints[nextIndex].position;
+        return splineProgress;
     }
 
-    public void SetTarget(Vector3 newTarget)
+    public void SetTargetOffset(Vector3 offset)
     {
-        curTarget = newTarget;
+        currentOffset = offset;
     }
-
-    public void SetSpeedModifier(float modifier)
-    {
-        curSpeedModifer = Mathf.Clamp(modifier, 0.1f, 2f); // Clamp between 0.1 and 2
-    }
-
+    
     #endregion
 
     private void OnDrawGizmos()
     {
-        if (curTarget != Vector3.zero)
+        if (!isInitialized || spline == null) return;
+
+        // Current position on spline - center (blue)
+        Vector3 currentSplinePos = spline.EvaluatePosition(splineProgress);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(currentSplinePos, 0.3f);
+        
+        // Current offset position - where AI goes (red)
+        Vector3 currentOffsetPos = currentSplinePos + currentOffset;
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(currentOffsetPos, 0.5f);
+        
+        // Line showing offset from center to lane
+        if (currentOffset != Vector3.zero)
         {
-            // Cyan sphere at offset position
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(curTarget, 0.8f); 
-            
-            // Follow Path
             Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(transform.position, curTarget);
+            Gizmos.DrawLine(currentSplinePos, currentOffsetPos);
         }
 
-        // Show base waypoint for comparison
-        if (waypoints.Length > 0 && curWaypointIndex < waypoints.Length)
+        // Target position ahead - center (cyan)
+        float targetProgress = splineProgress + (lookAheadDistance / splineLength);
+        if (targetProgress > 1f)
         {
-            // Red sphere at non offset waypoint
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(waypoints[curWaypointIndex].position, 0.5f); 
+            targetProgress = spline.Spline.Closed ? targetProgress - 1f : 1f;
         }
+        Vector3 targetPos = spline.EvaluatePosition(targetProgress);
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(targetPos, 0.3f);
         
+        // Target offset position - where AI aims (green)
+        Vector3 targetOffsetPos = targetPos + currentOffset;
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(targetOffsetPos, 0.6f);
+        Gizmos.DrawLine(transform.position, targetOffsetPos);
+
+        // Forward direction
+        Gizmos.color = Color.white;
+        Gizmos.DrawRay(transform.position, transform.forward * 2f);
     }
 }

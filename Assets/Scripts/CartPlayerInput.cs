@@ -14,15 +14,16 @@ public class CartPlayerInput : MonoBehaviour
     private CartPhysics cartPhysics; 
     private PlayerCart input; // bad name, "CartPlayerControls"
     [SerializeField] private int playerIndex = 0; // distinguish players using same script
+    [SerializeField] bool printRawInput = false;
 
-    testMessageHandler messageHandler;
+    ArduinoMessageHandler messageHandler;
 
     private void Awake()
     {
         input = new PlayerCart();
         cartPhysics = FindAnyObjectByType<CartPhysics>();
 
-        messageHandler = GameObject.FindAnyObjectByType<testMessageHandler>();
+        messageHandler = GameObject.FindAnyObjectByType<ArduinoMessageHandler>();
     }
 
     private void OnEnable()
@@ -57,10 +58,19 @@ public class CartPlayerInput : MonoBehaviour
             {
                 float left = messageHandler.input0;
                 float right = messageHandler.input1;
-                print("raw vals: " + left + ", " + right);
 
-                steer = Mathf.Clamp((right - left) / cartPhysics.maxPress, -1.0f, 1.0f);
-                if (Mathf.Abs(steer) < cartPhysics.deadzone) steer *= cartPhysics.deadzoneScale;
+                if (left > cartPhysics.maxPress && right > cartPhysics.maxPress) steer = 0.0f; //if both on, go forward
+                else
+                {
+                    steer = Mathf.Clamp((right - left) / cartPhysics.maxPress, -1.0f, 1.0f);
+                    if (Mathf.Abs(steer) < cartPhysics.deadzone) steer *= cartPhysics.deadzoneScale;
+                }
+
+
+                if (printRawInput)
+                print("raw vals: " + left + ", " + right + " | Steer: " + steer);
+
+
                 //print("steering: " + ((messageHandler.input1 - messageHandler.input0) / cartPhysics.maxPress).ToString());
             }
 
@@ -70,7 +80,7 @@ public class CartPlayerInput : MonoBehaviour
             }
 
             //drift
-            cartPhysics.Drift(input.Player.Drift.IsPressed());
+            //cartPhysics.Drift(input.Player.Drift.IsPressed());
 
             // east btn accelerates, south btn brakes/reverses
             float throttle = 0f;
@@ -86,7 +96,7 @@ public class CartPlayerInput : MonoBehaviour
             // Same action (use item) two inputs
             InputControl itemTrigger = input.Player.UseItem.activeControl;
             bool itemCanBeUsedBehind = itemTrigger?.path.Contains("rightShoulder") ?? false;
-            cart.UseItem(itemCanBeUsedBehind);
+            ItemManager.Instance.UseItem(cart, itemCanBeUsedBehind);
         }
 
         if (input.Player.StartGame.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.WaitingToStart)
