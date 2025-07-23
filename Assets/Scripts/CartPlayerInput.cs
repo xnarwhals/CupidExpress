@@ -14,6 +14,7 @@ public class CartPlayerInput : MonoBehaviour
     private CartPhysics cartPhysics; 
     private PlayerCart input; // bad name, "CartPlayerControls"
     [SerializeField] private int playerIndex = 0; // distinguish players using same script
+    [SerializeField] bool printRawInput = false;
 
     ArduinoMessageHandler messageHandler;
 
@@ -66,7 +67,7 @@ public class CartPlayerInput : MonoBehaviour
                 }
 
 
-
+                if (printRawInput)
                 print("raw vals: " + left + ", " + right + " | Steer: " + steer);
 
 
