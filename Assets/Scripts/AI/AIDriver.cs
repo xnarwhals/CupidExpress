@@ -32,6 +32,11 @@ public class AIDriver : MonoBehaviour
     private float spinOutTimer = 0f;
     private float spinOutDuration = 2f; // placeholder 2s
     private Quaternion originalRotation;
+    private bool isRecovering = false;
+    private float recoverTimer = 0f;
+    private float recoverTime = 1.5f; // Time to recover from spin out
+    private Quaternion targetRotation;
+
 
     // getters 
     public Cart ThisCart => thisCart;
@@ -68,6 +73,19 @@ public class AIDriver : MonoBehaviour
     private void FixedUpdate()
     {
         if (!isInitialized) return;
+        
+        if (isSpinningOut)
+        {
+            HandleSpinOut();
+            return;
+        }
+
+        if (isRecovering)
+        {
+            HandleRecovery();
+            return;
+        }
+
         MoveAlongSpline();
     }
 
@@ -107,19 +125,127 @@ public class AIDriver : MonoBehaviour
         rb.velocity = directionToSpline * maxSpeed;
     }
 
+    private void HandleSpinOut()
+    {
+        spinOutTimer += Time.fixedDeltaTime;
+
+        float breakIntensity = Mathf.Lerp(0.3f, 0.8f, spinOutTimer / spinOutDuration);
+        float breakForce = acceleration * breakIntensity;
+        rb.AddForce(-rb.velocity.normalized * breakForce, ForceMode.VelocityChange); 
+
+        float angleDamp = Mathf.Lerp(0.1f, 0.9f, spinOutTimer / spinOutDuration);
+        rb.angularVelocity *= (1f - angleDamp * Time.fixedDeltaTime);
+
+        if (spinOutTimer >= spinOutDuration)
+        {
+            EndSpinOut();
+        }
+        
+        UpdateSplineProgress();
+    }
+
+    private void EndSpinOut()
+    {
+        isSpinningOut = false;
+        spinOutTimer = 0f;
+
+        // Reset rotation to original
+        rb.angularVelocity = Vector3.zero;
+        rb.velocity *= 0.3f;
+
+        // Start recovery
+        StartRecovery();
+    }
+
+    private void StartRecovery()
+    {
+        isRecovering = true;
+        recoverTimer = 0f;
+
+        Vector3 splineDirection = GetSplineDirection(splineProgress);
+        targetRotation = Quaternion.LookRotation(splineDirection);
+    }
+
+    private void HandleRecovery()
+    {
+        recoverTimer += Time.fixedDeltaTime;
+
+        float recoveryProgress = recoverTimer / recoverTime;
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 3f * recoveryProgress);
+        Vector3 splineDirection = GetSplineDirection(splineProgress);
+        float speedMultiplier = Mathf.Lerp(0.3f, 1f, recoveryProgress);
+        float targetSpeed = maxSpeed * speedMultiplier;
+
+        rb.AddForce(splineDirection * acceleration * speedMultiplier, ForceMode.Acceleration);
+
+        if (rb.velocity.magnitude > targetSpeed)
+        {
+            rb.velocity = rb.velocity.normalized * targetSpeed; // Clamp speed
+        }
+
+        float rotationDifference = Quaternion.Angle(transform.rotation, targetRotation);
+        
+        if (recoverTimer >= recoverTime || rotationDifference < 5f)
+        {
+            isRecovering = false; // Reset after recovery
+            recoverTimer = 0f;
+            transform.rotation = targetRotation;
+        }
+        
+        UpdateSplineProgress();
+    }
+
+    private void UpdateSplineProgress()
+    {
+        Vector3 splineDirection = GetSplineDirection(splineProgress);
+        float fowardMovement = Vector3.Dot(rb.velocity, splineDirection);
+
+        if (fowardMovement > 0f)
+        {
+            float progressIncrement = fowardMovement / splineLength * Time.fixedDeltaTime;
+            splineProgress += progressIncrement;
+            if (splineProgress > 1f)
+            {
+                splineProgress = spline.Spline.Closed ? 0f : 1f;
+            }
+        }
+    }
+
+    private Vector3 GetSplineDirection(float progress)
+    {
+        float sampleDistance = 0.01f; // Sample distance for direction calculation
+        float nextProgress = Mathf.Min(1f, progress + sampleDistance);
+
+        Vector3 currentPos = spline.EvaluatePosition(progress);
+        Vector3 nextPos = spline.EvaluatePosition(nextProgress);
+
+        return (nextPos - currentPos).normalized;
+    }
+
 
     #region Public Methods
+
+    // temp override maxSpeed for boost
+    public void ApplyBoost(float force)
+    {
+        if (isSpinningOut) return; // Don't apply boost while spinning out
+        Debug.Log("Boosting");
+
+        float boostedSpeed = Mathf.Clamp(maxSpeed + force, 0f, maxSpeed * 2f);
+        rb.velocity = transform.forward * boostedSpeed;
+    }
     
     public void SpinOut(float duration)
     {
-        if (isSpinningOut) return;
+        if (isSpinningOut) return; // no perma spin out
 
         isSpinningOut = true;
         spinOutTimer = 0f;
         spinOutDuration = duration;
 
         originalRotation = transform.rotation;
-        Vector3 ySpin = Vector3.up * UnityEngine.Random.Range(-1f, 1f); 
+        Vector3 ySpin = Vector3.up * UnityEngine.Random.Range(-1f, 1f);
         rb.AddTorque(ySpin * 1000f, ForceMode.VelocityChange); // Random spin force
     }
 
