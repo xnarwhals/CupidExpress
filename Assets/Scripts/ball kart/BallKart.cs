@@ -18,6 +18,7 @@ public class BallKart : CartPhysics
     [SerializeField] float idleDecelleration = 1.0f;
     [SerializeField] float reverseAcceleration = 2.0f;
     [SerializeField] float reverseMaxSpeed = 15.0f;
+    [SerializeField] float maxAngularVelocity = 7.0f;
 
     [Header("Model SubSteering")]
     [SerializeField] float modelSteerOffset = 15f;
@@ -48,6 +49,10 @@ public class BallKart : CartPhysics
 
     private void Update()
     {
+        //temp??
+        rb.maxAngularVelocity = maxAngularVelocity;
+
+        //Update()
         float dt = Time.deltaTime;
         if (invertSteering) steerInput = -steerInput;
 
@@ -84,8 +89,6 @@ public class BallKart : CartPhysics
         if (grounded) gravity = floorGravity;
 
         rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration); //also rb gravity exists
-
-        //print(grounded);
 
         kartTransform.eulerAngles = Vector3.Lerp(kartTransform.eulerAngles, new Vector3(0, kartTransform.eulerAngles.y + currentRotate, 0), dt * steerAcceleration2);
 

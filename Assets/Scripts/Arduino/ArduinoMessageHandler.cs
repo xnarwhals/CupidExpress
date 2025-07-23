@@ -25,9 +25,9 @@ public class ArduinoMessageHandler : MonoBehaviour
     void OnConnectionEvent(bool success)
     {
         if (success)
-            Debug.Log("Connection established");
+            Debug.Log("Arduino Connection established");
         else
-            Debug.Log("Connection attempt failed or disconnection detected");
+            Debug.Log("Arduino Connection attempt failed or disconnection detected");
     }
 
     SerialController serialController;
