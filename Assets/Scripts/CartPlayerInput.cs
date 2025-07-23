@@ -79,7 +79,7 @@ public class CartPlayerInput : MonoBehaviour
             }
 
             //drift
-            cartPhysics.Drift(input.Player.Drift.IsPressed());
+            // cartPhysics.Drift(input.Player.Drift.IsPressed());
 
             // east btn accelerates, south btn brakes/reverses
             float throttle = 0f;

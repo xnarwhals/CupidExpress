@@ -18,10 +18,6 @@ public class Tomato : KartItem
     // Tomato Hit 
     public float directHitSpinOutDuration = 2f;
     public float enterKetchupSpinOutDuration = 1f;
-
-    // Tomato Hit Player
-    public float spinOutDuration = 1f;
-
     public override void Use(Cart cartUsingItem, bool throwBackward)
     {
         if (cartUsingItem != null && throwableTomatoPrefab != null)
