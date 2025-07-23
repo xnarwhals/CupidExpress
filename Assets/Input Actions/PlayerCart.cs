@@ -147,12 +147,12 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Drift"",
-                    ""type"": ""Value"",
-                    ""id"": ""0cafb787-b82f-4323-a932-784db187ba4d"",
-                    ""expectedControlType"": ""Axis"",
+                    ""type"": ""Button"",
+                    ""id"": ""f4584339-067d-4e4c-9bbc-7253b74ce146"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -241,6 +241,28 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""StartGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""80afde3e-b53f-4839-9faf-d1fd715aab72"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""34bf0c3e-10b8-41a7-9480-d19e3db92ded"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drift"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }

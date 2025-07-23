@@ -1,4 +1,3 @@
-using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -19,22 +18,20 @@ public class CartPhysics : MonoBehaviour
     [Header("Grip")]
     [SerializeField] protected float traction = 4f; // increase for snappy handling
     [SerializeField] protected float tractionDrift = 2f; // hold less when drift
-    [SerializeField] AnimationCurve driftSteerCurve = AnimationCurve.Linear(0,1,1,0.2f);
 
+    // spin out 
+    // private bool isSpinningOut = false;
+    // private float spinOutTimer = 0f;
+    // private float spinOutDuration = 2f;
+    // private Quaternion originalRotation;
+    // private bool isRecoveringRotation = false;
+    // private float recoverTimer = 0f;
+    // private float recoverTime = 0.5f;
 
     // runtime state
     [DoNotSerialize] public float steerInput; // -1 to 1, left to right
     protected float throttleInput; // -1 to 1, reverse to forward
     [DoNotSerialize] public bool isDrifting = false;
-
-    // spin out 
-    private bool isSpinningOut = false;
-    private float spinOutTimer = 0f;
-    private float spinOutDuration = 2f;
-    private Quaternion originalRotation;
-    private bool isRecoveringRotation = false;
-    private float recoverTimer = 0f;
-    private float recoverTime = 0.5f;
     
     protected Rigidbody rb;
     protected float curTraction;
@@ -49,9 +46,12 @@ public class CartPhysics : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         curTraction = traction;
-
-        rb.centerOfMass += Vector3.down * 0.3f; // Set center of mass to the center of the cart
     }
+
+    // private void HandleThrottle()
+    // {
+    //     curSpeed = Vector3.Dot(rb.velocity, transform.forward); // m/s
+    // }
 
 
     public virtual void FixedUpdate()
@@ -153,7 +153,12 @@ public class CartPhysics : MonoBehaviour
 
         Vector3 ySpin = transform.up * Random.Range(-1f, 1f);
         rb.AddTorque(ySpin * 1000f, ForceMode.VelocityChange); // Apply a strong torque to spin out
+    }
 
+    public void ApplyBoost(float force)
+    {
+        if (isSpinningOut) return; 
+        rb.AddForce(transform.forward * force, ForceMode.VelocityChange);
     }
 
     #region Getters

@@ -49,7 +49,7 @@ public class TomatoProjectile : MonoBehaviour
         if (hasHit) return; // Prevent multiple hits
 
         Cart hitCart = other.gameObject.GetComponent<Cart>(); 
-        if (hitCart != null && hitCart != throwingCart)
+        if (hitCart != null && (throwingCart == null || hitCart != throwingCart)) // testing 
         {
             HitCart(hitCart);
             return;
@@ -66,13 +66,9 @@ public class TomatoProjectile : MonoBehaviour
         hasHit = true;
         Debug.Log($"Tomato hit {hitCart.CartName}!");
 
-        // player vs AI onHit behavior
-        if (hitCart.CartID == 0)
-        {
-            hitCart.StartKetchupEffect(); 
-        }
+        if (hitCart.CartID == 0) hitCart.StartKetchupEffect(); 
 
-        hitCart.SpinOut(tomato.spinOutDuration);
+        hitCart.SpinOut(tomato.directHitSpinOutDuration);
 
         Destroy(gameObject);
     }
@@ -96,7 +92,7 @@ public class TomatoProjectile : MonoBehaviour
         splat.transform.localScale = new Vector3(tomato.splatRadius * 2, 0.1f, tomato.splatRadius * 2);
 
         KetchupPuddle puddle = splat.GetComponent<KetchupPuddle>();
-        puddle.Initialize(tomato.splatSlowdownEffect, tomato.splatDuration);
+        puddle.Initialize(tomato.enterKetchupSpinOutDuration, tomato.splatDuration);
     }
         
     
