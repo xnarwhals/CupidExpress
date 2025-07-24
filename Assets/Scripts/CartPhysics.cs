@@ -31,7 +31,7 @@ public class CartPhysics : MonoBehaviour
     // runtime state
     [DoNotSerialize] public float steerInput; // -1 to 1, left to right
     protected float throttleInput; // -1 to 1, reverse to forward
-    [DoNotSerialize] public bool isDrifting = false;
+    [DoNotSerialize] public bool DriftInput = false;
     
     protected Rigidbody rb;
     protected float curTraction;
@@ -39,7 +39,7 @@ public class CartPhysics : MonoBehaviour
     // API
     public void SetSteer(float steer) => steerInput = Mathf.Clamp(steer, -1f, 1f);
     public void SetThrottle(float throttle) => throttleInput = Mathf.Clamp(throttle, -1f, 1f);
-    public void Drift(bool on) => isDrifting = on;
+    public void Drift(bool on) => DriftInput = on;
 
     // life cycle 
     public virtual void Awake()

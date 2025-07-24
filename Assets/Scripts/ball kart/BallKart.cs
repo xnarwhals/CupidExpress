@@ -19,6 +19,7 @@ public class BallKart : CartPhysics
     [SerializeField] float reverseAcceleration = 2.0f;
     [SerializeField] float reverseMaxSpeed = 15.0f;
     [SerializeField] float maxAngularVelocity = 7.0f;
+    [SerializeField] float driftMaxAngularVelocity = 7.0f;
 
     [Header("Visual Stuff")]
     [SerializeField] float modelSteerOffset = 15f;
@@ -30,7 +31,6 @@ public class BallKart : CartPhysics
 
     [Header("Controls")]
     [SerializeField] bool invertSteering = false;
-
 
     [Header("Other")]
     [SerializeField] LayerMask floorLayerMask;
@@ -52,9 +52,6 @@ public class BallKart : CartPhysics
 
     private void Update()
     {
-        //temp??
-        rb.maxAngularVelocity = maxAngularVelocity;
-
         //Update()
         float dt = Time.deltaTime;
         if (invertSteering) steerInput = -steerInput;
@@ -64,15 +61,20 @@ public class BallKart : CartPhysics
         inputRotation = steerInput * steerPower; //jik ^
         currentAcceleration = acceleration;
 
+        //throttle forward vs backward acceleration & speed
         if (Mathf.Abs(throttleInput) <= 0.01f) currentAcceleration = idleDecelleration; //if no input, idle, uses rb drag in combination
         else if (throttleInput < 0) { currentAcceleration = reverseAcceleration; inputSpeed = reverseMaxSpeed * throttleInput; }
 
         currentSpeed = Mathf.SmoothStep(currentSpeed, inputSpeed, dt * currentAcceleration);
         currentRotate = Mathf.Lerp(currentRotate, inputRotation, dt * steerAccelleration);
 
+        //Drift
+        
+
         //tie the kart to the sphere
         kartTransform.position = transform.position + kartOffset;
 
+        //model steering exaggeration/offset
         float steerDir = steerInput * modelSteerOffset;
         kartModel.localRotation = Quaternion.Euler(Vector3.Lerp(kartModel.localEulerAngles, new Vector3(0, (steerDir), kartModel.localEulerAngles.z), modelSteerOffsetSmoothing)); //model steering
     }
@@ -95,11 +97,15 @@ public class BallKart : CartPhysics
 
         kartTransform.eulerAngles = Vector3.Lerp(kartTransform.eulerAngles, new Vector3(0, kartTransform.eulerAngles.y + currentRotate, 0), dt * steerAcceleration2);
 
-        //AIR CONTROL!!!!!!
+        //Drift
+        if (DriftInput) { rb.maxAngularVelocity = driftMaxAngularVelocity; }
+        else { rb.maxAngularVelocity = maxAngularVelocity; }
+
+            //AIR CONTROL!!!!!!
 
 
-        //kart puppeting
-        RaycastHit hitNear;
+            //kart puppeting
+            RaycastHit hitNear;
         Physics.Raycast(kartTransform.position + (kartTransform.up * .1f), Vector3.down, out hitNear, kartOrientationRayLength, floorLayerMask); //find floor
         if (hitNear.collider) //if hit ground
         {
@@ -107,7 +113,6 @@ public class BallKart : CartPhysics
         }
         else
         {
-            print("ungrounded");
             kartNormal.up = Vector3.Lerp(kartNormal.up, new Vector3(0, 1, 0), dt * airSmoothing); //correct rotation
         }
         kartNormal.Rotate(0, kartTransform.eulerAngles.y, 0);
