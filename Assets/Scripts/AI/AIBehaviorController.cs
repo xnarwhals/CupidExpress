@@ -288,6 +288,10 @@ public class AIBehaviorController : MonoBehaviour
             Gizmos.color = cornerAhead ? Color.red : Color.green;
             Gizmos.DrawWireSphere(transform.position, 3f);
 
+            // Proximity Sphere
+            Gizmos.color = cartInProximity ? Color.yellow : Color.gray;
+            Gizmos.DrawWireSphere(transform.position, personality.proximityRadius);
+
             // ✅ CURRENT SPEED BAR (Blue) - What speed AI is actually using
             float currentSpeedRatio = aiDriver.maxSpeed / baseMaxSpeed;
             Vector3 barStart = transform.position + Vector3.up * 5f;
