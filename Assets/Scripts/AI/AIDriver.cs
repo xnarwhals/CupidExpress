@@ -7,13 +7,14 @@ using Unity.Mathematics;
 public class AIDriver : MonoBehaviour
 {
     [Header("Drive Settings")]
-    public float maxSpeed = 20f;
+    public float maxSpeed = 21f;
     public float acceleration = 10f;  
     public float turnSpeed = 5f;
     public float lookAheadDistance = 5f;
 
     [Header("Spline Path")]
     public SplineContainer spline;
+    public SplineCornerDetector cornerDetector; 
     
     // Spline tracking
     private float splineProgress = 0f;
@@ -52,7 +53,7 @@ public class AIDriver : MonoBehaviour
             Debug.LogError("AIDriver requires a SplineContainer to be assigned!");
             return;
         }
-        
+
         InitializeSpline();
     }
     
@@ -66,19 +67,16 @@ public class AIDriver : MonoBehaviour
 
 
         splineLength = spline.CalculateLength();
-
-        // t is the normalized progress along the spline (0 to 1)
         SplineUtility.GetNearestPoint(spline.Spline, transform.position, out float3 closestPoint, out float t);
-        splineProgress = t / spline.Spline.Count;
+        splineProgress = t / spline.Spline.Count; 
         isInitialized = true;
     }
 
     private void FixedUpdate()
     {
         if (!isInitialized || stateController == null) return;
-        
-        // Only move normally if state allows it StateController.CanMove() 
-        if (stateController.IsInState(AIDriverState.Normal))
+
+        if (stateController.CanMove())
         {
             MoveAlongSpline();
         }
@@ -86,46 +84,88 @@ public class AIDriver : MonoBehaviour
 
     private void MoveAlongSpline()
     {
-        // Simple constant progress along spline
-        float speedMultiplier = stateController.IsInState(AIDriverState.Boosting) ? 1.5f : 1f;
-
-        float progressSpeed = maxSpeed * speedMultiplier / splineLength; // progress per second
-        // float progressSpeed = Mathf.Lerp(rb.velocity.magnitude, maxSpeed, 0.5f) / splineLength;
-        splineProgress += progressSpeed * Time.fixedDeltaTime;
-
-        // loop
-        if (splineProgress > 1f)
+        // Get current position on spline
+        Vector3 currentSplinePos = spline.EvaluatePosition(splineProgress);
+        Vector3 targetPosition = currentSplinePos + currentOffset;
+        
+        // look ahead for forward direction 
+        Vector3 toTarget = targetPosition - transform.position;
+        rb.AddForce(toTarget.normalized * acceleration, ForceMode.Acceleration);
+        
+        // Simple rotation toward target
+        if (toTarget.magnitude > 0.1f)
         {
-            splineProgress = spline.Spline.Closed ? 0f : 1f;
+            Quaternion targetRotation = Quaternion.LookRotation(toTarget.normalized);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 
+                turnSpeed * Time.fixedDeltaTime);
         }
+        
+        // Update spline progress based on movement
+        UpdateSplineProgress();
+        
+        ClampVelocity();
+        
+        ApplyStateEffects();
+    }
+    private float WrapSplineProgress(float progress)
+    {
+        progress = progress % 1f; 
+        if (progress < 0f)
+            progress += 1f; 
+        return progress;
+    }
 
-        // current vector3 with offset applied
-        Vector3 curSplinePosition = spline.EvaluatePosition(splineProgress);
-        Vector3 curOffsetPosition = curSplinePosition + currentOffset;
-
-        // Get target position slightly ahead
-        float targetProgress = splineProgress + (lookAheadDistance / splineLength);
-        if (targetProgress > 1f)
-        {
-            targetProgress = spline.Spline.Closed ? targetProgress - 1f : 1f;
-        }
-
-        Vector3 nextSplinePosition = spline.EvaluatePosition(targetProgress);
-        Vector3 nextOffsetPosition = nextSplinePosition + currentOffset;
-
-        // Point toward target
-        Vector3 directionToTarget = (nextOffsetPosition - transform.position).normalized;
-        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.fixedDeltaTime);
-
-        // Move toward current spline position at constant speed
-        Vector3 directionToSpline = (curOffsetPosition - transform.position).normalized;
-        rb.AddForce(directionToSpline * acceleration, ForceMode.Acceleration);
-
+    private void ClampVelocity()
+    {
         if (rb.velocity.magnitude > maxSpeed)
+            rb.velocity = rb.velocity.normalized * maxSpeed;
+    }
+
+    private void UpdateSplineProgress()
+    {
+        Vector3 splineDirection = GetSplineDirection(splineProgress);
+        float forwardSpeed = Vector3.Dot(rb.velocity, splineDirection);
+
+        forwardSpeed = Mathf.Max(0f, forwardSpeed);
+
+        splineProgress += forwardSpeed / splineLength * Time.fixedDeltaTime;
+        splineProgress = WrapSplineProgress(splineProgress);
+    }
+
+    private void ApplyStateEffects()
+    {
+        if (stateController == null) return;
+        switch (stateController.currentState)
         {
-            rb.velocity = rb.velocity.normalized * maxSpeed; 
+            case AIDriverState.CornerSlowing:
+                rb.velocity *= 0.7f;
+                break;
+
+            case AIDriverState.SpinningOut:
+                rb.velocity *= 0.95f;
+                rb.AddTorque(Vector3.up * 30f, ForceMode.Acceleration);
+                break;
+
+            case AIDriverState.Recovering:
+                rb.velocity *= 0.8f;
+                break;
+
+            case AIDriverState.Boosting:
+                float boostSpeed = maxSpeed * 1.5f;
+                if (rb.velocity.magnitude < boostSpeed)
+                    rb.AddForce(GetSplineDirection(splineProgress) * acceleration * 0.5f, ForceMode.Acceleration);
+                break;
+
+            case AIDriverState.Stunned:
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                break;
+
+            default:
+                break;
+
         }
+
     }
 
     public Vector3 GetSplineDirection()
@@ -147,15 +187,9 @@ public class AIDriver : MonoBehaviour
 
 
     #region Public Methods
-
-    // temp override maxSpeed for boost
-    public void ApplyBoost(float force)
+    public void ApplyBoost(float boostDuration = 3f, float speedMultiplier = 1.5f)
     {
         if (!stateController.CanUseItems()) return; // Don't apply boost during certain states
-
-
-        float boostDuration = 3f; // Default boost duration
-        float speedMultiplier = 1.5f; // Default speed multiplier
         stateController.StartBoost(boostDuration, speedMultiplier);
     }
     
@@ -177,7 +211,7 @@ public class AIDriver : MonoBehaviour
     // Methods for AIStateController
     public Rigidbody GetRigidbody() => rb;
     public float GetAcceleration() => acceleration;
-    
+
     #endregion
 
     private void OnDrawGizmos()
@@ -188,18 +222,18 @@ public class AIDriver : MonoBehaviour
         Vector3 currentSplinePos = spline.EvaluatePosition(splineProgress);
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(currentSplinePos, 0.3f);
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.Handles.Label(currentSplinePos, "Spline Center");
-        #endif
-        
+#endif
+
         // Current offset position - where AI goes (red)
         Vector3 currentOffsetPos = currentSplinePos + currentOffset;
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(currentOffsetPos, 0.5f);
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.Handles.Label(currentOffsetPos, "AI Offset Position");
-        #endif
-        
+#endif
+
         // Line showing offset from center to lane
         if (currentOffset != Vector3.zero)
         {
@@ -207,33 +241,38 @@ public class AIDriver : MonoBehaviour
             Gizmos.DrawLine(currentSplinePos, currentOffsetPos);
         }
 
-        // Dynamically calculate lookAheadDistance
-        float dynamicLookAheadDistance = Mathf.Lerp(2f, 10f, rb.velocity.magnitude / maxSpeed);
-
-        // Target position ahead - center (cyan)
-        float targetProgress = splineProgress + (dynamicLookAheadDistance / splineLength);
+        float targetProgress = splineProgress + (lookAheadDistance / splineLength);
         if (targetProgress > 1f)
         {
             targetProgress = spline.Spline.Closed ? targetProgress - 1f : 1f;
         }
+
         Vector3 targetPos = spline.EvaluatePosition(targetProgress);
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(targetPos, 0.3f);
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.Handles.Label(targetPos, "Spline Target");
-        #endif
-        
+#endif
+
         // Target offset position - where AI aims (green)
         Vector3 targetOffsetPos = targetPos + currentOffset;
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(targetOffsetPos, 0.6f);
         Gizmos.DrawLine(transform.position, targetOffsetPos);
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.Handles.Label(targetOffsetPos, "AI Target Position");
-        #endif
+#endif
 
-        // Forward direction
-        Gizmos.color = Color.white;
-        Gizmos.DrawRay(transform.position, transform.forward * 2f);
+        // Velocity 
+        if (rb != null && rb.velocity.magnitude > 0.1f)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawRay(transform.position, rb.velocity.normalized * 2f);
+#if UNITY_EDITOR
+            UnityEditor.Handles.Label(transform.position + Vector3.up * 2f,
+                $"Velocity: {rb.velocity.magnitude:F1}\nProgress: {splineProgress:F3}\n");
+#endif
+            
+        }
     }
 }

@@ -5,12 +5,23 @@ public class AIStateController : MonoBehaviour
 {
     [Header("State Management")]
     public AIDriverState currentState = AIDriverState.Normal;
-    
+
     [Header("State Durations")]
     public float spinOutDuration = 2f;
     public float recoveryDuration = 1.5f;
     public float boostDuration = 3f;
-    
+
+    [Header("Corner Stuff")]
+    public SplineCornerDetector cornerDetector;
+    [Range(0.05f, 0.1f)]
+    public float cornerLookAhead = 0.05f; 
+
+    [Header("Corner Settings")]
+    [Range(1f, 10f)]
+    public float distanceBeforeSlowDown = 1f;
+    [Range(0.3f, 0.8f)]
+    public float slowDownFactor = 0.3f;
+
     [Header("State Settings")]
     [Range(0.1f, 1f)]
     public float spinOutBrakeIntensity = 0.8f;
@@ -21,67 +32,72 @@ public class AIStateController : MonoBehaviour
 
     [Header("Spin Out Settings")]
     [Range(1f, 5f)]
-    public float spinOutRotationSpeed = 2f; // rotations per second
-    private float spinOutRotationVelocity = 0f; 
-    
+    public float spinOutRotationSpeed = 1f; // rotations per second
+
     // State tracking
     private float stateTimer = 0f;
-    private Quaternion targetRecoveryRotation;
     private float originalMaxSpeed;
-    
+
     // Components
     private AIDriver aiDriver;
     private Rigidbody rb;
-    private Transform transform;
-    
+
     // Events
     public System.Action<AIDriverState, AIDriverState> OnStateChanged;
-    
+
     public void Initialize(AIDriver driver)
     {
         aiDriver = driver;
         rb = aiDriver.GetComponent<Rigidbody>();
-        transform = aiDriver.transform;
-        originalMaxSpeed = aiDriver.maxSpeed;
+        cornerDetector = aiDriver.cornerDetector; // Get it from AIDriver, not this component
     }
-    
+
     private void Update()
     {
         if (aiDriver == null) return;
-        
+
         UpdateCurrentState();
     }
-    
+
     private void UpdateCurrentState()
     {
         stateTimer += Time.deltaTime;
-        
+
+        if (currentState == AIDriverState.Normal)
+        {
+            CheckForCorners();
+        }
+
         switch (currentState)
         {
             case AIDriverState.Normal:
                 // Normal state - no special handling needed
                 break;
-                
+
+            case AIDriverState.CornerSlowing:
+                // HandleCornerSlowingState();
+                break;
+
             case AIDriverState.SpinningOut:
                 HandleSpinOutState();
                 break;
-                
+
             case AIDriverState.Recovering:
                 HandleRecoveryState();
                 break;
-                
+
             case AIDriverState.Boosting:
                 HandleBoostState();
                 break;
-                
+
             case AIDriverState.Stunned:
                 HandleStunnedState();
                 break;
         }
     }
-    
+
     #region State Transitions
-    
+
     public bool TryChangeState(AIDriverState newState, float duration = 0f)
     {
         if (!CanTransitionTo(newState))
@@ -89,25 +105,25 @@ public class AIStateController : MonoBehaviour
             Debug.LogWarning($"Cannot transition from {currentState} to {newState}");
             return false;
         }
-        
+
         AIDriverState oldState = currentState;
         ExitCurrentState();
-        
+
         currentState = newState;
         stateTimer = 0f;
-        
+
         if (duration > 0f)
         {
             SetStateDuration(newState, duration);
         }
-        
+
         EnterNewState(newState);
         OnStateChanged?.Invoke(oldState, newState);
-        
+
         Debug.Log($"AI State: {oldState} -> {newState}");
         return true;
     }
-    
+
     private bool CanTransitionTo(AIDriverState newState)
     {
         // Define transition rules
@@ -115,24 +131,27 @@ public class AIStateController : MonoBehaviour
         {
             case AIDriverState.Normal:
                 return true; // Can transition to any state from normal
-                
+
+            case AIDriverState.CornerSlowing:
+                return newState != AIDriverState.Recovering;
+
             case AIDriverState.SpinningOut:
                 return newState == AIDriverState.Recovering; // Spinout must go to recovery
-                
+
             case AIDriverState.Recovering:
                 return newState == AIDriverState.Normal || newState == AIDriverState.SpinningOut;
-                
+
             case AIDriverState.Boosting:
                 return newState != AIDriverState.Recovering; // Can't recover while boosting
-                
+
             case AIDriverState.Stunned:
                 return newState == AIDriverState.Normal;
-                
+
             default:
                 return false;
         }
     }
-    
+
     private void SetStateDuration(AIDriverState state, float duration)
     {
         switch (state)
@@ -148,139 +167,95 @@ public class AIStateController : MonoBehaviour
                 break;
         }
     }
-    
+
     #endregion
-    
+
     #region State Handlers
-    
+
+    // Note: State effects (movement, physics) are now handled in AIDriver.ApplyStateEffects()
+    // These handlers only manage state transitions and timers
+
     private void HandleSpinOutState()
     {
-        float progressRatio = stateTimer / spinOutDuration;
-
-        float decelerateFactor = Mathf.Lerp(0.92f, 0.85f, progressRatio);
-        rb.velocity *= decelerateFactor; // Gradual slowdown
-
-        float spinThisFrame = spinOutRotationSpeed * 360f * Time.deltaTime;
-        transform.Rotate(0, spinThisFrame, 0, Space.Self);
-
-        if (progressRatio > 0.7f)
-        {
-            float spinReduction = Mathf.Lerp(1f, 0.1f, (progressRatio - 0.7f) / 0.3f);
-            spinOutRotationSpeed *= spinReduction;
-        } 
-        
-        // Transition to recovery when time is up
         if (stateTimer >= spinOutDuration)
         {
             TryChangeState(AIDriverState.Recovering);
         }
     }
-    
+
     private void HandleRecoveryState()
     {
-        float progressRatio = stateTimer / recoveryDuration;
-
-        Vector3 splineDirection = aiDriver.GetSplineDirection();
-        targetRecoveryRotation = Quaternion.LookRotation(splineDirection);
-        
-        // Smooth rotation towards spline direction
-        if (targetRecoveryRotation != Quaternion.identity)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRecoveryRotation,
-                recoveryRotationSpeed * Time.deltaTime);
-        }
-        
-        // Gradual speed increase
-        float speedMultiplier = Mathf.Lerp(recoverySpeedMultiplier, 1f, progressRatio);
-        float targetSpeed = originalMaxSpeed * speedMultiplier;
-        
-        rb.AddForce(splineDirection * aiDriver.acceleration * speedMultiplier, ForceMode.Acceleration);
-        
-        // Speed limiting
-        if (rb.velocity.magnitude > targetSpeed)
-        {
-            rb.velocity = rb.velocity.normalized * targetSpeed;
-        }
-        
-        // Check if recovery is complete
-        float rotationDiff = Quaternion.Angle(transform.rotation, targetRecoveryRotation);
-        if (stateTimer >= recoveryDuration || rotationDiff < 5f)
+        if (stateTimer >= recoveryDuration)
         {
             TryChangeState(AIDriverState.Normal);
         }
     }
-    
+
     private void HandleBoostState()
     {
-        // Boost effect gradually wears off
-        float progressRatio = stateTimer / boostDuration;
-        float boostMultiplier = Mathf.Lerp(1.5f, 1f, progressRatio);
-        
-        // Apply boost to max speed
-        aiDriver.maxSpeed = originalMaxSpeed * boostMultiplier;
-        
         if (stateTimer >= boostDuration)
         {
             TryChangeState(AIDriverState.Normal);
         }
     }
-    
+
     private void HandleStunnedState()
     {
-        // Completely stop movement
-        rb.velocity *= 0.95f; // Gradual slowdown
-        rb.angularVelocity *= 0.9f;
-        
-        // Auto-recover after duration (can be set externally)
+        // Auto-recover after duration
         if (stateTimer >= 1f) // Default 1 second stun
         {
             TryChangeState(AIDriverState.Normal);
         }
     }
-    
+
     #endregion
-    
+
+    #region Corner Detection
+
+    private void CheckForCorners()
+    {
+        if (cornerDetector == null) return;
+
+        float curProgress = aiDriver.GetCurrentSplineProgress();
+        bool cornerAhead = cornerDetector.IsCornerAhead(curProgress, cornerLookAhead);
+        
+        if (cornerAhead && currentState == AIDriverState.Normal)
+        {
+            TryChangeState(AIDriverState.CornerSlowing);
+        }
+        else if (!cornerAhead && currentState == AIDriverState.CornerSlowing)
+        {
+            TryChangeState(AIDriverState.Normal);
+        }
+    }
+
+    #endregion
+
     #region State Entry/Exit
-    
+
     private void EnterNewState(AIDriverState state)
     {
         switch (state)
         {
             case AIDriverState.SpinningOut:
-                // Apply initial spinning force
-                spinOutRotationVelocity = spinOutRotationSpeed;
-
-                Vector3 randomSpin = Vector3.up * Random.Range(-0.3f, 0.3f);
-                rb.AddTorque(randomSpin * 150f, ForceMode.VelocityChange);
-
-                Vector3 sidewayForce = transform.right * Random.Range(-30f, 30f);
-                rb.AddForce(sidewayForce, ForceMode.VelocityChange);
-
+                // Debug.Log("Enterd Spin Out State");
                 break;
-                
+
             case AIDriverState.Recovering:
-                // Stop all spinning and calculate target rotation
-                rb.velocity *= recoverySpeedMultiplier;
-                
-                Vector3 splineDirection = aiDriver.GetSplineDirection();
-                targetRecoveryRotation = Quaternion.LookRotation(splineDirection);
+                // Debug.Log("Enterd Recovery State");
                 break;
-                
+
             case AIDriverState.Normal:
-                // Restore original max speed
-                aiDriver.maxSpeed = originalMaxSpeed;
-                spinOutRotationSpeed = 3f; 
                 break;
         }
     }
-    
+
     private void ExitCurrentState()
     {
         // Cleanup when leaving a state
         switch (currentState)
         {
             case AIDriverState.Recovering:
-                // Ensure final rotation is set
                 rb.angularVelocity = Vector3.zero;
                 break;
 
@@ -289,39 +264,36 @@ public class AIStateController : MonoBehaviour
                 break;
         }
     }
-    
+
     #endregion
-    
+
     #region Public Interface
-    
+
     public void StartSpinOut(float duration)
     {
         TryChangeState(AIDriverState.SpinningOut, duration);
     }
-    
+
     public void StartBoost(float duration, float speedMultiplier = 1.5f)
     {
-        if (TryChangeState(AIDriverState.Boosting, duration))
-        {
-            aiDriver.maxSpeed = originalMaxSpeed * speedMultiplier;
-        }
+        TryChangeState(AIDriverState.Boosting, duration);
     }
-    
+
     public void StartStun(float duration)
     {
         TryChangeState(AIDriverState.Stunned, duration);
     }
-    
+
     public bool IsInState(AIDriverState state) => currentState == state;
-    public bool CanMove() => currentState != AIDriverState.Stunned;
+    public bool CanMove() => currentState != AIDriverState.Stunned && currentState != AIDriverState.SpinningOut; 
     public bool CanUseItems() => currentState == AIDriverState.Normal || currentState == AIDriverState.Boosting;
-    
+
     public float GetStateProgress()
     {
         float duration = GetCurrentStateDuration();
         return duration > 0 ? stateTimer / duration : 0f;
     }
-    
+
     private float GetCurrentStateDuration()
     {
         switch (currentState)
@@ -332,6 +304,72 @@ public class AIStateController : MonoBehaviour
             default: return 0f;
         }
     }
-    
+
     #endregion
+
+    private void OnDrawGizmos()
+    {
+        if (aiDriver == null || cornerDetector == null) return;
+
+        float currentProgress = aiDriver.GetCurrentSplineProgress();
+        bool cornerAhead = cornerDetector.IsCornerAhead(currentProgress, cornerLookAhead);
+        
+        // State indicator sphere
+        Vector3 spherePos = transform.position + Vector3.up * 2f;
+        switch (currentState)
+        {
+            case AIDriverState.Normal:
+                Gizmos.color = Color.green;
+                break;
+            case AIDriverState.CornerSlowing:
+                Gizmos.color = new Color(1f, 0.5f, 0f); // Orange
+                break;
+            case AIDriverState.SpinningOut:
+                Gizmos.color = Color.red;
+                break;
+            case AIDriverState.Recovering:
+                Gizmos.color = Color.yellow;
+                break;
+            case AIDriverState.Boosting:
+                Gizmos.color = Color.cyan;
+                break;
+            case AIDriverState.Stunned:
+                Gizmos.color = Color.magenta;
+                break;
+        }
+        Gizmos.DrawWireSphere(spherePos, 1.5f);
+        
+        // Corner detection visualization
+        if (currentState == AIDriverState.Normal || currentState == AIDriverState.CornerSlowing)
+        {
+            // Gizmos.color = cornerAhead ? Color.red : Color.green;
+            // Gizmos.DrawWireSphere(transform.position, 2f);
+            
+            // Look-ahead visualization
+            if (aiDriver.spline != null)
+            {
+                float lookAheadProgress = currentProgress + cornerLookAhead;
+                if (lookAheadProgress > 1f && aiDriver.spline.Spline.Closed)
+                    lookAheadProgress -= 1f;
+                else if (lookAheadProgress > 1f)
+                    lookAheadProgress = 1f;
+
+                Vector3 lookAheadPos = aiDriver.spline.EvaluatePosition(lookAheadProgress);
+                
+                // Gizmos.color = cornerAhead ? Color.red : Color.cyan;
+                // Gizmos.DrawWireSphere(lookAheadPos, 1f);
+                
+                Gizmos.color = Color.white;
+                Gizmos.DrawLine(transform.position, lookAheadPos);
+            }
+        }
+
+#if UNITY_EDITOR
+        // State information label
+        UnityEditor.Handles.Label(transform.position + Vector3.up * 6f,
+            $"State: {currentState}\n" +
+            $"Timer: {stateTimer:F1}s\n" +
+            $"Corner Ahead: {cornerAhead}");
+#endif
+    }
 }
