@@ -9,15 +9,6 @@
 /[Mm]emoryCaptures/
 /[Rr]ecordings/
 
-# Lighting/artifact data
-*.lighting
-*.lighting.meta
-*.mat.meta
-*.anim.meta
-*.controller.meta
-*.physicMaterial.meta
-*.mask.meta
-
 # OS-specific
 .DS_Store
 *.log
