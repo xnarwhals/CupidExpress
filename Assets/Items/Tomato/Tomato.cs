@@ -12,7 +12,7 @@ public class Tomato : KartItem
     // Ketchup Splat Properties (Hit ground)
     public float splatRadius = 2f;
     public float splatDuration = 10f;
-    public float splatSlowdownEffect = 0.5f; // Percent velocity reduction
+    // public float splatSlowdownEffect = 0.5f; // Percent velocity reduction
 
 
     // Tomato Hit 

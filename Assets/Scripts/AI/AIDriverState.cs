@@ -3,6 +3,7 @@ using UnityEngine;
 public enum AIDriverState
 {
     Normal,         // Following spline normally
+    CornerSlowing,  // Slowing down for upcoming corner
     SpinningOut,    // Currently spinning out from item hit
     Recovering,     // Reorienting after spinout
     Boosting,       // Under boost effect
