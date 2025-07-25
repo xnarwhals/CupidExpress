@@ -247,7 +247,7 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""80afde3e-b53f-4839-9faf-d1fd715aab72"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -258,7 +258,7 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""34bf0c3e-10b8-41a7-9480-d19e3db92ded"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
