@@ -1362,6 +1362,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input0: 0
   input1: 0
+  input2: 0
+  input3: 0
 --- !u!4 &794859307
 Transform:
   m_ObjectHideFlags: 0
@@ -2096,6 +2098,11 @@ MonoBehaviour:
   cart: {fileID: 938322939}
   playerIndex: 0
   printRawInput: 0
+  maxPress: 80
+  deadzone: 10.2
+  deadzoneScale: 1
+  stepThreshold: 200
+  stepBpm: 60
 --- !u!136 &1006205120
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2449,6 +2456,11 @@ MonoBehaviour:
   cart: {fileID: 938322939}
   playerIndex: 1
   printRawInput: 0
+  maxPress: 80
+  deadzone: 10.2
+  deadzoneScale: 1
+  stepThreshold: 200
+  stepBpm: 60
 --- !u!136 &1117847490
 CapsuleCollider:
   m_ObjectHideFlags: 0

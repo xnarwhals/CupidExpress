@@ -10,11 +10,6 @@ public class CartPhysics : MonoBehaviour
     [SerializeField] protected float breakForce = 50f; // N/kg
     [SerializeField] protected float steerPower = 4f; // rad/s
 
-    [Header("Arduino")]
-    [SerializeField] public float maxPress = 45.0f;
-    [SerializeField] public float deadzone = 0.2f;
-    [SerializeField] public float deadzoneScale = 0.2f;
-
     [Header("Grip")]
     [SerializeField] protected float traction = 4f; // increase for snappy handling
     [SerializeField] protected float tractionDrift = 2f; // hold less when drift
