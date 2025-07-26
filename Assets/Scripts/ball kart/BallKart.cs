@@ -23,6 +23,7 @@ public class BallKart : CartPhysics
 
     [Header("Visual Stuff")]
     [SerializeField] float modelSteerOffset = 15f;
+    [SerializeField] float modelDriftOffset = 20f;
     [SerializeField] float modelSteerOffsetSmoothing = 0.2f;
     [SerializeField] float kartOrientationRayLength = 1.0f;
     [SerializeField] float rampSmoothing = 8.0f;
@@ -75,7 +76,8 @@ public class BallKart : CartPhysics
         kartTransform.position = transform.position + kartOffset;
 
         //model steering exaggeration/offset
-        float steerDir = steerInput * modelSteerOffset;
+        float steerDir = steerInput;
+        steerDir *= DriftInput ? modelDriftOffset : modelSteerOffset;
         kartModel.localRotation = Quaternion.Euler(Vector3.Lerp(kartModel.localEulerAngles, new Vector3(0, (steerDir), kartModel.localEulerAngles.z), modelSteerOffsetSmoothing)); //model steering
     }
 
@@ -98,7 +100,10 @@ public class BallKart : CartPhysics
         kartTransform.eulerAngles = Vector3.Lerp(kartTransform.eulerAngles, new Vector3(0, kartTransform.eulerAngles.y + currentRotate, 0), dt * steerAcceleration2);
 
         //Drift
-        if (DriftInput) { rb.maxAngularVelocity = driftMaxAngularVelocity; }
+        if (DriftInput) 
+        { 
+            rb.maxAngularVelocity = driftMaxAngularVelocity;
+        }
         else { rb.maxAngularVelocity = maxAngularVelocity; }
 
             //AIR CONTROL!!!!!!
