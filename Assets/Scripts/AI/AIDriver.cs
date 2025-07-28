@@ -87,6 +87,9 @@ public class AIDriver : MonoBehaviour
         // Get current position on spline
         Vector3 currentSplinePos = spline.EvaluatePosition(splineProgress);
         Vector3 targetPosition = currentSplinePos + currentOffset;
+
+        float speedMultiplier = GetStateSpeedMultiplier();
+        float accelerationMultiplier = GetStateAccelerationMultiplier();
         
         // look ahead for forward direction 
         Vector3 toTarget = targetPosition - transform.position;
@@ -103,22 +106,51 @@ public class AIDriver : MonoBehaviour
         // Update spline progress based on movement
         UpdateSplineProgress();
         
-        ClampVelocity();
+        ClampVelocity(maxSpeed * speedMultiplier);
         
-        ApplyStateEffects();
+        // ApplyStateEffects();
+    }
+    private float GetStateSpeedMultiplier()
+    {
+        if (stateController == null) return 1f;
+        
+        switch (stateController.currentState)
+        {
+            case AIDriverState.CornerSlowing: return 0.7f;
+            case AIDriverState.SpinningOut: return 0.3f;
+            case AIDriverState.Recovering: return 0.8f;
+            case AIDriverState.Boosting: return 1.5f;
+            case AIDriverState.Stunned: return 0f;
+            default: return 1f;
+        }
+    }
+
+    private float GetStateAccelerationMultiplier()
+    {
+        if (stateController == null) return 1f;
+        
+        switch (stateController.currentState)
+        {
+            case AIDriverState.CornerSlowing: return 0.8f;
+            case AIDriverState.SpinningOut: return 0.1f;
+            case AIDriverState.Recovering: return 0.6f;
+            case AIDriverState.Boosting: return 1.2f;
+            case AIDriverState.Stunned: return 0f;
+            default: return 1f;
+        }
     }
     private float WrapSplineProgress(float progress)
     {
-        progress = progress % 1f; 
+        progress = progress % 1f;
         if (progress < 0f)
-            progress += 1f; 
+            progress += 1f;
         return progress;
     }
 
-    private void ClampVelocity()
+    private void ClampVelocity(float curMaxSpeed)
     {
-        if (rb.velocity.magnitude > maxSpeed)
-            rb.velocity = rb.velocity.normalized * maxSpeed;
+        if (rb.velocity.magnitude > curMaxSpeed)
+            rb.velocity = rb.velocity.normalized * curMaxSpeed;
     }
 
     private void UpdateSplineProgress()

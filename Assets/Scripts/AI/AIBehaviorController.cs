@@ -208,29 +208,29 @@ public class AIBehaviorController : MonoBehaviour
         // Gizmos.DrawWireSphere(transform.position, personality.proximityRadius);
 
         // ✅ CURRENT SPEED BAR (Blue) - What speed AI is actually using
-        if (baseMaxSpeed > 0)
-        {
-            float currentSpeedRatio = aiDriver.maxSpeed / baseMaxSpeed;
-            Vector3 barStart = transform.position + Vector3.up * 5f;
-            Vector3 currentBarEnd = barStart + Vector3.up * (currentSpeedRatio * 3f);
+        // if (baseMaxSpeed > 0)
+        // {
+        //     float currentSpeedRatio = aiDriver.maxSpeed / baseMaxSpeed;
+        //     Vector3 barStart = transform.position + Vector3.up * 5f;
+        //     Vector3 currentBarEnd = barStart + Vector3.up * (currentSpeedRatio * 3f);
 
-            // Color current speed bar based on level
-            if (currentSpeedRatio >= 0.9f)
-                Gizmos.color = Color.blue;
-            else if (currentSpeedRatio >= 0.7f)
-                Gizmos.color = Color.cyan;
-            else
-                Gizmos.color = Color.magenta;
+        //     // Color current speed bar based on level
+        //     if (currentSpeedRatio >= 0.9f)
+        //         Gizmos.color = Color.blue;
+        //     else if (currentSpeedRatio >= 0.7f)
+        //         Gizmos.color = Color.cyan;
+        //     else
+        //         Gizmos.color = Color.magenta;
 
-            Gizmos.DrawLine(barStart, currentBarEnd);
-            Gizmos.DrawWireSphere(currentBarEnd, 0.3f);
-        }
+        //     Gizmos.DrawLine(barStart, currentBarEnd);
+        //     Gizmos.DrawWireSphere(currentBarEnd, 0.3f);
+        // }
 
         // ✅ ENHANCED LANE INDICATOR
-        Vector3 cubePos = transform.position + Vector3.up * 3f;
-        Gizmos.color = personality.drivingLane == DrivingLane.Left ? Color.red :
-                    personality.drivingLane == DrivingLane.Right ? Color.blue : Color.white;
-        Gizmos.DrawWireCube(cubePos, Vector3.one * 0.5f);
+        // Vector3 cubePos = transform.position + Vector3.up * 3f;
+        // Gizmos.color = personality.drivingLane == DrivingLane.Left ? Color.red :
+        //             personality.drivingLane == DrivingLane.Right ? Color.blue : Color.white;
+        // Gizmos.DrawWireCube(cubePos, Vector3.one * 0.5f);
 
 #if UNITY_EDITOR
         string laneInfo = personality.drivingLane == DrivingLane.Center ? "Center" :
