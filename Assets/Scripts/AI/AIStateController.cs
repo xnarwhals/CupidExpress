@@ -359,8 +359,8 @@ public class AIStateController : MonoBehaviour
                 // Gizmos.color = cornerAhead ? Color.red : Color.cyan;
                 // Gizmos.DrawWireSphere(lookAheadPos, 1f);
                 
-                Gizmos.color = Color.white;
-                Gizmos.DrawLine(transform.position, lookAheadPos);
+                // Gizmos.color = Color.white;
+                // Gizmos.DrawLine(transform.position, lookAheadPos);
             }
         }
 
