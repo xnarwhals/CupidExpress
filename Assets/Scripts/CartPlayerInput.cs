@@ -107,6 +107,7 @@ public class CartPlayerInput : MonoBehaviour
             }
 
             //drift
+            //cartPhysics.Drift(input.Player.Drift.IsPressed());
             cartPhysics.Drift(input.Player.Drift.ReadValue<float>() > 0.5f);
 
             // east btn accelerates, south btn brakes/reverses

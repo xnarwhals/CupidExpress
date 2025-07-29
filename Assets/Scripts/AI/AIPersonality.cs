@@ -15,10 +15,6 @@ public class AIPersonality : ScriptableObject
     [Range(0f, 8f)]
     public float laneOffset = 2f;
 
-    [Tooltip("How strictly the AI follows the lane (0 = flex, 1 = strict)")]
-    [Range(0f, 1f)]
-    public float laneCommitment = 0.7f;
-
     [Header("Item Behavior")]
     [Range(0f, 1f)]
     [Tooltip("Chance to use an item when available 0% vs 100%")]
