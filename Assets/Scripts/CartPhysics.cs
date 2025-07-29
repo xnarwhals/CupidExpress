@@ -10,11 +10,6 @@ public class CartPhysics : MonoBehaviour
     [SerializeField] protected float breakForce = 50f; // N/kg
     [SerializeField] protected float steerPower = 4f; // rad/s
 
-    [Header("Arduino")]
-    [SerializeField] public float maxPress = 45.0f;
-    [SerializeField] public float deadzone = 0.2f;
-    [SerializeField] public float deadzoneScale = 0.2f;
-
     [Header("Grip")]
     [SerializeField] protected float traction = 4f; // increase for snappy handling
     [SerializeField] protected float tractionDrift = 2f; // hold less when drift
@@ -31,7 +26,7 @@ public class CartPhysics : MonoBehaviour
     // runtime state
     [DoNotSerialize] public float steerInput; // -1 to 1, left to right
     protected float throttleInput; // -1 to 1, reverse to forward
-    [DoNotSerialize] public bool isDrifting = false;
+    [DoNotSerialize] public bool DriftInput = false;
     
     protected Rigidbody rb;
     protected float curTraction;
@@ -39,7 +34,7 @@ public class CartPhysics : MonoBehaviour
     // API
     public void SetSteer(float steer) => steerInput = Mathf.Clamp(steer, -1f, 1f);
     public void SetThrottle(float throttle) => throttleInput = Mathf.Clamp(throttle, -1f, 1f);
-    public void Drift(bool on) => isDrifting = on;
+    public void Drift(bool on) => DriftInput = on;
 
     // life cycle 
     public virtual void Awake()

@@ -24,7 +24,9 @@ public class Cart : MonoBehaviour
     private void Awake()
     {
         cartPhysics = GetComponent<CartPhysics>();
-        if (cartPhysics == null ) print((CartPhysics)GetComponent<BallKart>());
+        
+        if (cartPhysics == null) print((CartPhysics)GetComponent<BallKart>());
+
         playerInputs = GetComponentsInChildren<CartPlayerInput>();
         ketchupEffect = GetComponent<KetchupEffect>();
         aiDriver = GetComponent<AIDriver>();
@@ -35,10 +37,11 @@ public class Cart : MonoBehaviour
     public void SpinOut(float duration)
     {
         Debug.Log("spin out");
-        // if (cartID == 0) if (cartPhysics != null) cartPhysics.SpinOut(duration);
-        // else if (aiDriver != null) aiDriver.SpinOut(duration);
+        if (cartID == 0) Debug.Log("Player Cart Spin Out");
+        else if (aiDriver != null) aiDriver.SpinOut(duration);
     }
 
+    // Player only
     public void StartKetchupEffect()
     {
         if (ketchupEffect != null) ketchupEffect.StartKetchupEffect();
@@ -54,8 +57,8 @@ public class Cart : MonoBehaviour
     public void ApplyBoost(float force)
     {   
         Debug.Log("apply boost");
-        // if (cartID == 0) cartPhysics.ApplyBoost(force);
-        // else aiDriver.ApplyBoost(force);
+        if (cartID == 0) Debug.Log("Player Cart Boost");
+        else aiDriver.ApplyBoost(force);
     }
 
     #endregion

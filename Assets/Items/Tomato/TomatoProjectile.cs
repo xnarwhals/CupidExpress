@@ -13,10 +13,15 @@ public class TomatoProjectile : MonoBehaviour
     {
         tomato = itemData;
         throwingCart = cart;
-        rb = GetComponent<Rigidbody>();
-        Rigidbody cartRb = throwingCart.GetComponent<Rigidbody>();
-        Vector3 cartVelocity = cartRb != null ? cartRb.velocity : Vector3.zero;
+        rb = GetComponent<Rigidbody>(); // tomato rb
 
+        Vector3 cartVelocity = Vector3.zero;
+
+        if (throwingCart != null)
+        {
+            Rigidbody cartRb = throwingCart.GetComponent<Rigidbody>();
+            cartVelocity = cartRb != null ? cartRb.velocity : Vector3.zero;
+        }
 
         LaunchTomato(throwDirection, cartVelocity);
         Destroy(gameObject, 10f); // Destroy after 10 seconds if freaky behavior occurs
@@ -29,7 +34,7 @@ public class TomatoProjectile : MonoBehaviour
         velocity.y = Mathf.Sqrt(2 * Mathf.Abs(Physics.gravity.y) * tomato.arcHeight); // Adjust for arc height
 
         Vector3 finalVelocity;
-        bool isForwardThrow = Vector3.Dot(throwDirection.normalized, throwingCart.transform.forward) > 0;
+        bool isForwardThrow = throwingCart != null && Vector3.Dot(throwDirection.normalized, throwingCart.transform.forward) > 0;
 
         if (!isForwardThrow)
         {
@@ -49,7 +54,7 @@ public class TomatoProjectile : MonoBehaviour
         if (hasHit) return; // Prevent multiple hits
 
         Cart hitCart = other.gameObject.GetComponent<Cart>(); 
-        if (hitCart != null && hitCart != throwingCart)
+        if (hitCart != null && (throwingCart == null || hitCart != throwingCart)) // testing 
         {
             HitCart(hitCart);
             return;
@@ -66,10 +71,7 @@ public class TomatoProjectile : MonoBehaviour
         hasHit = true;
         Debug.Log($"Tomato hit {hitCart.CartName}!");
 
-        if (hitCart.CartID == 0)
-        {
-            hitCart.StartKetchupEffect(); 
-        }
+        if (hitCart.CartID == 0) hitCart.StartKetchupEffect(); 
 
         hitCart.SpinOut(tomato.directHitSpinOutDuration);
 

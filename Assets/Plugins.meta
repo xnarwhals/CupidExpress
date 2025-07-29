@@ -1,7 +1,12 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Prefabs/ExampleTrack.prefab.meta
+guid: 493163b61553d4a118a722b4d3accb51
+PrefabImporter:
+========
 guid: 806ffb78ade769847bd970fd30c12f1d
 folderAsset: yes
 DefaultImporter:
+>>>>>>>> hardware/ziggy:Assets/Plugins.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

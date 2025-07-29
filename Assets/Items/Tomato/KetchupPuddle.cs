@@ -22,6 +22,9 @@ public class KetchupPuddle : MonoBehaviour
         {
             hitCart.SpinOut(spinOutDuration);
         }
+
+        // destroy puddle after trigger 
+        Destroy(gameObject, 0.1f);
     }
 
     // first thought was slowdown but nah
