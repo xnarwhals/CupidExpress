@@ -68,6 +68,7 @@ public class CartPlayerInput : MonoBehaviour
             // Left-stick X or force sensors control steering
             float steer = 0.0f;
 
+            if (currentThrottle != 0.0f && Time.time - prevStepTime > (60.0f / stepBpm)) currentThrottle = 0.0f; //stop the cart from going if no step has happened yet
             if (messageHandler != null) //if arduino
             {
                 float left = messageHandler.input0;
@@ -91,7 +92,6 @@ public class CartPlayerInput : MonoBehaviour
                 {
                     Step(true);
                 }
-                else if (currentThrottle > 0.0f && Time.time - prevStepTime <= (60.0f / stepBpm)) currentThrottle = 0.0f;
 
                 if (currentThrottle <= 0.01f) print("idling");
                 else print("running");
