@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
+using Unity.Mathematics;
+using UnityEngine.Splines;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -16,8 +17,10 @@ public class GameManager : MonoBehaviour
     [Tooltip("Max race time")]
     public float maxRaceTime = 300f; // 5 minutes
 
-    [Header("checkpoints")]
+    [Header("checkpoints/race track")]
     public Transform[] checkpoints;
+    public SplineContainer raceTrack;
+
 
     [Header("Debug")]
     [SerializeField] private bool debugMode = false;
@@ -266,6 +269,12 @@ public class GameManager : MonoBehaviour
             .ToList();
     }
 
+    public Cart GetLeaderCart()
+    {
+        var leaderboard = GetCartLeaderboard();
+        return leaderboard.Count > 0 ? leaderboard[0] : null; // first place
+    }
+
     public int GetCartPosition(Cart cart)
     {
         if (cartRaceData[cart].isFinished)
@@ -276,6 +285,15 @@ public class GameManager : MonoBehaviour
         // use leaderboard if not finished
         var leaderboard = GetCartLeaderboard();
         return leaderboard.IndexOf(cart) + 1;
+    }
+
+    public void SetCartLap(Cart cart, int lap)
+    {
+        if (cartRaceData.ContainsKey(cart))
+        {
+            cartRaceData[cart].curLap = lap;
+            cartRaceData[cart].nextCheckpointIndex = 0; 
+        }
     }
 
     #endregion
@@ -325,6 +343,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
     #endregion
 
     [Serializable]

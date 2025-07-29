@@ -17,6 +17,8 @@ public class Cart : MonoBehaviour
     private AIDriver aiDriver; // AI
     private CartPlayerInput[] playerInputs;
 
+    public bool isLeader = false;
+
     public string CartName => cartName;
     public int CartID => cartID;
     public CartPhysics CartPhysics => cartPhysics;
@@ -32,7 +34,22 @@ public class Cart : MonoBehaviour
         aiDriver = GetComponent<AIDriver>();
     }
 
+    private void Start()
+    {
+        if (isLeader)
+        {
+
+            GameManager.Instance.SetCartLap(this, 2);
+        }
+    }
+
     #region Cart Methods
+    public float GetSplineProgress()
+    {
+        if (aiDriver == null) return 0f;
+        return aiDriver.SplineProgress;
+
+    }
 
     public void SpinOut(float duration)
     {

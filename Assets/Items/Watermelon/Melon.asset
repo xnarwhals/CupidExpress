@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c62229dfc10940319d038847eb93b85, type: 3}
+  m_Name: Melon
+  m_EditorClassIdentifier: 
+  itemName: MelonWater
+  icon: {fileID: 21300000, guid: 08bbaa903304d45f0843f2a95e4dc936, type: 3}
+  visualPrefab: {fileID: 6227906712014666033, guid: f1eb4ec2b503c4e4da2aa8154b221e36,
+    type: 3}
+  rollingMelonPrefab: {fileID: 991024216014135118, guid: 474d9cc1c521a49aeaf344d0e9d82755,
+    type: 3}
+  AOERadius: 5
+  melonTrackSpeed: 15

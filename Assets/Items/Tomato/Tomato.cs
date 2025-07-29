@@ -34,6 +34,7 @@ public class Tomato : KartItem
         GameObject tomato = Instantiate(throwableTomatoPrefab, throwPosition, Quaternion.identity);
 
         TomatoProjectile tomatoProjectile = tomato.GetComponent<TomatoProjectile>();
+        
         if (tomatoProjectile != null)
         {
             tomatoProjectile.Initialize(this, user, throwDirection);

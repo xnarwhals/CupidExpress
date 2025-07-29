@@ -3,23 +3,27 @@ using UnityEngine;
 public class TestItemEffect : MonoBehaviour
 {
     [Header("Test Items")]
-    private Cart testCart;
+    private Cart cartUsingItem;
+    public Cart cartTarget;
+
     public GameObject tomato;
     public Tomato tomatoScriptableObject;
     public BoostItem boostItemScriptableObject;
+    public Watermelon watermelonScriptableObject;
 
     private void Awake()
     {
-        testCart = GetComponent<Cart>();  
+        cartUsingItem = GetComponent<Cart>();
     }
 
     private void Update()
     {
 
-        if (testCart != null && Input.GetKeyDown(KeyCode.T))
+        if (cartUsingItem != null && Input.GetKeyDown(KeyCode.T))
         {
             // SpawnTomato();
-            testCart.ApplyBoost(1000f);
+            // testCart.ApplyBoost(1000f);
+            watermelonScriptableObject.Use(cartUsingItem, false);
 
         }
     }

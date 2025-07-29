@@ -8,10 +8,6 @@ public class AIBehaviorController : MonoBehaviour
     [Header("Proximity")]
     [Range(0.5f, 5f)]
     public float proximityCheckFrequency = 1f; // Distance to check for nearby carts
-
-    [Header("Speed Lerping")]
-    [Range(1f, 10f)]
-    public float speedLerpTime = 4f; 
     private AIDriver aiDriver;
 
     // before personality modifications
@@ -35,7 +31,7 @@ public class AIBehaviorController : MonoBehaviour
         baseAcceleration = aiDriver.acceleration;
         baseTurnSpeed = aiDriver.turnSpeed;
 
-        ApplyPersonalityValues();
+        // ApplyPersonalityValues();
     }
 
     // Change in needed will need testing for tunning
@@ -79,24 +75,22 @@ public class AIBehaviorController : MonoBehaviour
         if (personality.drivingLane == DrivingLane.Center || personality.laneOffset <= 0f)
             return Vector3.zero;
 
-        // Calculate track direction at this progress point
-        Vector3 trackDirection = aiDriver.GetSplineDirection();
+        float lookAheadProgress = aiDriver.SplineProgress + (aiDriver.lookAheadDistance / aiDriver.SplineLength);
+        lookAheadProgress = aiDriver.WrapSplineProgress(lookAheadProgress);
 
-        // Get perpendicular direction (right side of track)
+        Vector3 trackDirection = aiDriver.GetSplineDirection(lookAheadProgress);
         Vector3 rightDirection = Vector3.Cross(trackDirection, Vector3.up).normalized;
 
-        // Calculate offset vector based on lane preference
         Vector3 offsetVector = Vector3.zero;
         switch (personality.drivingLane)
         {
             case DrivingLane.Left:
-                offsetVector = -rightDirection * personality.laneOffset; // Negative = left
+                offsetVector = -rightDirection * personality.laneOffset;
                 break;
             case DrivingLane.Right:
-                offsetVector = rightDirection * personality.laneOffset; // Positive = right
+                offsetVector = rightDirection * personality.laneOffset;
                 break;
         }
-
         return offsetVector;
     }
 
@@ -206,31 +200,6 @@ public class AIBehaviorController : MonoBehaviour
         // Proximity Sphere
         // Gizmos.color = cartInProximity ? Color.yellow : Color.gray;
         // Gizmos.DrawWireSphere(transform.position, personality.proximityRadius);
-
-        // ✅ CURRENT SPEED BAR (Blue) - What speed AI is actually using
-        // if (baseMaxSpeed > 0)
-        // {
-        //     float currentSpeedRatio = aiDriver.maxSpeed / baseMaxSpeed;
-        //     Vector3 barStart = transform.position + Vector3.up * 5f;
-        //     Vector3 currentBarEnd = barStart + Vector3.up * (currentSpeedRatio * 3f);
-
-        //     // Color current speed bar based on level
-        //     if (currentSpeedRatio >= 0.9f)
-        //         Gizmos.color = Color.blue;
-        //     else if (currentSpeedRatio >= 0.7f)
-        //         Gizmos.color = Color.cyan;
-        //     else
-        //         Gizmos.color = Color.magenta;
-
-        //     Gizmos.DrawLine(barStart, currentBarEnd);
-        //     Gizmos.DrawWireSphere(currentBarEnd, 0.3f);
-        // }
-
-        // ✅ ENHANCED LANE INDICATOR
-        // Vector3 cubePos = transform.position + Vector3.up * 3f;
-        // Gizmos.color = personality.drivingLane == DrivingLane.Left ? Color.red :
-        //             personality.drivingLane == DrivingLane.Right ? Color.blue : Color.white;
-        // Gizmos.DrawWireCube(cubePos, Vector3.one * 0.5f);
 
 #if UNITY_EDITOR
         string laneInfo = personality.drivingLane == DrivingLane.Center ? "Center" :

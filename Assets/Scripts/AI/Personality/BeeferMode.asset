@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aggressiveness: 0.2
   drivingLane: 2
-  laneOffset: 5
-  laneCommitment: 0.7
-  proximityDetectionRange: 5
-  proximityAggression: 0.5
+  laneOffset: 4.2
+  chanceToUseItem: 0.5
+  proximityRadius: 5
