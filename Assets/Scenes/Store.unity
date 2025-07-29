@@ -417,6 +417,7 @@ GameObject:
   - component: {fileID: 21151645}
   - component: {fileID: 21151644}
   - component: {fileID: 21151643}
+  - component: {fileID: 21151646}
   m_Layer: 0
   m_Name: fridge (22)
   m_TagString: Untagged
@@ -489,6 +490,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &21151646
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 21151642}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &22206424
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,6 +777,7 @@ GameObject:
   - component: {fileID: 22987788}
   - component: {fileID: 22987787}
   - component: {fileID: 22987786}
+  - component: {fileID: 22987789}
   m_Layer: 0
   m_Name: aisle shelf (24)
   m_TagString: Untagged
@@ -826,6 +850,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &22987789
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 22987785}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &23731560
 GameObject:
   m_ObjectHideFlags: 0
@@ -1446,6 +1492,7 @@ GameObject:
   - component: {fileID: 43872344}
   - component: {fileID: 43872343}
   - component: {fileID: 43872342}
+  - component: {fileID: 43872345}
   m_Layer: 0
   m_Name: fridge (16)
   m_TagString: Untagged
@@ -1518,6 +1565,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: -90, z: 0}
+--- !u!64 &43872345
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 43872341}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &51835112
 GameObject:
   m_ObjectHideFlags: 0
@@ -1613,6 +1682,7 @@ GameObject:
   - component: {fileID: 55054914}
   - component: {fileID: 55054913}
   - component: {fileID: 55054912}
+  - component: {fileID: 55054915}
   m_Layer: 0
   m_Name: fridge (42)
   m_TagString: Untagged
@@ -1685,6 +1755,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &55054915
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 55054911}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1001 &60026321
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2356,6 +2448,42 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &103358055 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 39cd4c15b9666354caea9a9151aaf26f,
+    type: 3}
+  m_PrefabInstance: {fileID: 442160927}
+  m_PrefabAsset: {fileID: 0}
+--- !u!33 &103358056
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103358055}
+  m_Mesh: {fileID: 0}
+--- !u!64 &103358057
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103358055}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1 &106270724
 GameObject:
   m_ObjectHideFlags: 0
@@ -3028,8 +3156,8 @@ Transform:
   m_GameObject: {fileID: 137036176}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 81.998276, y: 4, z: 1.911397}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalPosition: {x: 80, y: 4, z: 1.911397}
+  m_LocalScale: {x: 5.699, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 772913313}
@@ -3416,8 +3544,8 @@ Transform:
   m_GameObject: {fileID: 172288700}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 79.998276, y: 1, z: -3}
-  m_LocalScale: {x: 15, y: 15, z: 15}
+  m_LocalPosition: {x: 76.6, y: 1, z: -3}
+  m_LocalScale: {x: 17.466, y: 15, z: 15}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 772913313}
@@ -4010,6 +4138,7 @@ GameObject:
   - component: {fileID: 225163198}
   - component: {fileID: 225163200}
   - component: {fileID: 225163199}
+  - component: {fileID: 225163201}
   m_Layer: 0
   m_Name: aisle shelf (25)
   m_TagString: Untagged
@@ -4082,6 +4211,28 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 225163197}
   m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
+--- !u!64 &225163201
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 225163197}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &230010805
 GameObject:
   m_ObjectHideFlags: 0
@@ -4093,6 +4244,7 @@ GameObject:
   - component: {fileID: 230010808}
   - component: {fileID: 230010807}
   - component: {fileID: 230010806}
+  - component: {fileID: 230010809}
   m_Layer: 0
   m_Name: fridge (14)
   m_TagString: Untagged
@@ -4165,6 +4317,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &230010809
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230010805}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &238780289
 GameObject:
   m_ObjectHideFlags: 0
@@ -6118,6 +6292,7 @@ GameObject:
   - component: {fileID: 338854753}
   - component: {fileID: 338854752}
   - component: {fileID: 338854751}
+  - component: {fileID: 338854754}
   m_Layer: 0
   m_Name: aisle shelf (37)
   m_TagString: Untagged
@@ -6190,6 +6365,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!64 &338854754
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338854750}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &347911822
 GameObject:
   m_ObjectHideFlags: 0
@@ -6639,6 +6836,7 @@ GameObject:
   - component: {fileID: 365211898}
   - component: {fileID: 365211897}
   - component: {fileID: 365211896}
+  - component: {fileID: 365211899}
   m_Layer: 0
   m_Name: aisle shelf (29)
   m_TagString: Untagged
@@ -6711,6 +6909,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &365211899
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365211895}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &365446286
 GameObject:
   m_ObjectHideFlags: 0
@@ -7523,8 +7743,8 @@ Transform:
   m_GameObject: {fileID: 390899693}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 32.498276, y: 4, z: 1.911397}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalPosition: {x: 23.579, y: 4, z: 1.911397}
+  m_LocalScale: {x: 5.699, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 772913313}
@@ -8124,6 +8344,7 @@ GameObject:
   - component: {fileID: 403152991}
   - component: {fileID: 403152990}
   - component: {fileID: 403152989}
+  - component: {fileID: 403152992}
   m_Layer: 0
   m_Name: fridge (34)
   m_TagString: Untagged
@@ -8196,6 +8417,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &403152992
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 403152988}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &408638876
 GameObject:
   m_ObjectHideFlags: 0
@@ -9088,6 +9331,7 @@ GameObject:
   - component: {fileID: 435417053}
   - component: {fileID: 435417052}
   - component: {fileID: 435417051}
+  - component: {fileID: 435417054}
   m_Layer: 0
   m_Name: fridge (12)
   m_TagString: Untagged
@@ -9160,6 +9404,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &435417054
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435417050}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &436755715
 GameObject:
   m_ObjectHideFlags: 0
@@ -9293,7 +9559,23 @@ PrefabInstance:
     - {fileID: 65702495048144492, guid: 39cd4c15b9666354caea9a9151aaf26f, type: 3}
     - {fileID: -8700617353114198275, guid: 39cd4c15b9666354caea9a9151aaf26f, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 39cd4c15b9666354caea9a9151aaf26f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 103358057}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 39cd4c15b9666354caea9a9151aaf26f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 103358056}
+    - targetCorrespondingSourceObject: {fileID: -5568371526223589888, guid: 39cd4c15b9666354caea9a9151aaf26f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 948565637}
+    - targetCorrespondingSourceObject: {fileID: 8513859187771203891, guid: 39cd4c15b9666354caea9a9151aaf26f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 829684593}
   m_SourcePrefab: {fileID: 100100000, guid: 39cd4c15b9666354caea9a9151aaf26f, type: 3}
 --- !u!4 &443608829 stripped
 Transform:
@@ -9845,6 +10127,7 @@ GameObject:
   - component: {fileID: 478095930}
   - component: {fileID: 478095929}
   - component: {fileID: 478095928}
+  - component: {fileID: 478095931}
   m_Layer: 0
   m_Name: aisle shelf (41)
   m_TagString: Untagged
@@ -9917,6 +10200,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
+--- !u!64 &478095931
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478095927}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &479718378
 GameObject:
   m_ObjectHideFlags: 0
@@ -10127,6 +10432,7 @@ GameObject:
   - component: {fileID: 502483082}
   - component: {fileID: 502483081}
   - component: {fileID: 502483080}
+  - component: {fileID: 502483083}
   m_Layer: 0
   m_Name: aisle shelf (44)
   m_TagString: Untagged
@@ -10199,6 +10505,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
+--- !u!64 &502483083
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502483079}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &518516868
 GameObject:
   m_ObjectHideFlags: 0
@@ -11846,6 +12174,7 @@ GameObject:
   - component: {fileID: 570090456}
   - component: {fileID: 570090455}
   - component: {fileID: 570090454}
+  - component: {fileID: 570090457}
   m_Layer: 0
   m_Name: aisle shelf (22)
   m_TagString: Untagged
@@ -11918,6 +12247,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &570090457
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570090453}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1001 &572926636
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14174,6 +14525,7 @@ GameObject:
   - component: {fileID: 688148063}
   - component: {fileID: 688148062}
   - component: {fileID: 688148061}
+  - component: {fileID: 688148064}
   m_Layer: 0
   m_Name: aisle shelf (43)
   m_TagString: Untagged
@@ -14246,6 +14598,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
+--- !u!64 &688148064
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688148060}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &691086951
 GameObject:
   m_ObjectHideFlags: 0
@@ -14528,6 +14902,7 @@ GameObject:
   - component: {fileID: 701692727}
   - component: {fileID: 701692726}
   - component: {fileID: 701692725}
+  - component: {fileID: 701692728}
   m_Layer: 0
   m_Name: fridge (31)
   m_TagString: Untagged
@@ -14600,6 +14975,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &701692728
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 701692724}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &705072086
 GameObject:
   m_ObjectHideFlags: 0
@@ -14695,6 +15092,7 @@ GameObject:
   - component: {fileID: 705266827}
   - component: {fileID: 705266826}
   - component: {fileID: 705266825}
+  - component: {fileID: 705266828}
   m_Layer: 0
   m_Name: fridge (38)
   m_TagString: Untagged
@@ -14767,6 +15165,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &705266828
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705266824}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &712257750
 GameObject:
   m_ObjectHideFlags: 0
@@ -14883,6 +15303,7 @@ GameObject:
   - component: {fileID: 714394131}
   - component: {fileID: 714394130}
   - component: {fileID: 714394129}
+  - component: {fileID: 714394132}
   m_Layer: 0
   m_Name: aisle shelf (36)
   m_TagString: Untagged
@@ -14955,6 +15376,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
+--- !u!64 &714394132
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 714394128}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &714897820
 GameObject:
   m_ObjectHideFlags: 0
@@ -15472,6 +15915,7 @@ GameObject:
   - component: {fileID: 748006792}
   - component: {fileID: 748006791}
   - component: {fileID: 748006790}
+  - component: {fileID: 748006793}
   m_Layer: 0
   m_Name: aisle shelf (31)
   m_TagString: Untagged
@@ -15544,6 +15988,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
+--- !u!64 &748006793
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748006789}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1001 &755200059
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16616,6 +17082,7 @@ GameObject:
   - component: {fileID: 804032140}
   - component: {fileID: 804032139}
   - component: {fileID: 804032138}
+  - component: {fileID: 804032141}
   m_Layer: 0
   m_Name: fridge (13)
   m_TagString: Untagged
@@ -16688,6 +17155,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &804032141
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 804032137}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &805824313
 GameObject:
   m_ObjectHideFlags: 0
@@ -17149,6 +17638,34 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 814676532}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &829684591 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8513859187771203891, guid: 39cd4c15b9666354caea9a9151aaf26f,
+    type: 3}
+  m_PrefabInstance: {fileID: 442160927}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &829684593
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829684591}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7387706064836869012, guid: 39cd4c15b9666354caea9a9151aaf26f, type: 3}
 --- !u!1 &832468306
 GameObject:
   m_ObjectHideFlags: 0
@@ -17659,6 +18176,7 @@ GameObject:
   - component: {fileID: 869660807}
   - component: {fileID: 869660806}
   - component: {fileID: 869660805}
+  - component: {fileID: 869660808}
   m_Layer: 0
   m_Name: aisle shelf (30)
   m_TagString: Untagged
@@ -17731,6 +18249,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 19.468}
+--- !u!64 &869660808
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869660804}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &871935479
 GameObject:
   m_ObjectHideFlags: 0
@@ -17930,6 +18470,7 @@ GameObject:
   - component: {fileID: 878243572}
   - component: {fileID: 878243571}
   - component: {fileID: 878243570}
+  - component: {fileID: 878243573}
   m_Layer: 0
   m_Name: fridge (35)
   m_TagString: Untagged
@@ -18002,6 +18543,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &878243573
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 878243569}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &884726044
 GameObject:
   m_ObjectHideFlags: 0
@@ -18028,8 +18591,8 @@ Transform:
   m_GameObject: {fileID: 884726044}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 57.498276, y: 12, z: 1.911397}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalPosition: {x: 52.074, y: 12, z: 1.911397}
+  m_LocalScale: {x: 5.699, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 772913313}
@@ -19452,8 +20015,8 @@ Transform:
   m_GameObject: {fileID: 914659384}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 32.498276, y: 12, z: 1.911397}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalPosition: {x: 23.579, y: 12, z: 1.911397}
+  m_LocalScale: {x: 5.699, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 772913313}
@@ -19712,6 +20275,11 @@ MonoBehaviour:
   cart: {fileID: 0}
   playerIndex: 0
   printRawInput: 0
+  maxPress: 80
+  deadzone: 10.2
+  deadzoneScale: 1
+  stepThreshold: 200
+  stepBpm: 50
 --- !u!136 &927833527
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -20435,6 +21003,34 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 947061928}
   m_Mesh: {fileID: 7678392440402851791, guid: 3e2657a3aeae99f48a6de2d9636f74cd, type: 3}
+--- !u!1 &948565635 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -5568371526223589888, guid: 39cd4c15b9666354caea9a9151aaf26f,
+    type: 3}
+  m_PrefabInstance: {fileID: 442160927}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &948565637
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 948565635}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2534964839176971238, guid: 39cd4c15b9666354caea9a9151aaf26f, type: 3}
 --- !u!1 &949274136
 GameObject:
   m_ObjectHideFlags: 0
@@ -20446,6 +21042,7 @@ GameObject:
   - component: {fileID: 949274137}
   - component: {fileID: 949274139}
   - component: {fileID: 949274138}
+  - component: {fileID: 949274140}
   m_Layer: 0
   m_Name: aisle shelf (25)
   m_TagString: Untagged
@@ -20517,6 +21114,28 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 949274136}
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
+--- !u!64 &949274140
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949274136}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
   m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &950220999
 GameObject:
@@ -20638,6 +21257,11 @@ MonoBehaviour:
   cart: {fileID: 0}
   playerIndex: 1
   printRawInput: 0
+  maxPress: 80
+  deadzone: 10.2
+  deadzoneScale: 1
+  stepThreshold: 200
+  stepBpm: 50
 --- !u!136 &952062111
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -21264,6 +21888,7 @@ GameObject:
   - component: {fileID: 963308291}
   - component: {fileID: 963308290}
   - component: {fileID: 963308289}
+  - component: {fileID: 963308292}
   m_Layer: 0
   m_Name: fridge (09)
   m_TagString: Untagged
@@ -21336,6 +21961,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: -90, z: 0}
+--- !u!64 &963308292
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963308288}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &973908194
 GameObject:
   m_ObjectHideFlags: 0
@@ -22203,6 +22850,7 @@ GameObject:
   - component: {fileID: 1020295444}
   - component: {fileID: 1020295443}
   - component: {fileID: 1020295442}
+  - component: {fileID: 1020295445}
   m_Layer: 0
   m_Name: aisle shelf (26)
   m_TagString: Untagged
@@ -22275,6 +22923,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
+--- !u!64 &1020295445
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020295441}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1028679559
 GameObject:
   m_ObjectHideFlags: 0
@@ -23911,6 +24581,7 @@ GameObject:
   - component: {fileID: 1069639765}
   - component: {fileID: 1069639764}
   - component: {fileID: 1069639763}
+  - component: {fileID: 1069639766}
   m_Layer: 0
   m_Name: fridge (18)
   m_TagString: Untagged
@@ -23983,6 +24654,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &1069639766
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1069639762}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1001 &1074589545
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24082,6 +24775,7 @@ GameObject:
   - component: {fileID: 1075514989}
   - component: {fileID: 1075514988}
   - component: {fileID: 1075514987}
+  - component: {fileID: 1075514990}
   m_Layer: 0
   m_Name: fridge (27)
   m_TagString: Untagged
@@ -24154,6 +24848,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: -90, z: 0}
+--- !u!64 &1075514990
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075514986}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1078412348
 GameObject:
   m_ObjectHideFlags: 0
@@ -26494,6 +27210,7 @@ GameObject:
   - component: {fileID: 1166273757}
   - component: {fileID: 1166273756}
   - component: {fileID: 1166273755}
+  - component: {fileID: 1166273758}
   m_Layer: 0
   m_Name: aisle shelf (39)
   m_TagString: Untagged
@@ -26566,6 +27283,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
+--- !u!64 &1166273758
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166273754}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1167363595
 GameObject:
   m_ObjectHideFlags: 0
@@ -26717,6 +27456,7 @@ GameObject:
   - component: {fileID: 1183595139}
   - component: {fileID: 1183595138}
   - component: {fileID: 1183595137}
+  - component: {fileID: 1183595140}
   m_Layer: 0
   m_Name: fridge (23)
   m_TagString: Untagged
@@ -26789,6 +27529,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: -90, z: 0}
+--- !u!64 &1183595140
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183595136}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1184026138
 GameObject:
   m_ObjectHideFlags: 0
@@ -26884,6 +27646,7 @@ GameObject:
   - component: {fileID: 1185884563}
   - component: {fileID: 1185884562}
   - component: {fileID: 1185884561}
+  - component: {fileID: 1185884564}
   m_Layer: 0
   m_Name: aisle shelf (38)
   m_TagString: Untagged
@@ -26956,6 +27719,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
+--- !u!64 &1185884564
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1185884560}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1195070225
 GameObject:
   m_ObjectHideFlags: 0
@@ -28319,6 +29104,7 @@ GameObject:
   - component: {fileID: 1234709631}
   - component: {fileID: 1234709630}
   - component: {fileID: 1234709629}
+  - component: {fileID: 1234709632}
   m_Layer: 0
   m_Name: fridge (41)
   m_TagString: Untagged
@@ -28391,6 +29177,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &1234709632
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1234709628}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1238207805
 GameObject:
   m_ObjectHideFlags: 0
@@ -29047,6 +29855,7 @@ GameObject:
   - component: {fileID: 1289692689}
   - component: {fileID: 1289692688}
   - component: {fileID: 1289692687}
+  - component: {fileID: 1289692690}
   m_Layer: 0
   m_Name: fridge (37)
   m_TagString: Untagged
@@ -29119,6 +29928,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &1289692690
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289692686}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1300360102
 GameObject:
   m_ObjectHideFlags: 0
@@ -29297,6 +30128,7 @@ GameObject:
   - component: {fileID: 1303057103}
   - component: {fileID: 1303057102}
   - component: {fileID: 1303057101}
+  - component: {fileID: 1303057104}
   m_Layer: 0
   m_Name: fridge (29)
   m_TagString: Untagged
@@ -29369,6 +30201,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &1303057104
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303057100}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!4 &1303166848 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2581800735424805860, guid: 1060f28bab45ab94eb490830df68466e,
@@ -29657,8 +30511,8 @@ Transform:
   m_GameObject: {fileID: 1313883713}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 57.498276, y: 4, z: 1.911397}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalPosition: {x: 52.074, y: 4, z: 1.911397}
+  m_LocalScale: {x: 5.699, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 772913313}
@@ -30231,6 +31085,7 @@ GameObject:
   - component: {fileID: 1338201944}
   - component: {fileID: 1338201943}
   - component: {fileID: 1338201942}
+  - component: {fileID: 1338201945}
   m_Layer: 0
   m_Name: fridge (20)
   m_TagString: Untagged
@@ -30303,6 +31158,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &1338201945
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1338201941}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1341240483
 GameObject:
   m_ObjectHideFlags: 0
@@ -30397,6 +31274,7 @@ GameObject:
   - component: {fileID: 1348631984}
   - component: {fileID: 1348631983}
   - component: {fileID: 1348631982}
+  - component: {fileID: 1348631985}
   m_Layer: 0
   m_Name: aisle shelf (40)
   m_TagString: Untagged
@@ -30469,6 +31347,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &1348631985
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1348631981}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1351927753
 GameObject:
   m_ObjectHideFlags: 0
@@ -32299,6 +33199,7 @@ GameObject:
   - component: {fileID: 1439870721}
   - component: {fileID: 1439870720}
   - component: {fileID: 1439870719}
+  - component: {fileID: 1439870722}
   m_Layer: 0
   m_Name: aisle shelf (23)
   m_TagString: Untagged
@@ -32371,6 +33272,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &1439870722
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439870718}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1440923989
 GameObject:
   m_ObjectHideFlags: 0
@@ -34150,6 +35073,7 @@ GameObject:
   - component: {fileID: 1516099861}
   - component: {fileID: 1516099860}
   - component: {fileID: 1516099859}
+  - component: {fileID: 1516099862}
   m_Layer: 0
   m_Name: aisle shelf (75)
   m_TagString: Untagged
@@ -34222,6 +35146,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 24.071, y: 100.807, z: -179.446}
+--- !u!64 &1516099862
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1516099858}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1517733990
 GameObject:
   m_ObjectHideFlags: 0
@@ -35465,6 +36411,7 @@ GameObject:
   - component: {fileID: 1558086919}
   - component: {fileID: 1558086918}
   - component: {fileID: 1558086917}
+  - component: {fileID: 1558086920}
   m_Layer: 0
   m_Name: fridge (11)
   m_TagString: Untagged
@@ -35537,6 +36484,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &1558086920
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1558086916}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1001 &1571132880
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36040,8 +37009,8 @@ Transform:
   m_GameObject: {fileID: 1596695257}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 57.498276, y: -3, z: 1.911397}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalPosition: {x: 52.074, y: -3, z: 1.911397}
+  m_LocalScale: {x: 5.699, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 772913313}
@@ -36253,6 +37222,7 @@ GameObject:
   - component: {fileID: 1609008679}
   - component: {fileID: 1609008678}
   - component: {fileID: 1609008677}
+  - component: {fileID: 1609008680}
   m_Layer: 0
   m_Name: fridge (21)
   m_TagString: Untagged
@@ -36325,6 +37295,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &1609008680
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1609008676}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1610048247
 GameObject:
   m_ObjectHideFlags: 0
@@ -37067,6 +38059,7 @@ GameObject:
   - component: {fileID: 1627944065}
   - component: {fileID: 1627944064}
   - component: {fileID: 1627944063}
+  - component: {fileID: 1627944066}
   m_Layer: 0
   m_Name: fridge (19)
   m_TagString: Untagged
@@ -37139,6 +38132,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &1627944066
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627944062}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1633304425
 GameObject:
   m_ObjectHideFlags: 0
@@ -37448,6 +38463,7 @@ GameObject:
   - component: {fileID: 1646547981}
   - component: {fileID: 1646547980}
   - component: {fileID: 1646547979}
+  - component: {fileID: 1646547982}
   m_Layer: 0
   m_Name: aisle shelf (32)
   m_TagString: Untagged
@@ -37520,6 +38536,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
+--- !u!64 &1646547982
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646547978}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1647463088
 GameObject:
   m_ObjectHideFlags: 0
@@ -37546,8 +38584,8 @@ Transform:
   m_GameObject: {fileID: 1647463088}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 32.498276, y: -3, z: 1.911397}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalPosition: {x: 23.579, y: -3, z: 1.911397}
+  m_LocalScale: {x: 5.699, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 772913313}
@@ -40313,6 +41351,7 @@ GameObject:
   - component: {fileID: 1781969983}
   - component: {fileID: 1781969982}
   - component: {fileID: 1781969981}
+  - component: {fileID: 1781969984}
   m_Layer: 0
   m_Name: fridge (28)
   m_TagString: Untagged
@@ -40385,6 +41424,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: -90, z: 0}
+--- !u!64 &1781969984
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1781969980}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1784659800
 GameObject:
   m_ObjectHideFlags: 0
@@ -40891,6 +41952,7 @@ GameObject:
   - component: {fileID: 1817255940}
   - component: {fileID: 1817255939}
   - component: {fileID: 1817255938}
+  - component: {fileID: 1817255941}
   m_Layer: 0
   m_Name: fridge (10)
   m_TagString: Untagged
@@ -40963,6 +42025,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &1817255941
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817255937}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1001 &1817605683
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41062,6 +42146,7 @@ GameObject:
   - component: {fileID: 1818295920}
   - component: {fileID: 1818295919}
   - component: {fileID: 1818295918}
+  - component: {fileID: 1818295921}
   m_Layer: 0
   m_Name: aisle shelf (42)
   m_TagString: Untagged
@@ -41134,6 +42219,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
+--- !u!64 &1818295921
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818295917}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1818753748
 GameObject:
   m_ObjectHideFlags: 0
@@ -42026,6 +43133,7 @@ GameObject:
   - component: {fileID: 1874404464}
   - component: {fileID: 1874404463}
   - component: {fileID: 1874404462}
+  - component: {fileID: 1874404465}
   m_Layer: 0
   m_Name: fridge (33)
   m_TagString: Untagged
@@ -42098,6 +43206,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &1874404465
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1874404461}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1875726198
 GameObject:
   m_ObjectHideFlags: 0
@@ -42496,8 +43626,8 @@ Transform:
   m_GameObject: {fileID: 1894079382}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 81.998276, y: -3, z: 1.911397}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalPosition: {x: 80, y: -3, z: 1.911397}
+  m_LocalScale: {x: 5.699, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 772913313}
@@ -43225,6 +44355,7 @@ GameObject:
   - component: {fileID: 1939338162}
   - component: {fileID: 1939338161}
   - component: {fileID: 1939338160}
+  - component: {fileID: 1939338163}
   m_Layer: 0
   m_Name: aisle shelf (45)
   m_TagString: Untagged
@@ -43297,6 +44428,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
+--- !u!64 &1939338163
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1939338159}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &1943354791
 GameObject:
   m_ObjectHideFlags: 0
@@ -45719,8 +46872,8 @@ Transform:
   m_GameObject: {fileID: 2058003175}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 81.998276, y: 12, z: 1.911397}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalPosition: {x: 80, y: 12, z: 1.911397}
+  m_LocalScale: {x: 5.699, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 772913313}
@@ -46891,6 +48044,7 @@ GameObject:
   - component: {fileID: 2096777272}
   - component: {fileID: 2096777271}
   - component: {fileID: 2096777270}
+  - component: {fileID: 2096777273}
   m_Layer: 0
   m_Name: aisle shelf (34)
   m_TagString: Untagged
@@ -46963,6 +48117,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &2096777273
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096777269}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &2097042541
 GameObject:
   m_ObjectHideFlags: 0
@@ -46974,6 +48150,7 @@ GameObject:
   - component: {fileID: 2097042544}
   - component: {fileID: 2097042543}
   - component: {fileID: 2097042542}
+  - component: {fileID: 2097042545}
   m_Layer: 0
   m_Name: fridge (32)
   m_TagString: Untagged
@@ -47046,6 +48223,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!64 &2097042545
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097042541}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &2099973507
 GameObject:
   m_ObjectHideFlags: 0
@@ -47999,6 +49198,7 @@ GameObject:
   - component: {fileID: 2139862584}
   - component: {fileID: 2139862583}
   - component: {fileID: 2139862582}
+  - component: {fileID: 2139862585}
   m_Layer: 0
   m_Name: aisle shelf (33)
   m_TagString: Untagged
@@ -48071,6 +49271,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
+--- !u!64 &2139862585
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2139862581}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5899485679432154149, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &2144126601
 GameObject:
   m_ObjectHideFlags: 0
@@ -48082,6 +49304,7 @@ GameObject:
   - component: {fileID: 2144126604}
   - component: {fileID: 2144126603}
   - component: {fileID: 2144126602}
+  - component: {fileID: 2144126605}
   m_Layer: 0
   m_Name: fridge (15)
   m_TagString: Untagged
@@ -48154,6 +49377,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: -90, z: 0}
+--- !u!64 &2144126605
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144126601}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4560855401624191757, guid: 38a89482d7af54c40b1bb46a00438338, type: 3}
 --- !u!1 &976760260342369334
 GameObject:
   m_ObjectHideFlags: 0
