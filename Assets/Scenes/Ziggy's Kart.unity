@@ -2145,11 +2145,14 @@ MonoBehaviour:
   cart: {fileID: 938322939}
   playerIndex: 0
   printRawInput: 0
-  maxPress: 80
+  maxPressL: 35
+  maxPressR: 150
   deadzone: 10.2
   deadzoneScale: 1
   stepThreshold: 200
-  stepBpm: 60
+  stepBpm: 300
+  reverseStepCount: 1
+  currentThrottle: 0
 --- !u!136 &1006205120
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2503,11 +2506,14 @@ MonoBehaviour:
   cart: {fileID: 938322939}
   playerIndex: 1
   printRawInput: 0
-  maxPress: 80
+  maxPressL: 80
+  maxPressR: 80
   deadzone: 10.2
   deadzoneScale: 1
   stepThreshold: 200
   stepBpm: 60
+  reverseStepCount: 1
+  currentThrottle: 0
 --- !u!136 &1117847490
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4953,7 +4959,7 @@ PrefabInstance:
     - target: {fileID: 4777742908161267060, guid: 92d78431170f7e34d8c4c7c421f82764,
         type: 3}
       propertyPath: reverseAcceleration
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4777742908161267060, guid: 92d78431170f7e34d8c4c7c421f82764,
         type: 3}

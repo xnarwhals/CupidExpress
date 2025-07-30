@@ -17,16 +17,18 @@ public class CartPlayerInput : MonoBehaviour
     [SerializeField] bool printRawInput = false;
 
     [Header("Arduino")]
-    [SerializeField] public float maxPress = 80.0f;
-    [SerializeField] public float deadzone = 10.2f;
-    [SerializeField] public float deadzoneScale = 1.0f;
-    [SerializeField] public float stepThreshold = 200.0f;
-    [SerializeField] public float stepBpm = 50.0f;
+    public float maxPressL = 80.0f;
+    public float maxPressR = 80.0f;
+    public float deadzone = 10.2f;
+    public float deadzoneScale = 1.0f;
+    public float stepThreshold = 200.0f;
+    public float stepBpm = 50.0f;
+    public float reverseStepCount = 1.0f;
 
     float prevStepTime;
     bool prevStep; //false is left, true is right
 
-    float currentThrottle = 0.0f;
+    [SerializeField] float currentThrottle = 0.0f;
 
     ArduinoMessageHandler messageHandler;
 
@@ -74,10 +76,10 @@ public class CartPlayerInput : MonoBehaviour
                 float left = messageHandler.input0;
                 float right = messageHandler.input1;
 
-                if (left >  maxPress && right >  maxPress) steer = 0.0f; //if both on, go forward
+                if (left >  maxPressL && right >  maxPressR) steer = 0.0f; //if both on, go forward
                 else
                 {
-                    steer = Mathf.Clamp((right - left) /  maxPress, -1.0f, 1.0f);
+                    steer = Mathf.Clamp(right / maxPressR - left / maxPressL, -1.0f, 1.0f);
                     if (Mathf.Abs(steer) <  deadzone) steer *=  deadzoneScale;
                 }
 
@@ -92,7 +94,7 @@ public class CartPlayerInput : MonoBehaviour
                 {
                     Step(true);
                 }
-                else if (stepL > stepThreshold && stepR > stepThreshold)
+                else if (stepL > stepThreshold && stepR > stepThreshold && Time.time - prevStepTime > (60.0f / (stepBpm / reverseStepCount)))
                 {
                     currentThrottle = -1.0f;
                 }
@@ -140,10 +142,12 @@ public class CartPlayerInput : MonoBehaviour
     {
         if (prevStep == !side)
         {
-            if (Time.time - prevStepTime <= (60.0f / stepBpm))
+            /*if (Time.time - prevStepTime <= (60.0f / stepBpm))
             {
                 currentThrottle = 1f;
-            }
+            }*/
+
+            currentThrottle = Mathf.Clamp((60.0f / stepBpm) / (Time.time - prevStepTime), 0.0f, 1.0f);
         }
 
         prevStep = side;
