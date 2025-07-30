@@ -2231,7 +2231,7 @@ PrefabInstance:
     - target: {fileID: 2918981985892727087, guid: 166259820f9504f489f38fb40be859dc,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3320716231378619564, guid: 166259820f9504f489f38fb40be859dc,
         type: 3}
@@ -3011,7 +3011,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6447901160109039467, guid: 92d78431170f7e34d8c4c7c421f82764,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1578758176}
   m_SourcePrefab: {fileID: 100100000, guid: 92d78431170f7e34d8c4c7c421f82764, type: 3}
 --- !u!20 &1359490496 stripped
 Camera:
@@ -3262,6 +3266,45 @@ MonoBehaviour:
   lapTextFormat: Lap {0}/{1}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   finalLapColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+--- !u!1 &1578758169 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6447901160109039467, guid: 92d78431170f7e34d8c4c7c421f82764,
+    type: 3}
+  m_PrefabInstance: {fileID: 1359490495}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1578758172 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2885253684850634687, guid: 92d78431170f7e34d8c4c7c421f82764,
+    type: 3}
+  m_PrefabInstance: {fileID: 1359490495}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578758169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35d54d9ec1ada44d6b3b7d65b0e1e65d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1578758176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578758169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f12f99f543a374217a4b673cb6631944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  role: 0
+  cart: {fileID: 1578758172}
+  playerIndex: 0
+  printRawInput: 0
+  maxPress: 80
+  deadzone: 10.2
+  deadzoneScale: 1
+  stepThreshold: 200
+  stepBpm: 50
 --- !u!1 &1745602405
 GameObject:
   m_ObjectHideFlags: 0
@@ -4112,7 +4155,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!54 &2120767303
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4286,7 +4329,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2120767302}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7742be161af5a4e66bd7e72bb3cf1657, type: 3}
   m_Name: 
