@@ -106,11 +106,11 @@ public class BallKart : CartPhysics
         }
         else { rb.maxAngularVelocity = maxAngularVelocity; }
 
-            //AIR CONTROL!!!!!!
+        //AIR CONTROL!!!!!!
 
 
-            //kart puppeting
-            RaycastHit hitNear;
+        //kart puppeting
+        RaycastHit hitNear;
         Physics.Raycast(kartTransform.position + (kartTransform.up * .1f), Vector3.down, out hitNear, kartOrientationRayLength, floorLayerMask); //find floor
         if (hitNear.collider) //if hit ground
         {

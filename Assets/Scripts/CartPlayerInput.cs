@@ -92,9 +92,10 @@ public class CartPlayerInput : MonoBehaviour
                 {
                     Step(true);
                 }
-
-                if (currentThrottle <= 0.01f) print("idling");
-                else print("running");
+                else if (stepL > stepThreshold && stepR > stepThreshold)
+                {
+                    currentThrottle = -1.0f;
+                }
 
                 if (printRawInput)
                     print("raw vals: " + left + ", " + right + " | Steer: " + steer);
@@ -107,6 +108,8 @@ public class CartPlayerInput : MonoBehaviour
             }
 
             //drift
+
+
             //cartPhysics.Drift(input.Player.Drift.IsPressed());
             cartPhysics.Drift(input.Player.Drift.ReadValue<float>() > 0.5f);
 
@@ -118,7 +121,7 @@ public class CartPlayerInput : MonoBehaviour
             cartPhysics.SetThrottle(currentThrottle);
         }
 
-        if (role == CartRole.Passenger && input.Player.UseItem.triggered)
+        if (role == CartRole.Driver && input.Player.UseItem.triggered)
         {
             // Same action (use item) two inputs
             InputControl itemTrigger = input.Player.UseItem.activeControl;
