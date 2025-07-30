@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/AI/Personality/New AI Personality.asset.meta
+guid: 13ed23300f8bf6e43a49f68a36878e02
+NativeFormatImporter:
+========
 guid: 562ebb6ced12f4d1ab7242062988c014
 PrefabImporter:
+>>>>>>>> origin/Programming:Assets/Prefabs/Checkpoint.prefab.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

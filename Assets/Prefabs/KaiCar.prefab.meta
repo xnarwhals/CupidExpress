@@ -1,7 +1,14 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Materials/Environment/m_wall.mat.meta
+guid: f37f814093e916a459da85d1726253c8
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+========
 guid: 7533adf9fc49242e19426211b2a6d359
 PrefabImporter:
   externalObjects: {}
+>>>>>>>> origin/Programming:Assets/Prefabs/KaiCar.prefab.meta
   userData: 
   assetBundleName: 
   assetBundleVariant: 
