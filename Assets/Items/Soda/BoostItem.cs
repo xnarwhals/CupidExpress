@@ -11,7 +11,7 @@ public class BoostItem : KartItem
     {
         if (cartUsingItem != null)
         {
-            cartUsingItem.ApplyBoost(boostForce);
+            cartUsingItem.ApplyBoost(boostDuration, speedMultiplier);
         }
     }
 

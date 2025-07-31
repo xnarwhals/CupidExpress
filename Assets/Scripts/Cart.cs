@@ -38,7 +38,6 @@ public class Cart : MonoBehaviour
     {
         if (isLeader)
         {
-
             GameManager.Instance.SetCartLap(this, 2);
         }
     }
@@ -66,16 +65,15 @@ public class Cart : MonoBehaviour
 
     public bool IsSpinningOut()
     {
-        // if (cartID == 0) return cartPhysics != null && cartPhysics.IsSpinningOut();
-        // else return aiDriver != null && aiDriver.IsSpinningOut();
-        return false;
+        if (cartID == 0) return false;
+        else return aiDriver != null && aiDriver.StateController.currentState == AIDriverState.SpinningOut;
+
     }
 
-    public void ApplyBoost(float force)
+    public void ApplyBoost(float duration, float speedMultiplier)
     {   
-        Debug.Log("apply boost");
         if (cartID == 0) Debug.Log("Player Cart Boost");
-        else aiDriver.ApplyBoost(force);
+        else aiDriver.ApplyBoost(duration, speedMultiplier);
     }
 
     #endregion

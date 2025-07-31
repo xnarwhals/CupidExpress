@@ -22,8 +22,8 @@ public class TestItemEffect : MonoBehaviour
         if (cartUsingItem != null && Input.GetKeyDown(KeyCode.T))
         {
             // SpawnTomato();
-            // testCart.ApplyBoost(1000f);
-            watermelonScriptableObject.Use(cartUsingItem, false);
+            cartUsingItem.ApplyBoost(3f, 1.5f);
+            // watermelonScriptableObject.Use(cartUsingItem, false);
 
         }
     }

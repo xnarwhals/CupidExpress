@@ -36,6 +36,7 @@ public class AIDriver : MonoBehaviour
     public Cart ThisCart => thisCart;
     public float SplineLength => splineLength;
     public float SplineProgress => splineProgress;
+    public AIStateController StateController => stateController;
 
     private void Awake()
     {
@@ -130,7 +131,6 @@ public class AIDriver : MonoBehaviour
         // Update progress and apply state effects
         UpdateSplineProgress();
         ClampVelocity(maxSpeed * GetStateSpeedMultiplier());
-        ApplyStateEffects();
     }
     private float GetStateSpeedMultiplier()
     {
@@ -186,43 +186,10 @@ public class AIDriver : MonoBehaviour
         splineProgress = WrapSplineProgress(splineProgress);
     }
 
-    private void ApplyStateEffects()
-    {
-        if (stateController == null) return;
-        switch (stateController.currentState)
-        {
-            case AIDriverState.CornerSlowing:
-                break;
-
-            case AIDriverState.SpinningOut:
-                break;
-
-            case AIDriverState.Recovering:
-                break;
-
-            case AIDriverState.Boosting:
-                float boostSpeed = maxSpeed * 1.5f;
-                if (rb.velocity.magnitude < boostSpeed)
-                    rb.AddForce(GetSplineDirection(splineProgress) * acceleration * 0.5f, ForceMode.Acceleration);
-                break;
-
-            case AIDriverState.Stunned:
-                rb.velocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-                break;
-
-            default:
-                break;
-
-        }
-
-    }
-
     public Vector3 GetSplineDirection()
     {
         return GetSplineDirection(splineProgress);
     }
-
 
     public Vector3 GetSplineDirection(float progress)
     {

@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Splines;
-using Unity.Mathematics;
 
 public class RollingMelon : MonoBehaviour
 {
@@ -8,12 +7,12 @@ public class RollingMelon : MonoBehaviour
     private float melonTrackSpeed;
     private Cart leaderCart;
     private Cart userCart;
+    private GameObject aoeVisualInstance;
     private SplineContainer raceTrack;
     private SplineAnimate splineAnimator;
 
     private bool homingToLeader = false;
     private float homingSpeed = 30f;
-    private float splineProximityThreshold = 0.1f; // How close to the leader's spline we need to be before homing stops
     private float directExplodeDistance = 2f;
 
     private void Awake()
@@ -26,8 +25,9 @@ public class RollingMelon : MonoBehaviour
         }
     }
 
-    public void Initialize(float AOERadius, float melonTrackSpeed, Cart leader, Cart user)
+    public void Initialize(float AOERadius, float melonTrackSpeed, Cart leader, Cart user, GameObject aoeVisualPrefab)
     {
+        aoeVisualInstance = aoeVisualPrefab;
         this.AOERadius = AOERadius;
         this.melonTrackSpeed = melonTrackSpeed;
         leaderCart = leader;
@@ -35,14 +35,9 @@ public class RollingMelon : MonoBehaviour
 
         if (raceTrack != null && leaderCart != null)
         {
-            Vector3 userPos = user.transform.position;
-            float3 closestPoint;
-            float t;
-            SplineUtility.GetNearestPoint(raceTrack.Spline, userPos, out closestPoint, out t);
-            float normalizedT = t / raceTrack.Spline.Count;
             if (splineAnimator != null)
             {
-                splineAnimator.NormalizedTime = normalizedT;
+                splineAnimator.NormalizedTime = user.GetSplineProgress();
             }
         }
         Debug.Log("Melon start progress: " + splineAnimator.NormalizedTime);
@@ -57,14 +52,6 @@ public class RollingMelon : MonoBehaviour
         {
             homingToLeader = true;
         }
-        // if (cartInCollider != null && cartInCollider != leaderCart)
-        // {
-
-        // }
-        // else if (hitCart == leaderCart)
-        // {
-
-        // }
     } 
 
     private void Update()
@@ -95,24 +82,28 @@ public class RollingMelon : MonoBehaviour
 
     private void Explode()
     {
-        // leaderCart.SpinOut(7f); 
+        leaderCart.SpinOut(7f);
+        aoeVisualInstance = Instantiate(aoeVisualInstance, leaderCart.transform.position, Quaternion.identity);
+        aoeVisualInstance.transform.localScale = Vector3.one * AOERadius * 2f;
+
         Debug.Log("Boom!");
         // AOE: affect all carts in radius
-        // Collider[] hits = Physics.OverlapSphere(transform.position, AOERadius);
-        // foreach (var hit in hits)
-        // {
-        //     Cart cart = hit.GetComponent<Cart>();
-        //     if (cart != null)
-        //     {
-        //         cart.SpinOut(3f); // Apply long spin out effect
-        //     }
-        // }
+        Collider[] hits = Physics.OverlapSphere(leaderCart.transform.position, AOERadius);
+        foreach (var hit in hits)
+        {
+            Cart cart = hit.GetComponent<Cart>();
+            if (cart != null)
+            {
+                cart.SpinOut(3f); // Apply long spin out effect
+            }
+        }
 
         Destroy(gameObject);
+        Destroy(aoeVisualInstance, 2f);
     }
 
-    
-    #if UNITY_EDITOR
+
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if (splineAnimator != null)
@@ -123,6 +114,7 @@ public class RollingMelon : MonoBehaviour
                 $"Melon Spline Progress: {splineAnimator.NormalizedTime:F3}"
             );
         }
+
     }
     #endif
 

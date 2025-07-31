@@ -5,11 +5,9 @@ public class AIStateController : MonoBehaviour
 {
     [Header("State Management")]
     public AIDriverState currentState = AIDriverState.Normal;
-
-    [Header("State Durations")]
-    public float spinOutDuration = 2f;
-    public float recoveryDuration = 1.5f;
-    public float boostDuration = 3f;
+    private float spinOutDuration = 2f;
+    private float recoveryDuration = 1.5f;
+    private float boostDuration = 3f;
 
     [Header("Corner Stuff")]
     public SplineCornerDetector cornerDetector;
@@ -24,13 +22,8 @@ public class AIStateController : MonoBehaviour
     [Range(2f, 10f)]
     public float recoveryRotationSpeed = 3f;
 
-    [Header("Spin Out Settings")]
-    [Range(1f, 5f)]
-    public float spinOutRotationSpeed = 1f; // rotations per second
-
     // State tracking
     private float stateTimer = 0f;
-    private float originalMaxSpeed;
 
     // Components
     private AIDriver aiDriver;
@@ -171,7 +164,7 @@ public class AIStateController : MonoBehaviour
         if (rb.velocity.magnitude > 0.1f)
             rb.velocity *= 0.7f;
 
-        rb.angularVelocity = Vector3.up * spinOutRotationSpeed * Mathf.Deg2Rad * 360f;
+        rb.angularVelocity = Vector3.up * Mathf.Deg2Rad * 360f;
 
         if (stateTimer >= spinOutDuration)
         {

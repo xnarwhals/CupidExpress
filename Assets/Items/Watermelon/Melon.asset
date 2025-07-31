@@ -18,5 +18,7 @@ MonoBehaviour:
     type: 3}
   rollingMelonPrefab: {fileID: 991024216014135118, guid: 474d9cc1c521a49aeaf344d0e9d82755,
     type: 3}
+  aoeVisualPrefab: {fileID: 6161433013561176621, guid: 633f05ccfcc3244ad9bd336f175ff207,
+    type: 3}
   AOERadius: 5
-  melonTrackSpeed: 15
+  melonTrackSpeed: 25

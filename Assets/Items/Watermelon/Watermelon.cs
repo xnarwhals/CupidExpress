@@ -5,6 +5,7 @@ public class Watermelon : KartItem
 {
     [Header("Watermelon Specific")]
     public GameObject rollingMelonPrefab;
+    public GameObject aoeVisualPrefab;
     public float AOERadius = 5f; // Area of Effect radius
     public float melonTrackSpeed = 15f;
 
@@ -24,7 +25,7 @@ public class Watermelon : KartItem
 
             if (rollingMelon != null)
             {
-                rollingMelon.Initialize(AOERadius, melonTrackSpeed, leader, cartUsingItem);
+                rollingMelon.Initialize(AOERadius, melonTrackSpeed, leader, cartUsingItem, aoeVisualPrefab);
             }
             else
             {
