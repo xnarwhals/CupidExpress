@@ -35,6 +35,7 @@ public class BallKart : CartPhysics
 
     [Header("Other")]
     [SerializeField] LayerMask floorLayerMask;
+    [SerializeField] Transform resetTransform;
 
     float currentSpeed = 0.0f;
     float currentRotate = 0.0f;
@@ -42,7 +43,7 @@ public class BallKart : CartPhysics
     float inputRotation; //jik ^
     float currentAcceleration;
 
-    Vector3 kartOffset;
+    Vector3 kartOffset; //makes it flush with the floor
 
     public override void Awake()
     {
@@ -121,5 +122,25 @@ public class BallKart : CartPhysics
             kartNormal.up = Vector3.Lerp(kartNormal.up, new Vector3(0, 1, 0), dt * airSmoothing); //correct rotation
         }
         kartNormal.Rotate(0, kartTransform.eulerAngles.y, 0);
+    }
+
+    public override void Reset()
+    {
+        if (resetTransform)
+        {
+            transform.position = resetTransform.position;
+            kartTransform.rotation = resetTransform.rotation;
+
+            rb.velocity = new Vector3(0f, 0f, 0f);
+            rb.angularVelocity = new Vector3(0f, 0f, 0f);
+
+            //reset all vars
+            currentSpeed = 0.0f;
+            currentRotate = 0.0f;
+            inputSpeed = 0.0f;
+            inputRotation = 0.0f;
+            currentAcceleration = 0.0f;
+        }
+        else print("Warning: resetTransform on ballKart not assigned");
     }
 }

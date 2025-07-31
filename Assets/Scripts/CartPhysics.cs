@@ -48,6 +48,11 @@ public class CartPhysics : MonoBehaviour
     //     curSpeed = Vector3.Dot(rb.velocity, transform.forward); // m/s
     // }
 
+    public virtual void Reset()
+    {
+        //in ballkart
+    }
+
 
     public virtual void FixedUpdate()
     {

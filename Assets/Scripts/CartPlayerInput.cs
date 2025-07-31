@@ -65,6 +65,11 @@ public class CartPlayerInput : MonoBehaviour
 
     private void Update()
     {
+        if (input.Player.Reset.triggered)
+        {
+            cartPhysics.Reset();
+        }
+
         if (role == CartRole.Driver)
         {
             // Left-stick X or force sensors control steering
