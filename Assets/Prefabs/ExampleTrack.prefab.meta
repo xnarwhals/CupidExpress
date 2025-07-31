@@ -1,7 +1,14 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Materials/Environment/m_floor2.mat.meta
+guid: 853d396058a2b484290814a97f0201a0
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+========
 guid: 3ea149fe88cbc461db0ac899a844b08c
 PrefabImporter:
   externalObjects: {}
+>>>>>>>> origin/Programming:Assets/Prefabs/ExampleTrack.prefab.meta
   userData: 
   assetBundleName: 
   assetBundleVariant: 
