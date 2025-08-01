@@ -6,7 +6,7 @@ public class CartPhysics : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] protected float acceleration = 35f; // N/kg
-    [SerializeField] protected float maxSpeed = 25f; // m/s 
+    [SerializeField] public float maxSpeed = 25f; // m/s 
     [SerializeField] protected float breakForce = 50f; // N/kg
     [SerializeField] protected float steerPower = 4f; // rad/s
 

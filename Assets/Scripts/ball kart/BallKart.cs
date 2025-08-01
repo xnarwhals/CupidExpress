@@ -86,6 +86,7 @@ public class BallKart : CartPhysics
     {
         float dt = Time.deltaTime;
         
+        //forward
         rb.AddForce(kartTransform.forward * currentSpeed, ForceMode.Acceleration);
 
         RaycastHit hitGravCheck;
@@ -142,5 +143,25 @@ public class BallKart : CartPhysics
             currentAcceleration = 0.0f;
         }
         else print("Warning: resetTransform on ballKart not assigned");
+    }
+
+    float defaultMaxSpeed; //to store the max speed pre pad
+    float defaultAccel; //to store the max speed pre pad
+    public void Boost(float speed, float accel, bool toggle)
+    {
+        if (toggle)
+        {
+            defaultMaxSpeed = maxSpeed;
+            defaultAccel = accel;
+
+            maxSpeed = speed;
+            acceleration = accel;
+            SetThrottle(1f);
+        }
+        else
+        {
+            maxSpeed = defaultMaxSpeed;
+            acceleration = defaultAccel;
+        }
     }
 }

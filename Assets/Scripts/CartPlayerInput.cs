@@ -19,7 +19,8 @@ public class CartPlayerInput : MonoBehaviour
     [Header("Arduino")]
     public float maxPressL = 80.0f;
     public float maxPressR = 80.0f;
-    public float deadzone = 10.2f;
+    public float steerDeadzoneL = 10f;
+    public float steerDeadzoneR = 10f;
     public float deadzoneScale = 1.0f;
     public float stepThreshold = 200.0f;
     public float stepBpm = 50.0f;
@@ -28,7 +29,7 @@ public class CartPlayerInput : MonoBehaviour
     float prevStepTime;
     bool prevStep; //false is left, true is right
 
-    [SerializeField] float currentThrottle = 0.0f;
+    float currentThrottle = 0.0f;
 
     ArduinoMessageHandler messageHandler;
 
@@ -84,8 +85,11 @@ public class CartPlayerInput : MonoBehaviour
                 if (left >  maxPressL && right >  maxPressR) steer = 0.0f; //if both on, go forward
                 else
                 {
+                    //deadzones
+                    if (left < steerDeadzoneL) left *= deadzoneScale;
+                    if (right < steerDeadzoneR) right *= deadzoneScale;
+
                     steer = Mathf.Clamp(right / maxPressR - left / maxPressL, -1.0f, 1.0f);
-                    if (Mathf.Abs(steer) <  deadzone) steer *=  deadzoneScale;
                 }
 
                 float stepL = messageHandler.input2;
