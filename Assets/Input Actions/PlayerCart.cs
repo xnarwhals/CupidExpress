@@ -158,6 +158,11 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                     ""name"": ""DebugBtn"",
                     ""type"": ""Button"",
                     ""id"": ""b5a80948-1ee1-4e5f-9892-bcaf7e58ede3"",
+
+                    ""name"": ""Reset"",
+                    ""type"": ""Button"",
+                    ""id"": ""1649131b-d29d-4f06-95be-0d72199990b6"",
+
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -316,6 +321,14 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""DebugBtn"",
+
+                    ""id"": ""e7047be3-0fb8-402d-ae0e-172ef0b8e7a1"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reset"",
+
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -334,6 +347,7 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
         m_Player_StartGame = m_Player.FindAction("StartGame", throwIfNotFound: true);
         m_Player_Drift = m_Player.FindAction("Drift", throwIfNotFound: true);
         m_Player_DebugBtn = m_Player.FindAction("DebugBtn", throwIfNotFound: true);
+        m_Player_Reset = m_Player.FindAction("Reset", throwIfNotFound: true);
     }
 
     ~@PlayerCart()
@@ -422,6 +436,7 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_StartGame;
     private readonly InputAction m_Player_Drift;
     private readonly InputAction m_Player_DebugBtn;
+    private readonly InputAction m_Player_Reset;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -465,6 +480,9 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/DebugBtn".
         /// </summary>
         public InputAction @DebugBtn => m_Wrapper.m_Player_DebugBtn;
+        /// Provides access to the underlying input action "Player/Reset".
+        /// </summary>
+        public InputAction @Reset => m_Wrapper.m_Player_Reset;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -515,6 +533,9 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
             @DebugBtn.started += instance.OnDebugBtn;
             @DebugBtn.performed += instance.OnDebugBtn;
             @DebugBtn.canceled += instance.OnDebugBtn;
+            @Reset.started += instance.OnReset;
+            @Reset.performed += instance.OnReset;
+            @Reset.canceled += instance.OnReset;
         }
 
         /// <summary>
@@ -550,6 +571,9 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
             @DebugBtn.started -= instance.OnDebugBtn;
             @DebugBtn.performed -= instance.OnDebugBtn;
             @DebugBtn.canceled -= instance.OnDebugBtn;
+            @Reset.started -= instance.OnReset;
+            @Reset.performed -= instance.OnReset;
+            @Reset.canceled -= instance.OnReset;
         }
 
         /// <summary>
@@ -640,11 +664,15 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDrift(InputAction.CallbackContext context);
         /// <summary>
+
         /// Method invoked when associated input action "DebugBtn" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+
+        /// Method invoked when associated input action "Reset" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDebugBtn(InputAction.CallbackContext context);
+        void OnReset(InputAction.CallbackContext context);
     }
 }

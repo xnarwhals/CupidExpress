@@ -6,7 +6,7 @@ public class CartPhysics : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] protected float acceleration = 35f; // N/kg
-    [SerializeField] protected float maxSpeed = 25f; // m/s 
+    [SerializeField] public float maxSpeed = 25f; // m/s 
     [SerializeField] protected float breakForce = 50f; // N/kg
     [SerializeField] protected float steerPower = 4f; // rad/s
 
@@ -39,12 +39,21 @@ public class CartPhysics : MonoBehaviour
         curTraction = traction;
     }
 
+
+    // private void HandleThrottle()
+    // {
+    //     curSpeed = Vector3.Dot(rb.velocity, transform.forward); // m/s
+    // }
+
+    public virtual void Reset()
+    {
+        //in ballkart
+    }
+
     public virtual void FixedUpdate()
     {
 
     }
-
-
 
     public virtual void SpinOut(float duration)
     {

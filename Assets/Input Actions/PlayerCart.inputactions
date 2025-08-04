@@ -72,6 +72,9 @@
                     "name": "DebugBtn",
                     "type": "Button",
                     "id": "b5a80948-1ee1-4e5f-9892-bcaf7e58ede3",
+                    "name": "Reset",
+                    "type": "Button",
+                    "id": "1649131b-d29d-4f06-95be-0d72199990b6",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -230,6 +233,14 @@
                     "processors": "",
                     "groups": "",
                     "action": "DebugBtn",
+
+                    "id": "e7047be3-0fb8-402d-ae0e-172ef0b8e7a1",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reset",
+
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
