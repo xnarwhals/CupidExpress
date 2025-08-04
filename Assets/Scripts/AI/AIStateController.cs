@@ -24,6 +24,7 @@ public class AIStateController : MonoBehaviour
 
     // State tracking
     private float stateTimer = 0f;
+    private float boostSpeedMultiplier = 1f;
 
     // Components
     private AIDriver aiDriver;
@@ -36,7 +37,7 @@ public class AIStateController : MonoBehaviour
     {
         aiDriver = driver;
         rb = aiDriver.GetComponent<Rigidbody>();
-        cornerDetector = aiDriver.cornerDetector; // Get it from AIDriver, not this component
+        // cornerDetector = aiDriver.cornerDetector; // Get it from AIDriver, not this component
     }
 
     private void Update()
@@ -50,10 +51,10 @@ public class AIStateController : MonoBehaviour
     {
         stateTimer += Time.deltaTime;
 
-        if (currentState == AIDriverState.Normal || currentState == AIDriverState.CornerSlowing)
-        {
-            CheckForCorners();
-        }
+        // if (currentState == AIDriverState.Normal || currentState == AIDriverState.CornerSlowing)
+        // {
+        //     CheckForCorners();
+        // }
 
         switch (currentState)
         {
@@ -182,6 +183,7 @@ public class AIStateController : MonoBehaviour
 
     private void HandleBoostState()
     {
+
         if (stateTimer >= boostDuration)
         {
             TryChangeState(AIDriverState.Normal);
@@ -205,7 +207,7 @@ public class AIStateController : MonoBehaviour
     {
         if (cornerDetector == null) return;
 
-        float curProgress = aiDriver.SplineProgress;
+        float curProgress = aiDriver.GetSplineProgress();
         bool cornerAhead = cornerDetector.IsCornerAhead(curProgress, cornerLookAhead);
         
         if (cornerAhead && currentState == AIDriverState.Normal)
@@ -263,8 +265,9 @@ public class AIStateController : MonoBehaviour
         TryChangeState(AIDriverState.SpinningOut, duration);
     }
 
-    public void StartBoost(float duration, float speedMultiplier = 1.5f)
-    {
+    public void StartBoost(float duration, float speedMultiplier)
+    {   
+        boostSpeedMultiplier = speedMultiplier;
         TryChangeState(AIDriverState.Boosting, duration);
     }
 
@@ -294,45 +297,27 @@ public class AIStateController : MonoBehaviour
         }
     }
 
+    public float GetBoostMultiplier()
+    {
+        return boostSpeedMultiplier;
+    }
+
     #endregion
 
     private void OnDrawGizmos()
     {
-        if (aiDriver == null || cornerDetector == null) return;
+        if (aiDriver == null) return;
 
-        float currentProgress = aiDriver.SplineProgress;
-        bool cornerAhead = cornerDetector.IsCornerAhead(currentProgress, cornerLookAhead);
+        float currentProgress = aiDriver.GetSplineProgress();
+        // bool cornerAhead = cornerDetector.IsCornerAhead(currentProgress, cornerLookAhead);
 
-
-        // Corner detection visualization
-        if (currentState == AIDriverState.Normal || currentState == AIDriverState.CornerSlowing)
-        {
-            Gizmos.color = cornerAhead ? Color.red : Color.green;
-            Gizmos.DrawWireSphere(transform.position, 2f);
-
-            // Look-ahead visualization
-            if (aiDriver.spline != null)
-            {
-                float lookAheadProgress = currentProgress + cornerLookAhead;
-                if (lookAheadProgress > 1f && aiDriver.spline.Spline.Closed)
-                    lookAheadProgress -= 1f;
-                else if (lookAheadProgress > 1f)
-                    lookAheadProgress = 1f;
-
-                Vector3 lookAheadPos = aiDriver.spline.EvaluatePosition(lookAheadProgress);
-
-                Gizmos.color = cornerAhead ? Color.red : Color.cyan;
-                Gizmos.DrawWireSphere(lookAheadPos, 1f);
-            }
-        }
 
 #if UNITY_EDITOR
         // State information label
         UnityEditor.Handles.Label(transform.position + Vector3.up * 6f,
             $"State: {currentState}\n" +
             $"Timer: {stateTimer:F1}s\n" +
-            $"Corner Ahead: {cornerAhead}\n" +
-            $"Spline Progress: {aiDriver.SplineProgress:F2}");
+            $"Spline Progress: {aiDriver.GetSplineProgress():F2}");
 #endif
     }
 }

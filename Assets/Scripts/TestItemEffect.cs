@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class TestItemEffect : MonoBehaviour
 {
     [Header("Test Items")]
-    private Cart cartUsingItem;
+    public Cart cartUsingItem;
     public Cart cartTarget;
 
     public GameObject tomato;
@@ -13,16 +14,17 @@ public class TestItemEffect : MonoBehaviour
 
     private void Awake()
     {
+
         cartUsingItem = GetComponent<Cart>();
     }
 
-    private void Update()
+    public void Test()
     {
 
-        if (cartUsingItem != null && Input.GetKeyDown(KeyCode.T))
+        if (cartUsingItem != null)
         {
             // SpawnTomato();
-            cartUsingItem.ApplyBoost(3f, 1.5f);
+            cartUsingItem.ApplyBoost(boostItemScriptableObject.boostDuration, boostItemScriptableObject.speedMultiplier);
             // watermelonScriptableObject.Use(cartUsingItem, false);
 
         }

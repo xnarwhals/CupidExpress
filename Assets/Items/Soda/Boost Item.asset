@@ -17,3 +17,5 @@ MonoBehaviour:
   visualPrefab: {fileID: 2197511660725141480, guid: 26dd4a4f9af5140dd8b7f293b9a604b3,
     type: 3}
   boostForce: 1500
+  boostDuration: 2
+  speedMultiplier: 1.5
