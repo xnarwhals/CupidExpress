@@ -69,6 +69,9 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "DebugBtn",
+                    "type": "Button",
+                    "id": "b5a80948-1ee1-4e5f-9892-bcaf7e58ede3",
                     "name": "Reset",
                     "type": "Button",
                     "id": "1649131b-d29d-4f06-95be-0d72199990b6",
@@ -92,8 +95,30 @@
                 },
                 {
                     "name": "",
+                    "id": "82f4e98c-26b5-4b29-ac73-adf7b0933f6d",
+                    "path": "<Keyboard>/a",
+                    "interactions": "Hold",
+                    "processors": "Normalize",
+                    "groups": "",
+                    "action": "Steer",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a79950b1-d7c9-49fa-bb4a-697c8f7e49d7",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "Normalize",
+                    "groups": "",
+                    "action": "Steer",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "1d65f3cf-8075-4ce7-8882-11e02427e144",
-                    "path": "<Gamepad>/rightShoulder",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -104,7 +129,7 @@
                 {
                     "name": "",
                     "id": "972fb821-56b3-444f-be34-dca13c028f6d",
-                    "path": "<Gamepad>/leftShoulder",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -138,6 +163,17 @@
                     "name": "",
                     "id": "f988a956-1764-45cb-b7aa-458c776f3466",
                     "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Accelerate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cd2311ea-f34c-441a-ad98-3dbe4e75c996",
+                    "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -191,12 +227,20 @@
                 },
                 {
                     "name": "",
+                    "id": "56894f61-b342-43f9-a8fa-9d44dd15830c",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DebugBtn",
+
                     "id": "e7047be3-0fb8-402d-ae0e-172ef0b8e7a1",
                     "path": "<Gamepad>/select",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Reset",
+
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

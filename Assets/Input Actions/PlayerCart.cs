@@ -155,9 +155,14 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""DebugBtn"",
+                    ""type"": ""Button"",
+                    ""id"": ""b5a80948-1ee1-4e5f-9892-bcaf7e58ede3"",
+
                     ""name"": ""Reset"",
                     ""type"": ""Button"",
                     ""id"": ""1649131b-d29d-4f06-95be-0d72199990b6"",
+
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -178,8 +183,30 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""82f4e98c-26b5-4b29-ac73-adf7b0933f6d"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": ""Normalize"",
+                    ""groups"": """",
+                    ""action"": ""Steer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a79950b1-d7c9-49fa-bb4a-697c8f7e49d7"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": ""Normalize"",
+                    ""groups"": """",
+                    ""action"": ""Steer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""1d65f3cf-8075-4ce7-8882-11e02427e144"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -190,7 +217,7 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""972fb821-56b3-444f-be34-dca13c028f6d"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -224,6 +251,17 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""f988a956-1764-45cb-b7aa-458c776f3466"",
                     ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Accelerate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cd2311ea-f34c-441a-ad98-3dbe4e75c996"",
+                    ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -277,12 +315,20 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""56894f61-b342-43f9-a8fa-9d44dd15830c"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DebugBtn"",
+
                     ""id"": ""e7047be3-0fb8-402d-ae0e-172ef0b8e7a1"",
                     ""path"": ""<Gamepad>/select"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Reset"",
+
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -300,6 +346,7 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
         m_Player_Accelerate = m_Player.FindAction("Accelerate", throwIfNotFound: true);
         m_Player_StartGame = m_Player.FindAction("StartGame", throwIfNotFound: true);
         m_Player_Drift = m_Player.FindAction("Drift", throwIfNotFound: true);
+        m_Player_DebugBtn = m_Player.FindAction("DebugBtn", throwIfNotFound: true);
         m_Player_Reset = m_Player.FindAction("Reset", throwIfNotFound: true);
     }
 
@@ -388,6 +435,7 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Accelerate;
     private readonly InputAction m_Player_StartGame;
     private readonly InputAction m_Player_Drift;
+    private readonly InputAction m_Player_DebugBtn;
     private readonly InputAction m_Player_Reset;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
@@ -429,6 +477,9 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Drift => m_Wrapper.m_Player_Drift;
         /// <summary>
+        /// Provides access to the underlying input action "Player/DebugBtn".
+        /// </summary>
+        public InputAction @DebugBtn => m_Wrapper.m_Player_DebugBtn;
         /// Provides access to the underlying input action "Player/Reset".
         /// </summary>
         public InputAction @Reset => m_Wrapper.m_Player_Reset;
@@ -479,6 +530,9 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
             @Drift.started += instance.OnDrift;
             @Drift.performed += instance.OnDrift;
             @Drift.canceled += instance.OnDrift;
+            @DebugBtn.started += instance.OnDebugBtn;
+            @DebugBtn.performed += instance.OnDebugBtn;
+            @DebugBtn.canceled += instance.OnDebugBtn;
             @Reset.started += instance.OnReset;
             @Reset.performed += instance.OnReset;
             @Reset.canceled += instance.OnReset;
@@ -514,6 +568,9 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
             @Drift.started -= instance.OnDrift;
             @Drift.performed -= instance.OnDrift;
             @Drift.canceled -= instance.OnDrift;
+            @DebugBtn.started -= instance.OnDebugBtn;
+            @DebugBtn.performed -= instance.OnDebugBtn;
+            @DebugBtn.canceled -= instance.OnDebugBtn;
             @Reset.started -= instance.OnReset;
             @Reset.performed -= instance.OnReset;
             @Reset.canceled -= instance.OnReset;
@@ -607,11 +664,15 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDrift(InputAction.CallbackContext context);
         /// <summary>
+
+        /// Method invoked when associated input action "DebugBtn" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+
         /// Method invoked when associated input action "Reset" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDebugBtn(InputAction.CallbackContext context);
         void OnReset(InputAction.CallbackContext context);
     }
 }

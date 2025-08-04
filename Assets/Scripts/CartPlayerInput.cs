@@ -13,6 +13,7 @@ public class CartPlayerInput : MonoBehaviour
     public Cart cart;
     private CartPhysics cartPhysics; 
     private PlayerCart input; // bad name, "CartPlayerControls"
+    public TestItemEffect testItemEffect;
     [SerializeField] private int playerIndex = 0; // distinguish players using same script
     [SerializeField] bool printRawInput = false;
 
@@ -82,6 +83,7 @@ public class CartPlayerInput : MonoBehaviour
                 float left = messageHandler.input0;
                 float right = messageHandler.input1;
 
+
                 if (left >  maxPressL && right >  maxPressR) steer = 0.0f; //if both on, go forward
                 else
                 {
@@ -116,13 +118,14 @@ public class CartPlayerInput : MonoBehaviour
             if (steer == 0.0f) //if no arduino input, use controller
             {
                 steer = input.Player.Steer.ReadValue<float>();
+
             }
 
             //drift
 
 
-            //cartPhysics.Drift(input.Player.Drift.IsPressed());
-            cartPhysics.Drift(input.Player.Drift.ReadValue<float>() > 0.5f);
+                //cartPhysics.Drift(input.Player.Drift.IsPressed());
+                cartPhysics.Drift(input.Player.Drift.ReadValue<float>() > 0.5f);
 
             // east btn accelerates, south btn brakes/reverses
             if (input.Player.Accelerate.IsPressed()) currentThrottle = 1f;
@@ -136,8 +139,8 @@ public class CartPlayerInput : MonoBehaviour
         {
             // Same action (use item) two inputs
             InputControl itemTrigger = input.Player.UseItem.activeControl;
-            bool itemCanBeUsedBehind = itemTrigger?.path.Contains("rightShoulder") ?? false;
-            ItemManager.Instance.UseItem(cart, itemCanBeUsedBehind);
+            bool throwItBack = itemTrigger?.path.Contains("leftTrigger") ?? false;
+            ItemManager.Instance.UseItem(cart, throwItBack);
         }
 
         if (input.Player.StartGame.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.WaitingToStart)
@@ -145,6 +148,12 @@ public class CartPlayerInput : MonoBehaviour
             // Debug.Log("Game started");
             GameManager.Instance.StartRace();
         }
+
+        if (testItemEffect != null && input.Player.DebugBtn.WasPressedThisFrame())
+        {
+            testItemEffect.Test();
+        }
+
     }
 
     void Step (bool side)

@@ -6,6 +6,7 @@ public class Cart : MonoBehaviour
     public Transform driverSeat;
     public Transform passengerSeat;
     public Transform itemSlot;
+    public Transform forwardRef; // where items are thrown from
 
     [Header("Cart Properties")]
     [SerializeField] private string cartName = "Player Cart";
@@ -17,6 +18,8 @@ public class Cart : MonoBehaviour
     private AIDriver aiDriver; // AI
     private CartPlayerInput[] playerInputs;
 
+    public bool isLeader = false;
+
     public string CartName => cartName;
     public int CartID => cartID;
     public CartPhysics CartPhysics => cartPhysics;
@@ -24,7 +27,7 @@ public class Cart : MonoBehaviour
     private void Awake()
     {
         cartPhysics = GetComponent<CartPhysics>();
-        
+
         if (cartPhysics == null) print((CartPhysics)GetComponent<BallKart>());
 
         playerInputs = GetComponentsInChildren<CartPlayerInput>();
@@ -32,12 +35,25 @@ public class Cart : MonoBehaviour
         aiDriver = GetComponent<AIDriver>();
     }
 
+    private void Start()
+    {
+        if (isLeader)
+        {
+            GameManager.Instance.SetCartLap(this, 2);
+        }
+    }
+
     #region Cart Methods
+    public float GetSplineProgress()
+    {
+        if (aiDriver == null) return 0f;
+        return aiDriver.GetSplineProgress();
+
+    }
 
     public void SpinOut(float duration)
     {
-        Debug.Log("spin out");
-        if (cartID == 0) Debug.Log("Player Cart Spin Out");
+        if (cartID == 0) cartPhysics.SpinOut(duration);
         else if (aiDriver != null) aiDriver.SpinOut(duration);
     }
 
@@ -49,16 +65,15 @@ public class Cart : MonoBehaviour
 
     public bool IsSpinningOut()
     {
-        // if (cartID == 0) return cartPhysics != null && cartPhysics.IsSpinningOut();
-        // else return aiDriver != null && aiDriver.IsSpinningOut();
-        return false;
+        if (cartID == 0) return cartPhysics.isSpinningOut;
+        else return aiDriver != null && aiDriver.StateController.currentState == AIDriverState.SpinningOut;
+
     }
 
-    public void ApplyBoost(float force)
-    {   
-        Debug.Log("apply boost");
+    public void ApplyBoost(float duration, float speedMultiplier)
+    {
         if (cartID == 0) Debug.Log("Player Cart Boost");
-        else aiDriver.ApplyBoost(force);
+        else aiDriver.ApplyBoost(duration, speedMultiplier);
     }
 
     #endregion

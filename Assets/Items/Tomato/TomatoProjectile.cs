@@ -28,30 +28,19 @@ public class TomatoProjectile : MonoBehaviour
     }
 
     private void LaunchTomato(Vector3 throwDirection, Vector3 cartVelocity)
-    {   
-        // Arc that thang
-        Vector3 velocity = throwDirection.normalized * tomato.throwForce;
-        velocity.y = Mathf.Sqrt(2 * Mathf.Abs(Physics.gravity.y) * tomato.arcHeight); // Adjust for arc height
+    {
+  
+        Vector3 velocity = throwDirection * tomato.throwForce;
+        velocity.y += Mathf.Sqrt(2 * Mathf.Abs(Physics.gravity.y) * tomato.arcHeight); // Adjust for arc height
 
-        Vector3 finalVelocity;
-        bool isForwardThrow = throwingCart != null && Vector3.Dot(throwDirection.normalized, throwingCart.transform.forward) > 0;
-
-        if (!isForwardThrow)
-        {
-            finalVelocity = velocity;
-        }
-        else
-        {
-            finalVelocity = velocity + cartVelocity; // Momentum
-        }
-
-        rb.velocity = finalVelocity;
+        rb.velocity = velocity + cartVelocity;
         rb.angularVelocity = Random.insideUnitSphere * 5f; // Add some spin
     }
 
     private void OnCollisionEnter(Collision other)
     {
         if (hasHit) return; // Prevent multiple hits
+        // Debug.Log($"Tomato hit {other.gameObject.name}");
 
         Cart hitCart = other.gameObject.GetComponent<Cart>(); 
         if (hitCart != null && (throwingCart == null || hitCart != throwingCart)) // testing 
