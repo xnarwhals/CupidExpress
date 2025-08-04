@@ -72,9 +72,15 @@
                     "name": "DebugBtn",
                     "type": "Button",
                     "id": "b5a80948-1ee1-4e5f-9892-bcaf7e58ede3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Reset",
                     "type": "Button",
-                    "id": "1649131b-d29d-4f06-95be-0d72199990b6",
+                    "id": "a25395d9-b125-44c5-9d7a-abd02a824a83",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -233,14 +239,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "DebugBtn",
-
-                    "id": "e7047be3-0fb8-402d-ae0e-172ef0b8e7a1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9ee9f4fe-bbea-4b21-ba79-cda0bc350d4f",
                     "path": "<Gamepad>/select",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Reset",
-
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
