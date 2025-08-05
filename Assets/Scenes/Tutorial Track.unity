@@ -1921,6 +1921,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customImage: {fileID: 2055663466}
+  timeAmount: 10
+  timeElapsed: 0
 --- !u!65 &469603807
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7204,6 +7206,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customImage: {fileID: 1764951170}
+  timeAmount: 10
+  timeElapsed: 0
 --- !u!65 &1477719804
 BoxCollider:
   m_ObjectHideFlags: 0

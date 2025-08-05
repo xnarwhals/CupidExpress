@@ -19,13 +19,25 @@ public class TutorialTrigger : MonoBehaviour
         customImage.enabled = false;
         Time.timeScale = 1;
         Destroy(customImage);
+        Destroy(gameObject);
+
     }
 
     //Check every frame to see if button is being pressed. Let player move if button is pressed.
     [SerializeField] float timeAmount, timeElapsed;
     void Update()
     {
-        print("hi");
+        if (customImage.enabled == true)
+        {
+            timeElapsed = timeElapsed + Time.unscaledDeltaTime;
+
+
+            if (timeElapsed > timeAmount || Input.GetKeyDown(KeyCode.Space))
+            {
+                Time.timeScale = 1;
+            }
+        }
+       
     }
 
 
