@@ -52,6 +52,9 @@ public class BallKart : CartPhysics
         kartOffset = kartTransform.position - transform.position;
     }
 
+    [SerializeField] float postBoostDecceleration = 1.5f; //accel
+    [SerializeField] float postBoostDecay = 0.01f;
+    bool postBoost = false;
     private void Update()
     {
         //Update()
@@ -71,11 +74,20 @@ public class BallKart : CartPhysics
         }
 
 
-        currentSpeed = Mathf.SmoothStep(currentSpeed, inputSpeed, dt * currentAcceleration);
+        //post boost sustain
+        postBoost = currentSpeed > maxSpeed + 0.01f;
+        if (postBoost && inputSpeed > 0.01f) //if we're post boost and we want to go forward
+        {
+            currentSpeed = Mathf.SmoothStep(currentSpeed, currentSpeed - postBoostDecay, dt * postBoostDecceleration);
+        }
+        else
+        {
+            currentSpeed = Mathf.SmoothStep(currentSpeed, inputSpeed, dt * currentAcceleration);
+        }
+
         currentRotate = Mathf.Lerp(currentRotate, inputRotation, dt * steerAccelleration);
 
-        //Drift
-
+        //Drift(?)
 
         //tie the kart to the sphere
         kartTransform.position = transform.position + kartOffset;
