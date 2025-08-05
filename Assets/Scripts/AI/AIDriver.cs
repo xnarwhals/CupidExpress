@@ -14,6 +14,13 @@ public class AIDriver : MonoBehaviour
     public float cornerSlowdown = 0.7f;
     public float baseSpeedMultiplier = 1;
 
+    [Header("Transforms")]
+    [SerializeField] Transform kartTransform; //the parent of the kart (used for movement)
+    [SerializeField] Transform kartNormal; //the kart child of transform, parent of model
+    [SerializeField] Transform kartModel; //the actual model
+    Vector3 kartOffset;
+
+
     [Header("Spline Path")]
     public SplineContainer spline;
     // public SplineCornerDetector cornerDetector;
@@ -40,9 +47,17 @@ public class AIDriver : MonoBehaviour
     // Refs
     private Rigidbody rb;
     private Cart thisCart;
+    private Collider col;
 
     // State Management
     private AIStateController stateController;
+
+    //misc
+    private float currentSpeed = 0.0f;
+    private float currentRotate = 0.0f;
+    private float inputSpeed = 0.0f;
+    private float inputRotation = 0.0f;
+    private float currentAcceleration = 0.0f;
 
 
     // getters 
@@ -53,9 +68,9 @@ public class AIDriver : MonoBehaviour
     {
         thisCart = GetComponent<Cart>();
         rb = GetComponent<Rigidbody>();
-        rb.centerOfMass = new Vector3(0, -0.5f, 0); // Lower center of mass for stability
+        col = GetComponent<Collider>();
 
-        // Initialize state controller
+        kartOffset = kartTransform.position - transform.position;
         stateController = gameObject.AddComponent<AIStateController>();
         stateController.Initialize(this);
     }
@@ -71,6 +86,8 @@ public class AIDriver : MonoBehaviour
         InitializeSpline();
         FindClosestSplinePos();
         UpdateTargetPos();
+
+        if (!isInitialized || stateController == null) return;
     }
 
     private void InitializeSpline()
@@ -92,15 +109,86 @@ public class AIDriver : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isInitialized || stateController == null) return;
+        if (GameManager.Instance.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
 
         if (stateController.CanMove())
         {
             UpdateSplinePos();
             UpdateTargetPos();
             CalculateTargetSpeed();
-            HandleMovement();
+            // HandleMovement();
+            UpdateAIInputs();
+
+            float dt = Time.deltaTime;
+            rb.AddForce(kartTransform.forward * currentSpeed, ForceMode.Acceleration);
+
+            // Gravity
+            RaycastHit hitGravCheck;
+            Physics.Raycast(kartTransform.position + (kartTransform.up * .1f), Vector3.down, out hitGravCheck, 2.0f, ground);
+            bool grounded = hitGravCheck.collider;
+            float gravity = grounded ? 25f : 25f; // Use your floorGravity/airGravity if you want
+            rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
+
+            // Steering (rotate kartTransform for visual, not Rigidbody)
+            kartTransform.eulerAngles = Vector3.Lerp(
+                kartTransform.eulerAngles,
+                new Vector3(0, kartTransform.eulerAngles.y + currentRotate, 0),
+                dt * 5f // steerAcceleration2
+            );
+
+
+
+            UpdateKartTransforms();
         }
+    }
+
+    private void UpdateAIInputs()
+    {
+        float dt = Time.deltaTime;
+
+        // Calculate direction to target on spline
+        Vector3 directionToTarget = ((Vector3)targetPos - transform.position).normalized;
+        float steerAngle = Vector3.SignedAngle(kartTransform.forward, directionToTarget, Vector3.up);
+
+        // BallKart-style input smoothing
+        inputSpeed = targetSpeed;
+        inputRotation = Mathf.Clamp(steerAngle / 30f, -1f, 1f) * turnSpeed;
+        currentAcceleration = acceleration;
+
+        currentSpeed = Mathf.SmoothStep(currentSpeed, inputSpeed, dt * currentAcceleration);
+        currentRotate = Mathf.Lerp(currentRotate, inputRotation, dt * 4f); // 4f = steerAccelleration
+    }
+
+    private void UpdateKartTransforms()
+    {
+        float dt = Time.deltaTime;
+        kartTransform.position = transform.position + kartOffset;
+
+        RaycastHit hitNear;
+        if (Physics.Raycast(kartTransform.position + (kartTransform.up * 0.1f), Vector3.down, out hitNear, 1.5f, ground))
+            kartNormal.up = Vector3.Lerp(kartNormal.up, hitNear.normal, dt * 8f);
+        else
+            kartNormal.up = Vector3.Lerp(kartNormal.up, Vector3.up, dt * 0.2f);
+
+        // Align kartNormal's forward to splineForward (AI's intended direction)
+        if (((Vector3)splineForward).sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRot = Quaternion.LookRotation((Vector3)splineForward, kartNormal.up);
+            kartNormal.rotation = Quaternion.Slerp(kartNormal.rotation, targetRot, dt * 8f);
+        }
+
+        // Model steering exaggeration (visual only)
+        float steerDir = Mathf.Clamp(currentRotate / turnSpeed, -1f, 1f) * 15f;
+        // Only apply steering offset to Y axis, keep forward aligned with spline
+        // 1. Align model to spline tangent (forward) and ground normal (up)
+        Quaternion splineLook = Quaternion.LookRotation((Vector3)splineForward, kartNormal.up);
+
+        // 2. Apply steering exaggeration as a small local Y offset
+        Quaternion steerOffset = Quaternion.Euler(0, steerDir, 0);
+
+        // 3. Combine them
+        kartModel.rotation = splineLook * steerOffset;
+
     }
 
     private void UpdateSplinePos()
@@ -130,21 +218,11 @@ public class AIDriver : MonoBehaviour
     private void UpdateTargetPos()
     {
         float dynamicLookAhead = lookAheadDistance * (1f + (curSpeed / maxSpeed) * 0.5f);
-
         float lookAheadT = dynamicLookAhead / splineLength;
         float targetT = splinePos + lookAheadT;
-        float lookAheadT2 = (dynamicLookAhead * 2f) / splineLength;
-        float lookAheadTargetT = splinePos + lookAheadT2;
-
-        // Wrap around if necessary
         if (targetT > 1f) targetT -= 1f;
-        if (lookAheadTargetT > 1f) lookAheadTargetT -= 1f;
-
-        // Get positions and tangent from spline
         targetPos = spline.EvaluatePosition(targetT);
-        lookAheadPos = spline.EvaluatePosition(lookAheadTargetT);
         splineForward = math.normalize(spline.EvaluateTangent(targetT));
-
 
         // Apply currentOffset (set by SetLaneOffset)
         targetPos += (float3)currentOffset;
@@ -266,7 +344,9 @@ public class AIDriver : MonoBehaviour
 
     private bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, -transform.up, groundCheckDistance, ground);
+        float sphereRadius = col.bounds.extents.y;
+        Vector3 sphereCenter = transform.position - Vector3.up * sphereRadius;
+        return Physics.CheckSphere(sphereCenter, sphereRadius, ground, QueryTriggerInteraction.Ignore);
     }
 
     #region State 
@@ -361,15 +441,15 @@ public class AIDriver : MonoBehaviour
         // Draw target position
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(targetPos, 0.5f);
-        
+
         // Draw look-ahead position
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(lookAheadPos, 0.3f);
-        
+
         // Draw line to target
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position, targetPos);
-        
+
         // Draw forward direction from spline
         Gizmos.color = Color.green;
         Gizmos.DrawRay(targetPos, (Vector3)splineForward * 2f);
@@ -378,12 +458,12 @@ public class AIDriver : MonoBehaviour
         Gizmos.color = Color.cyan;
         Vector3 currentSplinePos = spline.EvaluatePosition(splinePos);
         Gizmos.DrawWireSphere(currentSplinePos, 0.4f);
-        
+
         // Draw spline path
         Gizmos.color = Color.white;
         int segments = 100;
         Vector3 previousPoint = spline.EvaluatePosition(0f);
-        
+
         for (int i = 1; i <= segments; i++)
         {
             float t = (float)i / segments;
@@ -391,20 +471,29 @@ public class AIDriver : MonoBehaviour
             Gizmos.DrawLine(previousPoint, currentPoint);
             previousPoint = currentPoint;
         }
-        
 
         // Ground check
-        Gizmos.color = Color.white;
-        Gizmos.DrawRay(transform.position, -transform.up * groundCheckDistance);
-        
+        if (col != null)
+        {
+            float sphereRadius = col.bounds.extents.y;
+            Vector3 sphereCenter = transform.position - Vector3.up * sphereRadius;
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(sphereCenter, sphereRadius);
+        }
+
+
         // speed indicator
-        Gizmos.color = Color.Lerp(Color.green, Color.red, curSpeed / maxSpeed);
-        Gizmos.DrawWireCube(transform.position + Vector3.up * 2f, Vector3.one * 0.3f);
-        #if UNITY_EDITOR
+        if (rb != null)
+        {
+            float rbSpeed = rb.velocity.magnitude;
+            Gizmos.color = Color.Lerp(Color.green, Color.red, rbSpeed / maxSpeed);
+            Gizmos.DrawWireCube(transform.position + Vector3.up * 2f, Vector3.one * 0.3f);
+#if UNITY_EDITOR
             UnityEditor.Handles.Label(
                 transform.position + Vector3.up * 2.5f,
-                $"Speed: {curSpeed:F2}"
+                $"RB Speed: {rbSpeed:F2}"
             );
-        #endif
+#endif
+        }
     }
 }

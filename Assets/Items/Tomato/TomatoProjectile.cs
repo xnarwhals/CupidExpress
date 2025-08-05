@@ -77,6 +77,9 @@ public class TomatoProjectile : MonoBehaviour
 
     private void CreateKetchupSplat(Vector3 splatPosition)
     {
+
+        splatPosition += Vector3.up * 0.9f;
+
         if (Physics.Raycast(splatPosition, Vector3.down, out RaycastHit hit, 10f))
         {
             splatPosition = hit.point; // ensure its on the floor

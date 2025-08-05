@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        // InitializeRace();
+        // PrintLeaderboardPositions();
     }
 
     private void Update()
@@ -305,7 +305,6 @@ public class GameManager : MonoBehaviour
 
         // use leaderboard if not finished
         var leaderboard = GetCartLeaderboard();
-        Debug.Log($"Cart {cart.CartName}");
         return leaderboard.IndexOf(cart) + 1;
     }
 
@@ -379,6 +378,16 @@ public class GameManager : MonoBehaviour
                 var curFirstPlaceData = cartRaceData[curFirstPlace];
                 Debug.Log($"Leader: {curFirstPlace.CartName} - Lap {curFirstPlaceData.curLap}/{totalLaps}");
             }
+        }
+    }
+
+    private void PrintLeaderboardPositions()
+    {
+        var leaderboard = GetCartLeaderboard();
+        for (int i = 0; i < leaderboard.Count; i++)
+        {
+            var cart = leaderboard[i];
+            Debug.Log($"{i + 1}: {cart.CartName} (Lap {cartRaceData[cart].curLap}/{totalLaps}, Checkpoint {cartRaceData[cart].nextCheckpointIndex + 1}/{checkpoints.Length})");
         }
     }
 

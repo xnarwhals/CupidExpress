@@ -14,11 +14,12 @@ public class Cart : MonoBehaviour
 
     [Header("Ref Components")]
     private CartPhysics cartPhysics;
+    private BallKart ballKart; 
     private KetchupEffect ketchupEffect; // player
     private AIDriver aiDriver; // AI
     private CartPlayerInput[] playerInputs;
 
-    public bool isLeader = false;
+    public bool isLeader = false; // ignore
 
     public string CartName => cartName;
     public int CartID => cartID;
@@ -27,26 +28,26 @@ public class Cart : MonoBehaviour
     private void Awake()
     {
         cartPhysics = GetComponent<CartPhysics>();
+        ballKart = GetComponent<BallKart>();
 
-        if (cartPhysics == null) print((CartPhysics)GetComponent<BallKart>());
+
+        if (cartPhysics == null || ballKart == null) print((CartPhysics)GetComponent<BallKart>());
 
         playerInputs = GetComponentsInChildren<CartPlayerInput>();
         ketchupEffect = GetComponent<KetchupEffect>();
         aiDriver = GetComponent<AIDriver>();
     }
 
+    // Testing
     private void Start()
     {
-        if (isLeader)
-        {
-            GameManager.Instance.SetCartLap(this, 2);
-        }
+        if (isLeader) GameManager.Instance.SetCartLap(this, 2);
     }
 
     #region Cart Methods
     public float GetSplineProgress()
     {
-        if (aiDriver == null) return 0f;
+        if (aiDriver == null) return 0f; // human no spline
         return aiDriver.GetSplineProgress();
 
     }
@@ -72,13 +73,9 @@ public class Cart : MonoBehaviour
 
     public void ApplyBoost(float duration, float speedMultiplier)
     {
-        if (cartID == 0) Debug.Log("Player Cart Boost");
+        if (cartID == 0) ballKart.Boost(100f, 100f, true);
         else aiDriver.ApplyBoost(duration, speedMultiplier);
     }
 
     #endregion
-
-
-
-
 }
