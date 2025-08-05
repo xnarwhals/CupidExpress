@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 public enum CartRole
 {
@@ -50,7 +51,14 @@ public class CartPlayerInput : MonoBehaviour
 
         if (Gamepad.all.Count > playerIndex)
         {
-            input.devices = new InputDevice[] { Gamepad.all[playerIndex] }; // assign specific gamepad to this player
+            if (playerIndex == 0)
+            {
+                input.devices = new InputDevice[] { Gamepad.all[0], Keyboard.current };
+            }
+            else
+            {
+                input.devices = new InputDevice[] { Gamepad.all[playerIndex] };
+            }
         }
 
         input.Player.SwapRoles.performed += ctx =>
@@ -135,11 +143,21 @@ public class CartPlayerInput : MonoBehaviour
             cartPhysics.SetThrottle(currentThrottle);
         }
 
+
+        // ITEM USE CODE
         if (role == CartRole.Driver && input.Player.UseItem.triggered)
         {
-            // Same action (use item) two inputs
+            bool throwItBack = false;
+
+            // Check if '2' key was pressed this frame
+            if (Keyboard.current != null && Keyboard.current.digit2Key.wasPressedThisFrame)
+                throwItBack = true;
+
+            // Also check for left trigger (gamepad)
             InputControl itemTrigger = input.Player.UseItem.activeControl;
-            bool throwItBack = itemTrigger?.path.Contains("leftTrigger") ?? false;
+            if (itemTrigger != null && itemTrigger.path.Contains("leftTrigger"))
+                throwItBack = true;
+
             ItemManager.Instance.UseItem(cart, throwItBack);
         }
 
