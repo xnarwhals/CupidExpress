@@ -360,7 +360,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   resetTransform: {fileID: 0}
-  postBoostSustain: 10
+  postBoostDecceleration: 10
+  postBoostDecay: 100
 --- !u!1 &8293393449995343660
 GameObject:
   m_ObjectHideFlags: 0
