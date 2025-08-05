@@ -212,7 +212,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3579075809553388709}
   m_Layer: 3
-  m_Name: Kart
+  m_Name: Kart(old)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
