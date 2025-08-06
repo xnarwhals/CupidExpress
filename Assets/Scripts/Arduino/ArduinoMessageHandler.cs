@@ -28,12 +28,19 @@ public class ArduinoMessageHandler : MonoBehaviour
     // Invoked when a connect/disconnect event occurs. The parameter 'success'
     // will be 'true' upon connection, and 'false' upon disconnection or
     // failure to connect.
+    bool alreadySentMsg = false;
     void OnConnectionEvent(bool success)
     {
         if (success)
             Debug.Log("Arduino Connection established");
-        else
-            Debug.Log("Arduino Connection attempt failed or disconnection detected");
+        else 
+        {
+            if (!alreadySentMsg)
+            {
+                alreadySentMsg = true;
+                Debug.Log("Arduino Connection attempt failed or disconnection detected");
+            }
+        }
     }
 
     SerialController serialController;
