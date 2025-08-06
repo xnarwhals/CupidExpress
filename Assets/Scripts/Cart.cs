@@ -33,6 +33,9 @@ public class Cart : MonoBehaviour
 
         //if (cartPhysics == null) print((CartPhysics)GetComponent<BallKart>());
 
+        // if (cartPhysics == null || ballKart == null) print((CartPhysics)GetComponent<BallKart>());
+
+
         playerInputs = GetComponentsInChildren<CartPlayerInput>();
         ketchupEffect = GetComponent<KetchupEffect>();
         aiDriver = GetComponent<AIDriver>();
