@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections.Generic;
 
 public enum CartRole
 {
@@ -34,6 +33,9 @@ public class CartPlayerInput : MonoBehaviour
     float currentThrottle = 0.0f;
 
     ArduinoMessageHandler messageHandler;
+
+    [Header("BarCode")]
+    public BarcodeInputReader barcodeInputReader;
 
     private void Awake()
     {
@@ -143,6 +145,15 @@ public class CartPlayerInput : MonoBehaviour
             cartPhysics.SetThrottle(currentThrottle);
         }
 
+        if (barcodeInputReader != null)
+        {
+            string barcodeInput = barcodeInputReader.GetInput();
+            if (!string.IsNullOrEmpty(barcodeInput))
+            {
+                ItemManager.Instance.UseItem(cart, barcodeInput.Contains("2")); 
+            }
+        }
+
 
         // ITEM USE CODE
         if (role == CartRole.Driver && input.Player.UseItem.triggered)
@@ -150,8 +161,8 @@ public class CartPlayerInput : MonoBehaviour
             bool throwItBack = false;
 
             // Check if '2' key was pressed this frame
-            if (Keyboard.current != null && Keyboard.current.digit2Key.wasPressedThisFrame)
-                throwItBack = true;
+            // if (Keyboard.current != null && Keyboard.current.digit2Key.wasPressedThisFrame)
+            //     throwItBack = true;
 
             // Also check for left trigger (gamepad)
             InputControl itemTrigger = input.Player.UseItem.activeControl;
