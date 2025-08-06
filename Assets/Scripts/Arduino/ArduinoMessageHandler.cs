@@ -10,6 +10,7 @@ public class ArduinoMessageHandler : MonoBehaviour
     public int input1 = 0;
     public int input2 = 0;
     public int input3 = 0;
+    public int input4 = 0;
 
     // Invoked when a line of data is received from the serial device.
     void OnMessageArrived(string msg)
@@ -21,6 +22,7 @@ public class ArduinoMessageHandler : MonoBehaviour
         int.TryParse(words[1], out input1);
         int.TryParse(words[2], out input2); //parse to int and set
         int.TryParse(words[3], out input3);
+        int.TryParse(words[3], out input4);
     }
 
     // Invoked when a connect/disconnect event occurs. The parameter 'success'

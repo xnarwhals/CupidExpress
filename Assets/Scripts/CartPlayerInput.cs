@@ -16,13 +16,14 @@ public class CartPlayerInput : MonoBehaviour
     [SerializeField] private int playerIndex = 0; // distinguish players using same script
     [SerializeField] bool printRawInput = false;
 
-    [Header("Arduino")]
+    [Header("Arduino")] //organize later?
     public float maxPressL = 80.0f;
     public float maxPressR = 80.0f;
     public float steerDeadzoneL = 10f;
     public float steerDeadzoneR = 10f;
     public float deadzoneScale = 1.0f;
     public float stepThreshold = 200.0f;
+    public float itemLThreshold = 200.0f;
     public float stepBpm = 50.0f;
     public float reverseStepCount = 1.0f;
 
@@ -79,6 +80,7 @@ public class CartPlayerInput : MonoBehaviour
             if (currentThrottle != 0.0f && Time.time - prevStepTime > (60.0f / stepBpm)) currentThrottle = 0.0f; //stop the cart from going if no step has happened yet
             if (messageHandler != null) //if arduino
             {
+                //steer
                 float left = messageHandler.input0;
                 float right = messageHandler.input1;
 
@@ -92,6 +94,7 @@ public class CartPlayerInput : MonoBehaviour
                     steer = Mathf.Clamp(right / maxPressR - left / maxPressL, -1.0f, 1.0f);
                 }
 
+                //stepping
                 float stepL = messageHandler.input2;
                 float stepR = messageHandler.input3;
 
@@ -108,6 +111,14 @@ public class CartPlayerInput : MonoBehaviour
                     currentThrottle = -1.0f;
                 }
 
+                //items
+                float itemL = messageHandler.input4;
+                if (itemL > itemLThreshold)
+                {
+                    ItemManager.Instance.UseItem(cart, false);
+                }
+
+                //printing
                 if (printRawInput)
                     print("raw vals: " + left + ", " + right + " | Steer: " + steer);
                 //print("steering: " + ((messageHandler.input1 - messageHandler.input0) / cartPhysics.maxPress).ToString());
