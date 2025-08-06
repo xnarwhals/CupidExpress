@@ -22,7 +22,7 @@ public class ArduinoMessageHandler : MonoBehaviour
         int.TryParse(words[1], out input1);
         int.TryParse(words[2], out input2); //parse to int and set
         int.TryParse(words[3], out input3);
-        int.TryParse(words[3], out input4);
+        int.TryParse(words[4], out input4);
     }
 
     // Invoked when a connect/disconnect event occurs. The parameter 'success'
