@@ -15,10 +15,12 @@ public class AIDriver : MonoBehaviour
     public float baseSpeedMultiplier = 1;
 
     [Header("Transforms")]
-    [SerializeField] Transform kartTransform; //the parent of the kart (used for movement)
-    [SerializeField] Transform kartNormal; //the kart child of transform, parent of model
-    [SerializeField] Transform kartModel; //the actual model
+    public Transform kartTransform; //the parent of the kart (used for movement)
+    public Transform kartNormal; //the kart child of transform, parent of model
+    public Transform kartModel; //the actual model
     Vector3 kartOffset;
+    public Vector3 targetModelScale = Vector3.one;
+    private float scaleLerpSpeed = 10f; 
 
 
     [Header("Spline Path")]
@@ -41,6 +43,7 @@ public class AIDriver : MonoBehaviour
 
     public bool showGizmos = true; 
 
+
     // Lane offset
     private Vector3 currentOffset = Vector3.zero;
 
@@ -60,9 +63,13 @@ public class AIDriver : MonoBehaviour
     private float currentAcceleration = 0.0f;
 
 
+
+
     // getters 
     public Cart ThisCart => thisCart;
     public AIStateController StateController => stateController;
+    public Rigidbody GetRigidbody() => rb;
+    public float GetAcceleration() => acceleration;
 
     private void Awake()
     {
@@ -104,6 +111,11 @@ public class AIDriver : MonoBehaviour
         UpdateTargetPos(); // initial target
 
         isInitialized = true;
+    }
+
+    private void Update()
+    {   
+        kartModel.localScale = Vector3.Lerp(kartModel.localScale, targetModelScale, Time.deltaTime * scaleLerpSpeed);
     }
 
 
@@ -349,8 +361,10 @@ public class AIDriver : MonoBehaviour
         return Physics.CheckSphere(sphereCenter, sphereRadius, ground, QueryTriggerInteraction.Ignore);
     }
 
+
+
     #region State 
-     private float GetStateSpeedMultiplier()
+    private float GetStateSpeedMultiplier()
     {
         if (stateController == null) return 1f;
 
@@ -381,8 +395,9 @@ public class AIDriver : MonoBehaviour
     }
 
     #endregion
+    
+    #region Item Methods
 
-    #region Public Methods
     public void ApplyBoost(float boostDuration, float speedMultiplier)
     {
         if (!stateController.CanUseItems()) return; // Don't apply boost during certain states
@@ -393,6 +408,18 @@ public class AIDriver : MonoBehaviour
     {
         stateController.StartSpinOut(duration);
     }
+
+    public void Shock(float duration)
+    {
+        SpinOut(duration);
+        rb.velocity = Vector3.zero;
+        targetModelScale = Vector3.one * 0.6f; // scale down by 60%
+
+    }
+
+    #endregion
+
+    #region Public Methods
 
     public void SetTargetOffset(Vector3 offset)
     {
@@ -428,9 +455,6 @@ public class AIDriver : MonoBehaviour
         currentOffset = splineRight * laneOffset;
     }
 
-    // Methods for AIStateController
-    public Rigidbody GetRigidbody() => rb;
-    public float GetAcceleration() => acceleration;
 
     #endregion
 

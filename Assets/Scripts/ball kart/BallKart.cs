@@ -7,6 +7,8 @@ public class BallKart : CartPhysics
     [SerializeField] Transform kartTransform; //the parent of the kart (used for movement)
     [SerializeField] Transform kartNormal; //the kart child of transform, parent of model
     [SerializeField] Transform kartModel; //the actual model
+    public Vector3 targetModelScale = Vector3.one;
+    private float scaleLerpSpeed = 10f; 
 
     [Header("Movement Settings")]
     [SerializeField] float floorGravity = 25f;
@@ -56,7 +58,10 @@ public class BallKart : CartPhysics
     [SerializeField] float postBoostDecay = 0.01f;
     bool postBoost = false;
     private void Update()
-    {
+    {   
+        // Shock minify
+        kartModel.localScale = Vector3.Lerp(kartModel.localScale, targetModelScale, Time.deltaTime * scaleLerpSpeed);
+
         //Update()
         float dt = Time.deltaTime;
         if (invertSteering) steerInput = -steerInput;
@@ -104,12 +109,13 @@ public class BallKart : CartPhysics
         if (isSpinningOut)
         {
             spinOutTimer += Time.fixedDeltaTime;
-            kartNormal.Rotate(Vector3.up * spinOutDirection * 500f * Time.fixedDeltaTime, Space.Self);
+            kartNormal.Rotate(Vector3.up * spinOutDirection * 400f * Time.fixedDeltaTime, Space.Self);
 
             if (spinOutTimer >= spinOutDuration)
             {
                 isSpinningOut = false;
-                rb.drag = originalDrag; 
+                targetModelScale = Vector3.one; // scale reset
+                rb.drag = originalDrag;
             }
             return; // Skip normal movement while spinning out
         }
@@ -159,8 +165,16 @@ public class BallKart : CartPhysics
         base.SpinOut(duration);
         spinOutDirection = Random.value > 0.5f ? 1f : -1f;
         originalDrag = rb.drag;
-        rb.drag = 2f; 
-     }
+        rb.drag = 1.5f;
+    }
+
+    public void Shock(float duration)
+    {
+        SpinOut(duration);
+        rb.velocity = Vector3.zero;
+        targetModelScale = Vector3.one * 0.6f; // scale down by 60%
+    }
+
 
     public override void Reset()
     {
@@ -199,6 +213,14 @@ public class BallKart : CartPhysics
         {
             maxSpeed = defaultMaxSpeed;
             acceleration = defaultAccel;
+        }
+    }
+
+    public void ApplyInstantBoost(float force)
+    {
+        if (rb != null)
+        {
+            rb.AddForce(kartTransform.forward * force, ForceMode.VelocityChange);
         }
     }
 }
