@@ -150,7 +150,7 @@ public class CartPlayerInput : MonoBehaviour
             string barcodeInput = barcodeInputReader.GetInput();
             if (!string.IsNullOrEmpty(barcodeInput))
             {
-                ItemManager.Instance.UseItem(cart, barcodeInput.Contains("2")); 
+                ItemManager.Instance.UseItem(cart, barcodeInput[0] == '2'); 
             }
         }
 
