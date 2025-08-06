@@ -88,15 +88,22 @@ public class CartRoleManager : MonoBehaviour
         p2.AssignRole(r1);
 
         // apply mini boost here?
- 
-        swapUI.SwapIcons();
-        swapUI.Reset();
+        if (swapUI != null)
+        {
+            swapUI.SwapIcons();
+            swapUI.Reset();
+        }
+    
         Debug.Log("Roles swapped: " + joinedPlayers[0].role + " <-> " + joinedPlayers[1].role);
     }
 
     private void OnRoleSwapFailed()
     {   
-        swapUI.Reset();
+        if (swapUI != null)
+        {
+            swapUI.Reset();
+        }
+
         Debug.Log("Role swap sync failed");
     }
 

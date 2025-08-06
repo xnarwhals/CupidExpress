@@ -86,7 +86,8 @@ public class LapUI : MonoBehaviour
             case GameManager.RaceState.Finished:
                 lapText.text = "Finished!";
                 lapText.color = finalLapColor;
-                endTimeText.text = "Time: " + GameManager.Instance.GetCartRaceTime(playerCart).ToString("F2") + "s";
+                if (endTimeText != null)
+                    endTimeText.text = "Time: " + GameManager.Instance.GetCartRaceTime(playerCart).ToString("F2") + "s";
                 break;
 
             case GameManager.RaceState.Paused:

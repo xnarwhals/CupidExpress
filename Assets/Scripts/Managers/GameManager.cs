@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
+using UnityEngine.Splines;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -16,8 +16,11 @@ public class GameManager : MonoBehaviour
     [Tooltip("Max race time")]
     public float maxRaceTime = 300f; // 5 minutes
 
-    [Header("checkpoints")]
+    [Header("checkpoints/race track")]
+    public Transform checkpointHolder;
     public Transform[] checkpoints;
+    public SplineContainer raceTrack;
+
 
     [Header("Debug")]
     [SerializeField] private bool debugMode = false;
@@ -51,6 +54,7 @@ public class GameManager : MonoBehaviour
     public Action<float> OnRaceTimeUpdate;
     public Action OnRaceFinished;
     public Action<int> OnCountdownUpdate; // For UI 
+    public Action<Cart, int> OnCartPositionChanged;
     public Action CountdownGO;
 
 
@@ -65,11 +69,13 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        InitializeRace();
     }
 
     private void Start()
     {
-        InitializeRace();
+        // PrintLeaderboardPositions();
     }
 
     private void Update()
@@ -181,14 +187,15 @@ public class GameManager : MonoBehaviour
             }
             else if (checkpointIndex == 0 && data.firstLoopCheck) // ignore
             {
-                CompleteLap(cart); 
+                CompleteLap(cart);
             }
 
             if (checkpointIndex == checkpoints.Length - 1)
             {
-                data.firstLoopCheck = true; 
+                data.firstLoopCheck = true;
             }
         }
+        NotifyCartPositions();
     }
 
     private void CompleteLap(Cart cart)
@@ -199,13 +206,15 @@ public class GameManager : MonoBehaviour
         data.lastLapTime = Time.time;
 
         OnCartLapCompleted?.Invoke(cart, data.curLap);
-        // Debug.Log($"{cart.CartName} completed lap {data.curLap - 1}! Total laps: {data.curLap - 1}/{totalLaps}");
+        Debug.Log($"{cart.CartName} completed lap {data.curLap - 1}! Total laps: {data.curLap - 1}/{totalLaps}");
 
         // Check if finished + leaderboard stuff later
         if (data.curLap > totalLaps)
         {
             FinishRace(cart);
         }
+        
+        NotifyCartPositions();
     }
 
     private void FinishRace(Cart cart)
@@ -222,12 +231,21 @@ public class GameManager : MonoBehaviour
         OnCartFinished?.Invoke(cart, position);
         Debug.Log($"{cart.CartName} finish in {position}. Time: {data.finishTime:F2} seconds");
     }
+    
+    private void NotifyCartPositions()
+    {
+        var leaderboard = GetCartLeaderboard();
+        for (int i = 0; i < leaderboard.Count; i++)
+        {
+            OnCartPositionChanged?.Invoke(leaderboard[i], i + 1); // 1-based position
+        }
+    }
 
     #endregion
 
     #region Race Info
 
-    public RaceState GetCurrentRaceState() 
+    public RaceState GetCurrentRaceState()
     {
         return currentRaceState;
     }
@@ -266,16 +284,38 @@ public class GameManager : MonoBehaviour
             .ToList();
     }
 
+    public Cart GetLeaderCart()
+    {
+        var leaderboard = GetCartLeaderboard();
+        return leaderboard.Count > 0 ? leaderboard[0] : null; // first place
+    }
+
     public int GetCartPosition(Cart cart)
     {
-        if (cartRaceData[cart].isFinished)
+        if (!cartRaceData.ContainsKey(cart))
         {
-            return finishedCarts.IndexOf(cart) + 1;
+            Debug.LogWarning($"Cart {cart.CartName} not found");
+            return -1; // not registered
         }
+
+        if (cartRaceData[cart].isFinished)
+            {
+                return finishedCarts.IndexOf(cart) + 1;
+            }
 
         // use leaderboard if not finished
         var leaderboard = GetCartLeaderboard();
         return leaderboard.IndexOf(cart) + 1;
+    }
+
+    //testing
+    public void SetCartLap(Cart cart, int lap)
+    {
+        if (cartRaceData.ContainsKey(cart))
+        {
+            cartRaceData[cart].curLap = lap;
+            cartRaceData[cart].nextCheckpointIndex = 0;
+        }
     }
 
     #endregion
@@ -286,6 +326,20 @@ public class GameManager : MonoBehaviour
         currentRaceTime = 0f;
         finishedCarts.Clear();
 
+        // checkpoint assignment
+        if (checkpointHolder != null)
+        {
+            checkpoints = checkpointHolder.GetComponentsInChildren<Transform>()
+                .Where(t => t != checkpointHolder.transform) // exclude the holder itself
+                .ToArray();
+        }
+        else
+        {
+            Debug.LogWarning("Checkpoint holder not assigned! Please assign it in the GameManager.");
+            checkpoints = new Transform[0];
+        }
+
+
         // find carts in scene to register
         Cart[] carts = FindObjectsOfType<Cart>();
         foreach (Cart cart in carts)
@@ -293,6 +347,7 @@ public class GameManager : MonoBehaviour
             RegisterCart(cart);
         }
         Debug.Log($"Race initialized with {carts.Length} carts and {totalLaps} laps");
+
     }
 
     private void UpdateRaceTime()
@@ -325,6 +380,17 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    private void PrintLeaderboardPositions()
+    {
+        var leaderboard = GetCartLeaderboard();
+        for (int i = 0; i < leaderboard.Count; i++)
+        {
+            var cart = leaderboard[i];
+            Debug.Log($"{i + 1}: {cart.CartName} (Lap {cartRaceData[cart].curLap}/{totalLaps}, Checkpoint {cartRaceData[cart].nextCheckpointIndex + 1}/{checkpoints.Length})");
+        }
+    }
+
     #endregion
 
     [Serializable]

@@ -81,8 +81,8 @@ public class ItemManager : MonoBehaviour
         {
             KartItem curItem = items[0];
             GameObject itemVisual = Instantiate(curItem.visualPrefab, itemSlot);
-            itemVisual.transform.localPosition = Vector3.zero;
-            itemVisual.transform.localRotation = Quaternion.identity;
+            // itemVisual.transform.localPosition = Vector3.zero;
+            // itemVisual.transform.localRotation = Quaternion.identity;
         }
     }
 

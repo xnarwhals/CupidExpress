@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6e09f8e0690ed4803bdc79abd59627dc, type: 3}
-  m_Name: AgroLeft
+  m_Name: Xavier
   m_EditorClassIdentifier: 
   aggressiveness: 0.8
   drivingLane: 1
-  laneOffset: 4.2
-  laneCommitment: 0.7
+  laneOffset: 8
   chanceToUseItem: 0.81
-  proximityRadius: 10
+  proximityRadius: 6

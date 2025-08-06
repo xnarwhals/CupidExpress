@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 public enum CartRole
 {
@@ -13,6 +14,7 @@ public class CartPlayerInput : MonoBehaviour
     public Cart cart;
     private CartPhysics cartPhysics; 
     private PlayerCart input; // bad name, "CartPlayerControls"
+    public TestItemEffect testItemEffect;
     [SerializeField] private int playerIndex = 0; // distinguish players using same script
     [SerializeField] bool printRawInput = false;
 
@@ -50,7 +52,14 @@ public class CartPlayerInput : MonoBehaviour
 
         if (Gamepad.all.Count > playerIndex)
         {
-            input.devices = new InputDevice[] { Gamepad.all[playerIndex] }; // assign specific gamepad to this player
+            if (playerIndex == 0)
+            {
+                input.devices = new InputDevice[] { Gamepad.all[0], Keyboard.current };
+            }
+            else
+            {
+                input.devices = new InputDevice[] { Gamepad.all[playerIndex] };
+            }
         }
 
         input.Player.SwapRoles.performed += ctx =>
@@ -83,6 +92,7 @@ public class CartPlayerInput : MonoBehaviour
                 //steer
                 float left = messageHandler.input0;
                 float right = messageHandler.input1;
+
 
                 if (left >  maxPressL && right >  maxPressR) steer = 0.0f; //if both on, go forward
                 else
@@ -127,13 +137,14 @@ public class CartPlayerInput : MonoBehaviour
             if (steer == 0.0f) //if no arduino input, use controller
             {
                 steer = input.Player.Steer.ReadValue<float>();
+
             }
 
             //drift
 
 
-            //cartPhysics.Drift(input.Player.Drift.IsPressed());
-            cartPhysics.Drift(input.Player.Drift.ReadValue<float>() > 0.5f);
+                //cartPhysics.Drift(input.Player.Drift.IsPressed());
+                cartPhysics.Drift(input.Player.Drift.ReadValue<float>() > 0.5f);
 
             // east btn accelerates, south btn brakes/reverses
             if (input.Player.Accelerate.IsPressed()) currentThrottle = 1f;
@@ -143,12 +154,22 @@ public class CartPlayerInput : MonoBehaviour
             cartPhysics.SetThrottle(currentThrottle);
         }
 
+
+        // ITEM USE CODE
         if (role == CartRole.Driver && input.Player.UseItem.triggered)
         {
-            // Same action (use item) two inputs
+            bool throwItBack = false;
+
+            // Check if '2' key was pressed this frame
+            if (Keyboard.current != null && Keyboard.current.digit2Key.wasPressedThisFrame)
+                throwItBack = true;
+
+            // Also check for left trigger (gamepad)
             InputControl itemTrigger = input.Player.UseItem.activeControl;
-            bool itemCanBeUsedBehind = itemTrigger?.path.Contains("rightShoulder") ?? false;
-            ItemManager.Instance.UseItem(cart, itemCanBeUsedBehind);
+            if (itemTrigger != null && itemTrigger.path.Contains("leftTrigger"))
+                throwItBack = true;
+
+            ItemManager.Instance.UseItem(cart, throwItBack);
         }
 
         if (input.Player.StartGame.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.WaitingToStart)
@@ -156,6 +177,12 @@ public class CartPlayerInput : MonoBehaviour
             // Debug.Log("Game started");
             GameManager.Instance.StartRace();
         }
+
+        if (testItemEffect != null && input.Player.DebugBtn.WasPressedThisFrame())
+        {
+            testItemEffect.Test();
+        }
+
     }
 
     void Step (bool side)

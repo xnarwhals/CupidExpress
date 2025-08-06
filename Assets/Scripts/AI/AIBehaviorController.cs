@@ -8,10 +8,6 @@ public class AIBehaviorController : MonoBehaviour
     [Header("Proximity")]
     [Range(0.5f, 5f)]
     public float proximityCheckFrequency = 1f; // Distance to check for nearby carts
-
-    [Header("Speed Lerping")]
-    [Range(1f, 10f)]
-    public float speedLerpTime = 4f; 
     private AIDriver aiDriver;
 
     // before personality modifications
@@ -35,7 +31,7 @@ public class AIBehaviorController : MonoBehaviour
         baseAcceleration = aiDriver.acceleration;
         baseTurnSpeed = aiDriver.turnSpeed;
 
-        ApplyPersonalityValues();
+        // ApplyPersonalityValues();
     }
 
     // Change in needed will need testing for tunning
@@ -66,39 +62,25 @@ public class AIBehaviorController : MonoBehaviour
 
     private void ApplyLaneOffset()
     {
-        if (personality == null) return;
-        
-        // Calculate lane offset vector
-        Vector3 offsetVector = CalculateLaneOffsetVector();
-        aiDriver.SetTargetOffset(offsetVector);
-    }
+        if (personality == null || aiDriver == null) return;
 
-    private Vector3 CalculateLaneOffsetVector()
-    {
-        // No offset for center lane or zero offset
-        if (personality.drivingLane == DrivingLane.Center || personality.laneOffset <= 0f)
-            return Vector3.zero;
-
-        // Calculate track direction at this progress point
-        Vector3 trackDirection = aiDriver.GetSplineDirection();
-
-        // Get perpendicular direction (right side of track)
-        Vector3 rightDirection = Vector3.Cross(trackDirection, Vector3.up).normalized;
-
-        // Calculate offset vector based on lane preference
-        Vector3 offsetVector = Vector3.zero;
         switch (personality.drivingLane)
         {
+            case DrivingLane.Center:
+                break;
             case DrivingLane.Left:
-                offsetVector = -rightDirection * personality.laneOffset; // Negative = left
+                aiDriver.SetLaneOffset(-personality.laneOffset);
                 break;
             case DrivingLane.Right:
-                offsetVector = rightDirection * personality.laneOffset; // Positive = right
+                aiDriver.SetLaneOffset(personality.laneOffset);
                 break;
-        }
+            default:
+                break;
+        } 
+        
 
-        return offsetVector;
     }
+
 
 
     #region Item Usage
@@ -207,43 +189,18 @@ public class AIBehaviorController : MonoBehaviour
         // Gizmos.color = cartInProximity ? Color.yellow : Color.gray;
         // Gizmos.DrawWireSphere(transform.position, personality.proximityRadius);
 
-        // ✅ CURRENT SPEED BAR (Blue) - What speed AI is actually using
-        // if (baseMaxSpeed > 0)
-        // {
-        //     float currentSpeedRatio = aiDriver.maxSpeed / baseMaxSpeed;
-        //     Vector3 barStart = transform.position + Vector3.up * 5f;
-        //     Vector3 currentBarEnd = barStart + Vector3.up * (currentSpeedRatio * 3f);
+// #if UNITY_EDITOR
+//         string laneInfo = personality.drivingLane == DrivingLane.Center ? "Center" :
+//                         personality.drivingLane == DrivingLane.Left ? $"Left ({personality.laneOffset:F1}m)" :
+//                         $"Right ({personality.laneOffset:F1}m)";
 
-        //     // Color current speed bar based on level
-        //     if (currentSpeedRatio >= 0.9f)
-        //         Gizmos.color = Color.blue;
-        //     else if (currentSpeedRatio >= 0.7f)
-        //         Gizmos.color = Color.cyan;
-        //     else
-        //         Gizmos.color = Color.magenta;
-
-        //     Gizmos.DrawLine(barStart, currentBarEnd);
-        //     Gizmos.DrawWireSphere(currentBarEnd, 0.3f);
-        // }
-
-        // ✅ ENHANCED LANE INDICATOR
-        // Vector3 cubePos = transform.position + Vector3.up * 3f;
-        // Gizmos.color = personality.drivingLane == DrivingLane.Left ? Color.red :
-        //             personality.drivingLane == DrivingLane.Right ? Color.blue : Color.white;
-        // Gizmos.DrawWireCube(cubePos, Vector3.one * 0.5f);
-
-#if UNITY_EDITOR
-        string laneInfo = personality.drivingLane == DrivingLane.Center ? "Center" :
-                        personality.drivingLane == DrivingLane.Left ? $"Left ({personality.laneOffset:F1}m)" :
-                        $"Right ({personality.laneOffset:F1}m)";
-
-        UnityEditor.Handles.Label(transform.position + Vector3.up * 9f,
-            $"Personality: {personality.name}\n" +
-            $"Aggressiveness: {personality.aggressiveness:F2}\n" +
-            $"Lane: {laneInfo}\n" +
-            $"Current Speed: {aiDriver.maxSpeed:F1}\n" +
-            $"Base Speed: {baseMaxSpeed:F1}\n" +
-            $"Proximity: {(cartInProximity ? "NEARBY" : "CLEAR")}");
-#endif
+//         UnityEditor.Handles.Label(transform.position + Vector3.up * 9f,
+//             $"Personality: {personality.name}\n" +
+//             $"Aggressiveness: {personality.aggressiveness:F2}\n" +
+//             $"Lane: {laneInfo}\n" +
+//             $"Current Speed: {aiDriver.maxSpeed:F1}\n" +
+//             $"Base Speed: {baseMaxSpeed:F1}\n" +
+//             $"Proximity: {(cartInProximity ? "NEARBY" : "CLEAR")}");
+// #endif
     }
 }
