@@ -2683,6 +2683,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   role: 0
   cart: {fileID: 0}
+  testItemEffect: {fileID: 0}
   playerIndex: 1
   printRawInput: 0
   maxPressL: 80
@@ -2691,6 +2692,7 @@ MonoBehaviour:
   steerDeadzoneR: 10
   deadzoneScale: 1
   stepThreshold: 200
+  itemLThreshold: 200
   stepBpm: 60
   reverseStepCount: 1
 --- !u!136 &1117847490
@@ -2812,11 +2814,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   totalLaps: 3
   maxRaceTime: 600
+  checkpointHolder: {fileID: 0}
   checkpoints:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  raceTrack: {fileID: 0}
   debugMode: 0
   countDownDuration: 3
   currentRaceState: 0
@@ -3469,6 +3473,7 @@ MonoBehaviour:
   input1: 0
   input2: 0
   input3: 0
+  input4: 0
 --- !u!4 &1390645867
 Transform:
   m_ObjectHideFlags: 0
@@ -5317,6 +5322,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8702622490716018280, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8931734999363503700, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_Name
@@ -5345,6 +5355,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Boost Pad
+      objectReference: {fileID: 0}
+    - target: {fileID: 1513201715474901622, guid: 47efa1bf37354bb4abdcc929eb1630a2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7656366650797108951, guid: 47efa1bf37354bb4abdcc929eb1630a2,
         type: 3}
