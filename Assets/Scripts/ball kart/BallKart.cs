@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class BallKart : CartPhysics
 {
     [SerializeField] Transform kartTransform; //the parent of the kart (used for movement)
     [SerializeField] Transform kartNormal; //the kart child of transform, parent of model
     [SerializeField] Transform kartModel; //the actual model
+    public Vector3 targetModelScale = Vector3.one;
+    private float scaleLerpSpeed = 10f; 
 
     [Header("Movement Settings")]
     [SerializeField] float floorGravity = 25f;
@@ -35,14 +35,17 @@ public class BallKart : CartPhysics
 
     [Header("Other")]
     [SerializeField] LayerMask floorLayerMask;
+    [SerializeField] Transform resetTransform;
+    private float spinOutDirection = 1f;
 
     float currentSpeed = 0.0f;
     float currentRotate = 0.0f;
     float inputSpeed; //in case we want a more dynamic throttle system
     float inputRotation; //jik ^
     float currentAcceleration;
+    private float originalDrag;
 
-    Vector3 kartOffset;
+    Vector3 kartOffset; //makes it flush with the floor
 
     public override void Awake()
     {
@@ -51,26 +54,45 @@ public class BallKart : CartPhysics
         kartOffset = kartTransform.position - transform.position;
     }
 
+    [SerializeField] float postBoostDecceleration = 1.5f; //accel
+    [SerializeField] float postBoostDecay = 0.01f;
+    bool postBoost = false;
     private void Update()
-    {
+    {   
+        // Shock minify
+        kartModel.localScale = Vector3.Lerp(kartModel.localScale, targetModelScale, Time.deltaTime * scaleLerpSpeed);
+
         //Update()
         float dt = Time.deltaTime;
         if (invertSteering) steerInput = -steerInput;
 
-        //setting inputs to be used in fixed
-        inputSpeed = maxSpeed * throttleInput; //in case we want a more dynamic throttle system
-        inputRotation = steerInput * steerPower; //jik ^
-        currentAcceleration = acceleration;
+        if (!isSpinningOut)
+        {
+            //setting inputs to be used in fixed
+            inputSpeed = maxSpeed * throttleInput; //in case we want a more dynamic throttle system
+            inputRotation = steerInput * steerPower; //jik ^
+            currentAcceleration = acceleration;
 
-        //throttle forward vs backward acceleration & speed
-        if (Mathf.Abs(throttleInput) <= 0.01f) currentAcceleration = idleDecelleration; //if no input, idle, uses rb drag in combination
-        else if (throttleInput < 0) { currentAcceleration = reverseAcceleration; inputSpeed = reverseMaxSpeed * throttleInput; }
+            //throttle forward vs backward acceleration & speed
+            if (Mathf.Abs(throttleInput) <= 0.01f) currentAcceleration = idleDecelleration; //if no input, idle, uses rb drag in combination
+            else if (throttleInput < 0) { currentAcceleration = reverseAcceleration; inputSpeed = reverseMaxSpeed * throttleInput; }
+        }
 
-        currentSpeed = Mathf.SmoothStep(currentSpeed, inputSpeed, dt * currentAcceleration);
+
+        //post boost sustain
+        postBoost = currentSpeed > maxSpeed + 0.01f;
+        if (postBoost && inputSpeed > 0.01f) //if we're post boost and we want to go forward
+        {
+            currentSpeed = Mathf.SmoothStep(currentSpeed, currentSpeed - postBoostDecay, dt * postBoostDecceleration);
+        }
+        else
+        {
+            currentSpeed = Mathf.SmoothStep(currentSpeed, inputSpeed, dt * currentAcceleration);
+        }
+
         currentRotate = Mathf.Lerp(currentRotate, inputRotation, dt * steerAccelleration);
 
-        //Drift
-        
+        //Drift(?)
 
         //tie the kart to the sphere
         kartTransform.position = transform.position + kartOffset;
@@ -83,8 +105,22 @@ public class BallKart : CartPhysics
 
     public override void FixedUpdate()
     {
+
+        if (isSpinningOut)
+        {
+            spinOutTimer += Time.fixedDeltaTime;
+            kartNormal.Rotate(Vector3.up * spinOutDirection * 400f * Time.fixedDeltaTime, Space.Self);
+
+            if (spinOutTimer >= spinOutDuration)
+            {
+                isSpinningOut = false;
+                targetModelScale = Vector3.one; // scale reset
+                rb.drag = originalDrag;
+            }
+            return; // Skip normal movement while spinning out
+        }
+
         float dt = Time.deltaTime;
-        
         rb.AddForce(kartTransform.forward * currentSpeed, ForceMode.Acceleration);
 
         RaycastHit hitGravCheck;
@@ -100,8 +136,8 @@ public class BallKart : CartPhysics
         kartTransform.eulerAngles = Vector3.Lerp(kartTransform.eulerAngles, new Vector3(0, kartTransform.eulerAngles.y + currentRotate, 0), dt * steerAcceleration2);
 
         //Drift
-        if (DriftInput) 
-        { 
+        if (DriftInput)
+        {
             rb.maxAngularVelocity = driftMaxAngularVelocity;
         }
         else { rb.maxAngularVelocity = maxAngularVelocity; }
@@ -121,5 +157,70 @@ public class BallKart : CartPhysics
             kartNormal.up = Vector3.Lerp(kartNormal.up, new Vector3(0, 1, 0), dt * airSmoothing); //correct rotation
         }
         kartNormal.Rotate(0, kartTransform.eulerAngles.y, 0);
+    }
+
+
+    public override void SpinOut(float duration)
+    {
+        base.SpinOut(duration);
+        spinOutDirection = Random.value > 0.5f ? 1f : -1f;
+        originalDrag = rb.drag;
+        rb.drag = 1.5f;
+    }
+
+    public void Shock(float duration)
+    {
+        SpinOut(duration);
+        rb.velocity = Vector3.zero;
+        targetModelScale = Vector3.one * 0.6f; // scale down by 60%
+    }
+
+
+    public override void Reset()
+    {
+        if (resetTransform)
+        {
+            transform.position = resetTransform.position;
+            kartTransform.rotation = resetTransform.rotation;
+
+            rb.velocity = new Vector3(0f, 0f, 0f);
+            rb.angularVelocity = new Vector3(0f, 0f, 0f);
+
+            //reset all vars
+            currentSpeed = 0.0f;
+            currentRotate = 0.0f;
+            inputSpeed = 0.0f;
+            inputRotation = 0.0f;
+            currentAcceleration = 0.0f;
+        }
+        else print("Warning: resetTransform on ballKart not assigned");
+    }
+
+    float defaultMaxSpeed; //to store the max speed pre pad
+    float defaultAccel; //to store the max speed pre pad
+    public void Boost(float speed, float accel, bool toggle)
+    {
+        if (toggle)
+        {
+            defaultMaxSpeed = maxSpeed;
+            defaultAccel = accel;
+
+            maxSpeed = speed;
+            acceleration = accel;
+            SetThrottle(1f);
+        }
+        else
+        {
+            maxSpeed = defaultMaxSpeed;
+            acceleration = defaultAccel;
+        }
+    }
+
+    public void ApplyInstantBoost(float force)
+    {
+        if (rb != null)
+        {
+            rb.AddForce(kartTransform.forward * force, ForceMode.VelocityChange);
+        }
     }
 }

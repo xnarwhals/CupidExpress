@@ -1,25 +1,33 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class TestItemEffect : MonoBehaviour
 {
     [Header("Test Items")]
-    private Cart testCart;
+    public Cart cartUsingItem;
+    public Cart cartTarget;
+
     public GameObject tomato;
     public Tomato tomatoScriptableObject;
     public BoostItem boostItemScriptableObject;
+    public Watermelon watermelonScriptableObject;
 
     private void Awake()
     {
-        testCart = GetComponent<Cart>();  
+
+        cartUsingItem = GetComponent<Cart>();
     }
 
-    private void Update()
+    public void Test()
     {
 
-        if (testCart != null && Input.GetKeyDown(KeyCode.T))
+        if (cartUsingItem != null)
         {
+            
+            // cartUsingItem.SpinOut(4f);
             // SpawnTomato();
-            testCart.ApplyBoost(1000f);
+            // cartUsingItem.ApplyBoost(boostItemScriptableObject.boostDuration, boostItemScriptableObject.speedMultiplier);
+            // watermelonScriptableObject.Use(cartUsingItem, false);
 
         }
     }

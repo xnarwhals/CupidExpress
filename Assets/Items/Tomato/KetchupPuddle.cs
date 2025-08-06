@@ -9,6 +9,7 @@ public class KetchupPuddle : MonoBehaviour
     {
         puddleDuration = duration;
         spinOutDuration = puddleSpinOutDuration;
+        // Debug.Log("Spin out duration: " + spinOutDuration);
         GetComponent<Collider>().isTrigger = true;
         Destroy(gameObject, puddleDuration); // Destroy after duration
     }
@@ -24,7 +25,7 @@ public class KetchupPuddle : MonoBehaviour
         }
 
         // destroy puddle after trigger 
-        Destroy(gameObject, 0.1f);
+        Destroy(gameObject, 1f);
     }
 
     // first thought was slowdown but nah

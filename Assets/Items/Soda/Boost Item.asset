@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Boost Item
   m_EditorClassIdentifier: 
   itemName: SodaBoost
-  icon: {fileID: 21300000, guid: f28d7065943ab447786e7a067428ea8a, type: 3}
-  visualPrefab: {fileID: 2197511660725141480, guid: 26dd4a4f9af5140dd8b7f293b9a604b3,
+  icon: {fileID: 21300000, guid: b114ac16685b546e9b6ed574d738d15e, type: 3}
+  visualPrefab: {fileID: 6728221610405830611, guid: d29635c8cba9d4126b630a78131fe2aa,
     type: 3}
-  boostForce: 1500
+  boostDuration: 2
+  speedMultiplier: 1.5

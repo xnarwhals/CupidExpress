@@ -5,22 +5,14 @@ public class AIStateController : MonoBehaviour
 {
     [Header("State Management")]
     public AIDriverState currentState = AIDriverState.Normal;
-
-    [Header("State Durations")]
-    public float spinOutDuration = 2f;
-    public float recoveryDuration = 1.5f;
-    public float boostDuration = 3f;
+    private float spinOutDuration = 2f;
+    private float recoveryDuration = 1.5f;
+    private float boostDuration = 3f;
 
     [Header("Corner Stuff")]
     public SplineCornerDetector cornerDetector;
     [Range(0.05f, 0.1f)]
     public float cornerLookAhead = 0.05f; 
-
-    [Header("Corner Settings")]
-    [Range(1f, 10f)]
-    public float distanceBeforeSlowDown = 1f;
-    [Range(0.3f, 0.8f)]
-    public float slowDownFactor = 0.3f;
 
     [Header("State Settings")]
     [Range(0.1f, 1f)]
@@ -30,13 +22,9 @@ public class AIStateController : MonoBehaviour
     [Range(2f, 10f)]
     public float recoveryRotationSpeed = 3f;
 
-    [Header("Spin Out Settings")]
-    [Range(1f, 5f)]
-    public float spinOutRotationSpeed = 1f; // rotations per second
-
     // State tracking
     private float stateTimer = 0f;
-    private float originalMaxSpeed;
+    private float boostSpeedMultiplier = 1f;
 
     // Components
     private AIDriver aiDriver;
@@ -49,7 +37,7 @@ public class AIStateController : MonoBehaviour
     {
         aiDriver = driver;
         rb = aiDriver.GetComponent<Rigidbody>();
-        cornerDetector = aiDriver.cornerDetector; // Get it from AIDriver, not this component
+        // cornerDetector = aiDriver.cornerDetector; // Get it from AIDriver, not this component
     }
 
     private void Update()
@@ -63,10 +51,10 @@ public class AIStateController : MonoBehaviour
     {
         stateTimer += Time.deltaTime;
 
-        if (currentState == AIDriverState.Normal)
-        {
-            CheckForCorners();
-        }
+        // if (currentState == AIDriverState.Normal || currentState == AIDriverState.CornerSlowing)
+        // {
+        //     CheckForCorners();
+        // }
 
         switch (currentState)
         {
@@ -172,14 +160,18 @@ public class AIStateController : MonoBehaviour
 
     #region State Handlers
 
-    // Note: State effects (movement, physics) are now handled in AIDriver.ApplyStateEffects()
-    // These handlers only manage state transitions and timers
-
     private void HandleSpinOutState()
     {
+        if (rb.velocity.magnitude > 0.1f)
+            rb.velocity *= 0.7f;
+
+        rb.angularVelocity = Vector3.up * Mathf.Deg2Rad * 360f;
+        aiDriver.kartModel.Rotate(Vector3.up, 720f * Time.deltaTime, Space.Self);
+
         if (stateTimer >= spinOutDuration)
         {
             TryChangeState(AIDriverState.Recovering);
+            aiDriver.targetModelScale = Vector3.one; 
         }
     }
 
@@ -193,6 +185,7 @@ public class AIStateController : MonoBehaviour
 
     private void HandleBoostState()
     {
+
         if (stateTimer >= boostDuration)
         {
             TryChangeState(AIDriverState.Normal);
@@ -216,7 +209,7 @@ public class AIStateController : MonoBehaviour
     {
         if (cornerDetector == null) return;
 
-        float curProgress = aiDriver.GetCurrentSplineProgress();
+        float curProgress = aiDriver.GetSplineProgress();
         bool cornerAhead = cornerDetector.IsCornerAhead(curProgress, cornerLookAhead);
         
         if (cornerAhead && currentState == AIDriverState.Normal)
@@ -274,8 +267,9 @@ public class AIStateController : MonoBehaviour
         TryChangeState(AIDriverState.SpinningOut, duration);
     }
 
-    public void StartBoost(float duration, float speedMultiplier = 1.5f)
-    {
+    public void StartBoost(float duration, float speedMultiplier)
+    {   
+        boostSpeedMultiplier = speedMultiplier;
         TryChangeState(AIDriverState.Boosting, duration);
     }
 
@@ -305,71 +299,27 @@ public class AIStateController : MonoBehaviour
         }
     }
 
+    public float GetBoostMultiplier()
+    {
+        return boostSpeedMultiplier;
+    }
+
     #endregion
 
     private void OnDrawGizmos()
     {
-        if (aiDriver == null || cornerDetector == null) return;
+        if (aiDriver == null) return;
 
-        float currentProgress = aiDriver.GetCurrentSplineProgress();
-        bool cornerAhead = cornerDetector.IsCornerAhead(currentProgress, cornerLookAhead);
-        
-        // State indicator sphere
-        Vector3 spherePos = transform.position + Vector3.up * 2f;
-        switch (currentState)
-        {
-            case AIDriverState.Normal:
-                Gizmos.color = Color.green;
-                break;
-            case AIDriverState.CornerSlowing:
-                Gizmos.color = new Color(1f, 0.5f, 0f); // Orange
-                break;
-            case AIDriverState.SpinningOut:
-                Gizmos.color = Color.red;
-                break;
-            case AIDriverState.Recovering:
-                Gizmos.color = Color.yellow;
-                break;
-            case AIDriverState.Boosting:
-                Gizmos.color = Color.cyan;
-                break;
-            case AIDriverState.Stunned:
-                Gizmos.color = Color.magenta;
-                break;
-        }
-        Gizmos.DrawWireSphere(spherePos, 1.5f);
-        
-        // Corner detection visualization
-        if (currentState == AIDriverState.Normal || currentState == AIDriverState.CornerSlowing)
-        {
-            // Gizmos.color = cornerAhead ? Color.red : Color.green;
-            // Gizmos.DrawWireSphere(transform.position, 2f);
-            
-            // Look-ahead visualization
-            if (aiDriver.spline != null)
-            {
-                float lookAheadProgress = currentProgress + cornerLookAhead;
-                if (lookAheadProgress > 1f && aiDriver.spline.Spline.Closed)
-                    lookAheadProgress -= 1f;
-                else if (lookAheadProgress > 1f)
-                    lookAheadProgress = 1f;
+        float currentProgress = aiDriver.GetSplineProgress();
+        // bool cornerAhead = cornerDetector.IsCornerAhead(currentProgress, cornerLookAhead);
 
-                Vector3 lookAheadPos = aiDriver.spline.EvaluatePosition(lookAheadProgress);
-                
-                // Gizmos.color = cornerAhead ? Color.red : Color.cyan;
-                // Gizmos.DrawWireSphere(lookAheadPos, 1f);
-                
-                // Gizmos.color = Color.white;
-                // Gizmos.DrawLine(transform.position, lookAheadPos);
-            }
-        }
 
 #if UNITY_EDITOR
         // State information label
         UnityEditor.Handles.Label(transform.position + Vector3.up * 6f,
             $"State: {currentState}\n" +
             $"Timer: {stateTimer:F1}s\n" +
-            $"Corner Ahead: {cornerAhead}");
+            $"Spline Progress: {aiDriver.GetSplineProgress():F2}");
 #endif
     }
 }

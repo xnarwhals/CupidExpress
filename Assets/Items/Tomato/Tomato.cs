@@ -17,12 +17,12 @@ public class Tomato : KartItem
 
     // Tomato Hit 
     public float directHitSpinOutDuration = 2f;
-    public float enterKetchupSpinOutDuration = 1f;
+    public float enterKetchupSpinOutDuration = 10f;
     public override void Use(Cart cartUsingItem, bool throwBackward)
     {
         if (cartUsingItem != null && throwableTomatoPrefab != null)
         {
-            Vector3 throwDirection = throwBackward ? -cartUsingItem.transform.forward : cartUsingItem.transform.forward;
+            Vector3 throwDirection = throwBackward ? -cartUsingItem.forwardRef.forward : cartUsingItem.forwardRef.forward;
             ThrowTomato(cartUsingItem, throwDirection);
         }
     }
@@ -30,10 +30,14 @@ public class Tomato : KartItem
     private void ThrowTomato(Cart user, Vector3 throwDirection)
     {
         Vector3 throwPosition = user.itemSlot.position; // throw from where it is visually
+        Debug.DrawLine(throwPosition, throwPosition + throwDirection * 5f, Color.green, 2f);
+
 
         GameObject tomato = Instantiate(throwableTomatoPrefab, throwPosition, Quaternion.identity);
 
         TomatoProjectile tomatoProjectile = tomato.GetComponent<TomatoProjectile>();
+
+        
         if (tomatoProjectile != null)
         {
             tomatoProjectile.Initialize(this, user, throwDirection);
