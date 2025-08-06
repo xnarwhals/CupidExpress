@@ -14,7 +14,7 @@ public class Cart : MonoBehaviour
 
     [Header("Ref Components")]
     private CartPhysics cartPhysics;
-    private BallKart ballKart; 
+    private BallKart ballKart;
     private KetchupEffect ketchupEffect; // player
     private AIDriver aiDriver; // AI
     private CartPlayerInput[] playerInputs;
@@ -24,6 +24,7 @@ public class Cart : MonoBehaviour
     public string CartName => cartName;
     public int CartID => cartID;
     public CartPhysics CartPhysics => cartPhysics;
+    public BallKart BallKart => ballKart;
 
     private void Awake()
     {
@@ -72,8 +73,14 @@ public class Cart : MonoBehaviour
 
     public void ApplyBoost(float duration, float speedMultiplier)
     {
-        if (cartID == 0) ballKart.Boost(100f, 100f, true);
+        if (cartID == 0) ballKart.ApplyInstantBoost(20f);
         else aiDriver.ApplyBoost(duration, speedMultiplier);
+    }
+
+    public void Shock(float duration)
+    {
+        if (cartID == 0) ballKart.Shock(duration);
+        else aiDriver.Shock(duration);
     }
 
     #endregion

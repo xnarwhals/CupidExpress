@@ -23,8 +23,10 @@ public class TestItemEffect : MonoBehaviour
 
         if (cartUsingItem != null)
         {
+            
+            // cartUsingItem.SpinOut(4f);
             // SpawnTomato();
-            cartUsingItem.ApplyBoost(boostItemScriptableObject.boostDuration, boostItemScriptableObject.speedMultiplier);
+            // cartUsingItem.ApplyBoost(boostItemScriptableObject.boostDuration, boostItemScriptableObject.speedMultiplier);
             // watermelonScriptableObject.Use(cartUsingItem, false);
 
         }

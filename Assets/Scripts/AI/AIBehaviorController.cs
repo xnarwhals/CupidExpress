@@ -184,23 +184,8 @@ public class AIBehaviorController : MonoBehaviour
     private void OnDrawGizmos()
     {
         if (aiDriver == null || personality == null) return;
-
-        // Proximity Sphere
-        // Gizmos.color = cartInProximity ? Color.yellow : Color.gray;
-        // Gizmos.DrawWireSphere(transform.position, personality.proximityRadius);
-
-// #if UNITY_EDITOR
-//         string laneInfo = personality.drivingLane == DrivingLane.Center ? "Center" :
-//                         personality.drivingLane == DrivingLane.Left ? $"Left ({personality.laneOffset:F1}m)" :
-//                         $"Right ({personality.laneOffset:F1}m)";
-
-//         UnityEditor.Handles.Label(transform.position + Vector3.up * 9f,
-//             $"Personality: {personality.name}\n" +
-//             $"Aggressiveness: {personality.aggressiveness:F2}\n" +
-//             $"Lane: {laneInfo}\n" +
-//             $"Current Speed: {aiDriver.maxSpeed:F1}\n" +
-//             $"Base Speed: {baseMaxSpeed:F1}\n" +
-//             $"Proximity: {(cartInProximity ? "NEARBY" : "CLEAR")}");
-// #endif
+        // proximity sphere
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, personality.proximityRadius);
     }
 }

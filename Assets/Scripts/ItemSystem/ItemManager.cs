@@ -22,7 +22,7 @@ public class ItemManager : MonoBehaviour
         if (itemQueue.Count < 2)
         {
             itemQueue.Enqueue(item); // add item 
-            UpdateItemVisuals(cart, cart.itemSlot); 
+            UpdateItemVisuals(cart, cart.itemSlot);
             OnItemPickup?.Invoke(cart);
         }
         else
@@ -39,7 +39,7 @@ public class ItemManager : MonoBehaviour
             var item = heldItems[cart].Dequeue();
             item.Use(cart, throwBackward);
 
-            UpdateItemVisuals(cart, cart.itemSlot); 
+            UpdateItemVisuals(cart, cart.itemSlot);
             OnItemUse?.Invoke(cart);
         }
     }
@@ -91,6 +91,15 @@ public class ItemManager : MonoBehaviour
         foreach (Transform child in itemSlot)
         {
             Destroy(child.gameObject);
+        }
+    }
+    
+    public void ClearCartItems(Cart cart)
+    {
+        if (heldItems.ContainsKey(cart))
+        {
+            heldItems[cart].Clear();
+            UpdateItemVisuals(cart, cart.itemSlot);
         }
     }
     

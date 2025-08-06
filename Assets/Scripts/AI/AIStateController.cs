@@ -166,10 +166,12 @@ public class AIStateController : MonoBehaviour
             rb.velocity *= 0.7f;
 
         rb.angularVelocity = Vector3.up * Mathf.Deg2Rad * 360f;
+        aiDriver.kartModel.Rotate(Vector3.up, 720f * Time.deltaTime, Space.Self);
 
         if (stateTimer >= spinOutDuration)
         {
             TryChangeState(AIDriverState.Recovering);
+            aiDriver.targetModelScale = Vector3.one; 
         }
     }
 
