@@ -38,7 +38,7 @@ public class BallKart : CartPhysics
     [SerializeField] Transform resetTransform;
     private float spinOutDirection = 1f;
 
-    float currentSpeed = 0.0f;
+    public float currentSpeed = 0.0f;
     float currentRotate = 0.0f;
     float inputSpeed; //in case we want a more dynamic throttle system
     float inputRotation; //jik ^
