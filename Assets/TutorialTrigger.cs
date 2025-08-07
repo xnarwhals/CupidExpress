@@ -7,16 +7,18 @@ using UnityEngine.UI;
 public class TutorialTrigger : MonoBehaviour
 {
     [SerializeField] private Image customImage;
-
+    [SerializeField] private Image customImage2;
     void OnTriggerEnter(Collider other)
     {
         customImage.enabled = true;
+        
         Time.timeScale = 0;
     }
 
     void OnTriggerExit(Collider other)
     {
         customImage.enabled = false;
+        customImage2.enabled = false;
         Time.timeScale = 1;
         Destroy(customImage);
         Destroy(gameObject);
@@ -35,6 +37,8 @@ public class TutorialTrigger : MonoBehaviour
             if (timeElapsed > timeAmount || Input.GetKeyDown(KeyCode.Space))
             {
                 Time.timeScale = 1;
+                customImage.enabled = false;
+                customImage2.enabled = true;
             }
         }
        

@@ -704,7 +704,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &275012748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -718,6 +718,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customImage: {fileID: 1764951170}
+  customImage2: {fileID: 0}
   timeAmount: 10
   timeElapsed: 0
 --- !u!65 &275012749
@@ -1990,6 +1991,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customImage: {fileID: 2055663466}
+  customImage2: {fileID: 1764951170}
   timeAmount: 10
   timeElapsed: 0
 --- !u!65 &469603807
@@ -2022,8 +2024,8 @@ Transform:
   m_GameObject: {fileID: 469603805}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20.47, y: 3.32, z: -5.001164}
-  m_LocalScale: {x: 3.6825361, y: 14.02, z: 1}
+  m_LocalPosition: {x: -20.47, y: 3.32, z: 7}
+  m_LocalScale: {x: 3.6825361, y: 14.02, z: 4.458}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -7287,6 +7289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customImage: {fileID: 1764951170}
+  customImage2: {fileID: 0}
   timeAmount: 10
   timeElapsed: 0
 --- !u!65 &1477719804
@@ -7319,7 +7322,7 @@ Transform:
   m_GameObject: {fileID: 1477719802}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20.47, y: 3.32, z: -9}
+  m_LocalPosition: {x: -20.47, y: 3.32, z: -57.5}
   m_LocalScale: {x: 3.6825361, y: 14.02, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
