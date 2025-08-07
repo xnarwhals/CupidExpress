@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6e09f8e0690ed4803bdc79abd59627dc, type: 3}
-  m_Name: Ziggy
+  m_Name: ZiggyMode
   m_EditorClassIdentifier: 
   aggressiveness: 0.2
   drivingLane: 2

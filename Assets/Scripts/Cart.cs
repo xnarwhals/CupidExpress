@@ -9,8 +9,8 @@ public class Cart : MonoBehaviour
     public Transform forwardRef; // where items are thrown from
 
     [Header("Cart Properties")]
-    [SerializeField] private string cartName = "Player Cart";
-    [SerializeField] private int cartID = 0; // AI later
+    public string cartName = "Player Cart";
+    public int cartID = 0; // AI later
 
     [Header("Ref Components")]
     private CartPhysics cartPhysics;
