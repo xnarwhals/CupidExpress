@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
 public enum CartRole
 {
@@ -15,7 +16,8 @@ public class CartPlayerInput : MonoBehaviour
     private PlayerCart input; // bad name, "CartPlayerControls"
     public TestItemEffect testItemEffect;
     [SerializeField] private int playerIndex = 0; // distinguish players using same script
-    [SerializeField] bool printRawInput = false;
+    /*[SerializeField]*/ bool printRawInput = false;
+    [SerializeField] bool EnableArduinoReverse = false;
 
     [Header("Arduino")] //organize later?
     public float maxPressL = 80.0f;
@@ -27,6 +29,7 @@ public class CartPlayerInput : MonoBehaviour
     public float itemLThreshold = 200.0f;
     public float stepBpm = 50.0f;
     public float reverseStepCount = 1.0f;
+    public float initialStepThrottle = 0.5f;
 
     float prevStepTime;
     bool prevStep; //false is left, true is right
@@ -118,8 +121,9 @@ public class CartPlayerInput : MonoBehaviour
                 {
                     Step(true);
                 }
-                else if (stepL > stepThreshold && stepR > stepThreshold && Time.time - prevStepTime > (60.0f / (stepBpm / reverseStepCount)))
+                else if (stepL > stepThreshold && stepR > stepThreshold && Time.time - prevStepTime > (60.0f / (stepBpm / reverseStepCount))) //step both
                 {
+                    if (EnableArduinoReverse)
                     currentThrottle = -1.0f;
                 }
 
@@ -145,8 +149,8 @@ public class CartPlayerInput : MonoBehaviour
             //drift
 
 
-                //cartPhysics.Drift(input.Player.Drift.IsPressed());
-                cartPhysics.Drift(input.Player.Drift.ReadValue<float>() > 0.5f);
+            //cartPhysics.Drift(input.Player.Drift.IsPressed());
+            cartPhysics.Drift(input.Player.Drift.ReadValue<float>() > 0.5f);
 
             // east btn accelerates, south btn brakes/reverses
             if (input.Player.Accelerate.IsPressed()) currentThrottle = 1f;
@@ -206,6 +210,10 @@ public class CartPlayerInput : MonoBehaviour
             }*/
 
             currentThrottle = Mathf.Clamp((60.0f / stepBpm) / (Time.time - prevStepTime), 0.0f, 1.0f);
+        }
+        else if (currentThrottle <= 0.01f)
+        {
+            currentThrottle = initialStepThrottle;
         }
 
         prevStep = side;
