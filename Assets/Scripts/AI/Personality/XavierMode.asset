@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6e09f8e0690ed4803bdc79abd59627dc, type: 3}
-  m_Name: Kai
+  m_Name: XavierMode
   m_EditorClassIdentifier: 
-  aggressiveness: 0.5
-  drivingLane: 0
-  laneOffset: 0
-  chanceToUseItem: 0.6
-  proximityRadius: 5
+  aggressiveness: 0.8
+  drivingLane: 1
+  laneOffset: 8
+  chanceToUseItem: 0.81
+  proximityRadius: 6
