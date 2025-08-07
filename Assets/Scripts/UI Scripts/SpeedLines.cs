@@ -31,6 +31,5 @@ public class SpeedLines : MonoBehaviour
                 transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y);
                 timer = 0.0f;
             }
-        } else timer = 0.0f;
-    }
+        } else timer = 0.0f;    }
 }
