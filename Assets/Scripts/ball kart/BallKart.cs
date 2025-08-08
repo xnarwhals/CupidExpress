@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BallKart : CartPhysics
@@ -8,7 +6,7 @@ public class BallKart : CartPhysics
     [SerializeField] Transform kartNormal; //the kart child of transform, parent of model
     [SerializeField] Transform kartModel; //the actual model
     public Vector3 targetModelScale = Vector3.one;
-    private float scaleLerpSpeed = 10f; 
+    private float scaleLerpSpeed = 10f;
 
     [Header("Movement Settings")]
     [SerializeField] float floorGravity = 25f;
@@ -58,7 +56,7 @@ public class BallKart : CartPhysics
     [SerializeField] float postBoostDecay = 0.01f;
     bool postBoost = false;
     private void Update()
-    {   
+    {
         // Shock minify
         kartModel.localScale = Vector3.Lerp(kartModel.localScale, targetModelScale, Time.deltaTime * scaleLerpSpeed);
 
@@ -67,7 +65,7 @@ public class BallKart : CartPhysics
         if (invertSteering) steerInput = -steerInput;
 
         if (isSpinningOut || GameManager.Instance.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
-    
+
         //setting inputs to be used in fixed
         inputSpeed = maxSpeed * throttleInput; //in case we want a more dynamic throttle system
         inputRotation = steerInput * steerPower; //jik ^
@@ -99,26 +97,27 @@ public class BallKart : CartPhysics
         float steerDir = steerInput;
         steerDir *= DriftInput ? modelDriftOffset : modelSteerOffset;
         kartModel.localRotation = Quaternion.Euler(Vector3.Lerp(kartModel.localEulerAngles, new Vector3(0, (steerDir), kartModel.localEulerAngles.z), modelSteerOffsetSmoothing)); //model steering
+
     }
 
     public override void FixedUpdate()
     {
 
-        if (GameManager.Instance.GetCurrentRaceState() != GameManager.RaceState.Racing) return; 
-        
-        if (isSpinningOut)
-            {
-                spinOutTimer += Time.fixedDeltaTime;
-                kartNormal.Rotate(Vector3.up * spinOutDirection * 400f * Time.fixedDeltaTime, Space.Self);
+        if (GameManager.Instance.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
 
-                if (spinOutTimer >= spinOutDuration)
-                {
-                    isSpinningOut = false;
-                    targetModelScale = Vector3.one; // scale reset
-                    rb.drag = originalDrag;
-                }
-                return; // Skip normal movement while spinning out
+        if (isSpinningOut)
+        {
+            spinOutTimer += Time.fixedDeltaTime;
+            kartNormal.Rotate(Vector3.up * spinOutDirection * 400f * Time.fixedDeltaTime, Space.Self);
+
+            if (spinOutTimer >= spinOutDuration)
+            {
+                isSpinningOut = false;
+                targetModelScale = Vector3.one; // scale reset
+                rb.drag = originalDrag;
             }
+            return; // Skip normal movement while spinning out
+        }
 
         float dt = Time.deltaTime;
         rb.AddForce(kartTransform.forward * currentSpeed, ForceMode.Acceleration);
@@ -163,7 +162,7 @@ public class BallKart : CartPhysics
     public override void SpinOut(float duration)
     {
         base.SpinOut(duration);
-        spinOutDirection = Random.value > 0.5f ? 1f : -1f;
+        spinOutDirection = UnityEngine.Random.value > 0.5f ? 1f : -1f;
         originalDrag = rb.drag;
         rb.drag = 1.5f;
     }
@@ -223,4 +222,5 @@ public class BallKart : CartPhysics
             rb.AddForce(kartTransform.forward * force, ForceMode.VelocityChange);
         }
     }
+
 }

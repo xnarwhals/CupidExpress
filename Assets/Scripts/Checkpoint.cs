@@ -20,7 +20,18 @@ public class Checkpoint : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = isStartFinish ? Color.green : Color.yellow;
-        Gizmos.DrawWireCube(transform.position, transform.localScale);
+        BoxCollider box = GetComponent<BoxCollider>();
+        if (box != null)
+        {
+            Matrix4x4 oldMatrix = Gizmos.matrix;
+            Gizmos.matrix = transform.localToWorldMatrix;
+            Gizmos.DrawWireCube(box.center, box.size);
+            Gizmos.matrix = oldMatrix;
+        }
+        else
+        {
+            Gizmos.DrawWireCube(transform.position, transform.localScale);
+        }
 
         //UnityEditor.Handles.Label(transform.position, $"Checkpoint {checkpointIndex}");
     }

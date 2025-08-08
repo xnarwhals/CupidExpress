@@ -18,6 +18,7 @@ public class Cart : MonoBehaviour
     private KetchupEffect ketchupEffect; // player
     private AIDriver aiDriver; // AI
     private CartPlayerInput[] playerInputs;
+    private PlayerSplineProgress splineProgress;
 
     public bool isLeader = false; // ignore
 
@@ -30,6 +31,7 @@ public class Cart : MonoBehaviour
     {
         cartPhysics = GetComponent<CartPhysics>();
         ballKart = GetComponent<BallKart>();
+        splineProgress = GetComponent<PlayerSplineProgress>();
 
         //if (cartPhysics == null) print((CartPhysics)GetComponent<BallKart>());
 
@@ -44,18 +46,17 @@ public class Cart : MonoBehaviour
     // Testing
     private void Start()
     {
-        if (cartID == 0)
-        {
-            cartName = PlayerData.PlayerName;
-        }
-    
+        if (cartID == 0) cartName = PlayerData.PlayerName;
+        if (splineProgress == null) Debug.LogWarning("PlayerSplineProgress component not found on Cart!");
+        
     }
 
     #region Cart Methods
     public float GetSplineProgress()
     {
-        if (aiDriver == null) return 0f; // human no spline
-        return aiDriver.GetSplineProgress();
+        if (cartID == 0 && splineProgress != null) return splineProgress.splineProgress; // player
+        else if (aiDriver != null) return aiDriver.GetSplineProgress(); // AI
+        return 0f; 
 
     }
 

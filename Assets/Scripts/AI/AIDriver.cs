@@ -205,26 +205,41 @@ public class AIDriver : MonoBehaviour
 
     private void UpdateSplinePos()
     {
-
         float3 carPos = transform.position;
         float closestDistance = float.MaxValue;
-        float closestT = splinePos; // Start search near current progress
+        float closestT = splinePos;
 
         int samples = 50;
+        float minT = splinePos;
         for (int i = 0; i <= samples; i++)
         {
             float t = (float)i / samples;
+            // Only consider t values ahead of or equal to current splinePos (allow small wrap-around tolerance)
+            bool isAhead = false;
+            if (t >= splinePos)
+            {
+                isAhead = true;
+            }
+            else if (splinePos > 0.95f && t < 0.05f) // allow wrap-around at end of lap
+            {
+                isAhead = true;
+            }
+            if (!isAhead) continue;
+
             float3 splinePoint = spline.EvaluatePosition(t);
             float distance = math.distance(carPos, splinePoint);
-
             if (distance < closestDistance)
             {
                 closestDistance = distance;
                 closestT = t;
             }
         }
-
-        splinePos = closestT;
+        // Only update splinePos if we found a point ahead
+        if (closestT >= splinePos || (splinePos > 0.95f && closestT < 0.05f))
+        {
+            splinePos = closestT;
+        }
+        // else: do not update splinePos, prevents going backwards
     }
 
     private void UpdateTargetPos()
