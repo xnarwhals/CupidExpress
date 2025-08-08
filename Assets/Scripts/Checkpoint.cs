@@ -33,6 +33,6 @@ public class Checkpoint : MonoBehaviour
             Gizmos.DrawWireCube(transform.position, transform.localScale);
         }
 
-        //UnityEditor.Handles.Label(transform.position, $"Checkpoint {checkpointIndex}");
+        UnityEditor.Handles.Label(transform.position, $"Checkpoint {checkpointIndex}");
     }
 }
