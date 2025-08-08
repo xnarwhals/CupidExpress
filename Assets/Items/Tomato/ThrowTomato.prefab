@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5341092228340805939}
   - component: {fileID: 4855188262441469160}
   - component: {fileID: 337579230432454858}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: Stem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 5158592770257053150}
   - component: {fileID: -3876681900959096982}
   - component: {fileID: -85533664399905503}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: ThrowTomato
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 public class StartUI : MonoBehaviour
 {
@@ -25,9 +26,11 @@ public class StartUI : MonoBehaviour
         {
             leaderboardText.text = "No times recorded yet.";
         }
-
+       
         // inputField.text = PlayerData.PlayerName;    
     }
+
+
 
 
     private void Update()
@@ -46,6 +49,7 @@ public class StartUI : MonoBehaviour
         //     PlayerData.PlayerName = inputField.text;
         //     SceneLoader.Instance.LoadScene(1);
         // }
+
 
 
         if (Gamepad.current != null && Gamepad.current.buttonWest.wasPressedThisFrame) // 3) Gamepad button opens scene

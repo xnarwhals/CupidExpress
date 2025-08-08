@@ -80,7 +80,7 @@ public class ItemManager : MonoBehaviour
         if (items.Count > 0)
         {
             KartItem curItem = items[0];
-            GameObject itemVisual = Instantiate(curItem.visualPrefab, itemSlot);
+            Instantiate(curItem.visualPrefab, itemSlot);
             // itemVisual.transform.localPosition = Vector3.zero;
             // itemVisual.transform.localRotation = Quaternion.identity;
         }

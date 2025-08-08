@@ -313,13 +313,21 @@ public class AIStateController : MonoBehaviour
         float currentProgress = aiDriver.GetSplineProgress();
         // bool cornerAhead = cornerDetector.IsCornerAhead(currentProgress, cornerLookAhead);
 
+        int leaderboardPos = -1;
+        if (GameManager.Instance != null && aiDriver.ThisCart != null)
+        {
+            leaderboardPos = GameManager.Instance.GetCartPosition(aiDriver.ThisCart);
+        }
+
 
 #if UNITY_EDITOR
         // State information label
         UnityEditor.Handles.Label(transform.position + Vector3.up * 6f,
             $"State: {currentState}\n" +
             $"Timer: {stateTimer:F1}s\n" +
-            $"Spline Progress: {aiDriver.GetSplineProgress():F2}");
+            $"Spline Progress: {aiDriver.GetSplineProgress():F2}\n" +
+            $"Leaderboard Pos: {(leaderboardPos > 0 ? leaderboardPos.ToString() : "N/A")}"
+        );
 #endif
     }
 }
