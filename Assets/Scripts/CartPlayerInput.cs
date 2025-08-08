@@ -36,6 +36,7 @@ public class CartPlayerInput : MonoBehaviour
 
     [Header("BarCode")]
     public BarcodeInputReader barcodeInputReader;
+    public RaceUI raceUI;
 
     private void Awake()
     {
@@ -160,10 +161,6 @@ public class CartPlayerInput : MonoBehaviour
         {
             bool throwItBack = false;
 
-            // Check if '2' key was pressed this frame
-            // if (Keyboard.current != null && Keyboard.current.digit2Key.wasPressedThisFrame)
-            //     throwItBack = true;
-
             // Also check for left trigger (gamepad)
             InputControl itemTrigger = input.Player.UseItem.activeControl;
             if (itemTrigger != null && itemTrigger.path.Contains("leftTrigger"))
@@ -172,11 +169,38 @@ public class CartPlayerInput : MonoBehaviour
             ItemManager.Instance.UseItem(cart, throwItBack);
         }
 
+        // start
         if (input.Player.StartGame.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.WaitingToStart)
         {
             // Debug.Log("Game started");
             GameManager.Instance.StartRace();
         }
+
+        // pause
+        if (input.Player.Pause.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Racing)
+        {
+            GameManager.Instance.PauseRace();
+            if (raceUI != null)
+            {
+                raceUI.showPauseMenu();
+            }
+
+        } else if (input.Player.Pause.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Paused)
+        {
+            GameManager.Instance.ResumeRace();
+            if (raceUI != null)
+            {
+                raceUI.hidePauseMenu();
+            }
+        }
+
+        // restart 
+        if (input.Player.Restart.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Paused)
+        {
+            GameManager.Instance.RestartRace();
+        }
+        
+        
 
         if (testItemEffect != null && input.Player.DebugBtn.WasPressedThisFrame())
         {

@@ -44,7 +44,11 @@ public class Cart : MonoBehaviour
     // Testing
     private void Start()
     {
-        if (isLeader) GameManager.Instance.SetCartLap(this, 2);
+        if (cartID == 0)
+        {
+            cartName = PlayerData.PlayerName;
+        }
+    
     }
 
     #region Cart Methods
