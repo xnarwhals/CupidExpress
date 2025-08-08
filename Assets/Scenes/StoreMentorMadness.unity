@@ -4816,7 +4816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca50b2e5b77ed4d50816f667f1e6b7e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 250
+  maxSpeed: 400
   acceleration: 10
   turnSpeed: 2
   lookAheadDistance: 10
@@ -4861,7 +4861,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 250
   m_Drag: 0.34
-  m_AngularDrag: 0.4
+  m_AngularDrag: 6
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -16380,7 +16380,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca50b2e5b77ed4d50816f667f1e6b7e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 250
+  maxSpeed: 400
   acceleration: 7
   turnSpeed: 2
   lookAheadDistance: 10
@@ -16425,7 +16425,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 250
   m_Drag: 0.34
-  m_AngularDrag: 0.4
+  m_AngularDrag: 6
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -17882,7 +17882,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca50b2e5b77ed4d50816f667f1e6b7e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 250
+  maxSpeed: 400
   acceleration: 12
   turnSpeed: 3
   lookAheadDistance: 10
@@ -17927,7 +17927,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 250
   m_Drag: 0.34
-  m_AngularDrag: 0.4
+  m_AngularDrag: 6
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -45937,7 +45937,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca50b2e5b77ed4d50816f667f1e6b7e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 250
+  maxSpeed: 400
   acceleration: 7
   turnSpeed: 2
   lookAheadDistance: 10
@@ -45982,7 +45982,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 250
   m_Drag: 0.34
-  m_AngularDrag: 0.4
+  m_AngularDrag: 6
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -46328,7 +46328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca50b2e5b77ed4d50816f667f1e6b7e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 250
+  maxSpeed: 400
   acceleration: 7
   turnSpeed: 2
   lookAheadDistance: 10
@@ -46373,7 +46373,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 250
   m_Drag: 0.34
-  m_AngularDrag: 0.4
+  m_AngularDrag: 6
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -48338,7 +48338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca50b2e5b77ed4d50816f667f1e6b7e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 250
+  maxSpeed: 400
   acceleration: 7
   turnSpeed: 2
   lookAheadDistance: 10
@@ -48383,7 +48383,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 250
   m_Drag: 0.34
-  m_AngularDrag: 0.4
+  m_AngularDrag: 6
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -53561,7 +53561,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca50b2e5b77ed4d50816f667f1e6b7e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 250
+  maxSpeed: 400
   acceleration: 7
   turnSpeed: 2
   lookAheadDistance: 10
@@ -53606,7 +53606,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 250
   m_Drag: 0.34
-  m_AngularDrag: 0.4
+  m_AngularDrag: 6
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
