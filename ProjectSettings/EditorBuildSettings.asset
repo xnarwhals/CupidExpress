@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Ziggy's Kart.unity
     guid: ca5ef8db36042c842b1e0c697decbc37
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Race/Start.unity
     guid: 31ae33b0a141f4be48cf488f2eeaee61
   - enabled: 1
