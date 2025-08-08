@@ -15,7 +15,7 @@ public class ShockItem : KartItem
             {
                 var cart = leaderboard[i];
                 //cart != cartUsingItem
-                if (cart != null)
+                if (cart != null && cart != cartUsingItem)
                 {
                     cart.Shock(shockDuration);
                     ItemManager.Instance.ClearCartItems(cart);

@@ -94,7 +94,6 @@ public class GameManager : MonoBehaviour
         }
 
 
-
         if (debugMode)
         {
             DebugRaceInfo();
@@ -293,6 +292,7 @@ public class GameManager : MonoBehaviour
             .Where(cart => !cartRaceData[cart].isFinished)
             .OrderByDescending(cart => cartRaceData[cart].curLap)
             .ThenByDescending(cart => cartRaceData[cart].nextCheckpointIndex)
+            .ThenByDescending(cart => cart.GetSplineProgress()) // spline 
             .ToList();
 
         var full = new List<Cart>(finishedCarts);
@@ -357,7 +357,10 @@ public class GameManager : MonoBehaviour
 
 
         // find carts in scene to register
-        Cart[] carts = FindObjectsOfType<Cart>();
+        Cart[] carts = FindObjectsOfType<Cart>()
+            .OrderBy(cart => cart.CartID) // sort by ID
+            .ToArray();
+
         foreach (Cart cart in carts)
         {
             RegisterCart(cart);
@@ -387,7 +390,7 @@ public class GameManager : MonoBehaviour
 
             SetRaceState(RaceState.Finished);
             OnRaceFinished?.Invoke();
-            SceneLoader.Instance.LoadScene(0); 
+            // SceneLoader.Instance.LoadScene(0); 
         }
     }
     
