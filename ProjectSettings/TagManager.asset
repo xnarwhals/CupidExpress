@@ -3,17 +3,19 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Track
+  - Cart
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - kart
   - Water
   - UI
-  - 
-  - 
-  - 
+  - 'Obstacle '
+  - Track
+  - Tutorial
   - 
   - 
   - 
