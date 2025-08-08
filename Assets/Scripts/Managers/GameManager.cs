@@ -80,7 +80,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (currentRaceState == RaceState.CountDown) 
+        
+
+        if (currentRaceState == RaceState.CountDown)
         {
             UpdateCountdown();
         }
@@ -91,10 +93,7 @@ public class GameManager : MonoBehaviour
             CheckForRaceCompletion();
         }
 
-        // if (currentRaceState == RaceState.Finished)
-        // {
-            
-        // }
+
 
         if (debugMode)
         {
@@ -149,11 +148,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
     private void SetRaceState(RaceState newState)
     {
         currentRaceState = newState;
         OnRaceStateChanged?.Invoke(currentRaceState);
         // Debug.Log($"Race State: {currentRaceState}");
+    }
+
+    public void RestartRace()
+    {
+        Time.timeScale = 1f; // Ensure time is running
+        SceneLoader.Instance.LoadScene(0);
+        // InitializeRace();
     }
 
 
@@ -374,11 +381,16 @@ public class GameManager : MonoBehaviour
         // (maxRaceTime > 0 && currentRaceTime >= maxRaceTime)
         if (playerCartFinished)
         {
+            var playerCart = finishedCarts.First(cart => cart.CartID == 0);
+            float playerFinishTime = cartRaceData[playerCart].finishTime;
+            LocalLeaderboard.AddTime(playerFinishTime, playerCart.CartName);
+
             SetRaceState(RaceState.Finished);
             OnRaceFinished?.Invoke();
+            SceneLoader.Instance.LoadScene(0); 
         }
     }
-
+    
     private void DebugRaceInfo()
     {
         if (currentRaceState == RaceState.Racing && cartRaceData.Count > 0)

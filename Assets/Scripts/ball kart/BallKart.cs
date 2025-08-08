@@ -66,18 +66,16 @@ public class BallKart : CartPhysics
         float dt = Time.deltaTime;
         if (invertSteering) steerInput = -steerInput;
 
-        if (!isSpinningOut)
-        {
-            //setting inputs to be used in fixed
-            inputSpeed = maxSpeed * throttleInput; //in case we want a more dynamic throttle system
-            inputRotation = steerInput * steerPower; //jik ^
-            currentAcceleration = acceleration;
+        if (isSpinningOut || GameManager.Instance.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
+    
+        //setting inputs to be used in fixed
+        inputSpeed = maxSpeed * throttleInput; //in case we want a more dynamic throttle system
+        inputRotation = steerInput * steerPower; //jik ^
+        currentAcceleration = acceleration;
 
-            //throttle forward vs backward acceleration & speed
-            if (Mathf.Abs(throttleInput) <= 0.01f) currentAcceleration = idleDecelleration; //if no input, idle, uses rb drag in combination
-            else if (throttleInput < 0) { currentAcceleration = reverseAcceleration; inputSpeed = reverseMaxSpeed * throttleInput; }
-        }
-
+        //throttle forward vs backward acceleration & speed
+        if (Mathf.Abs(throttleInput) <= 0.01f) currentAcceleration = idleDecelleration; //if no input, idle, uses rb drag in combination
+        else if (throttleInput < 0) { currentAcceleration = reverseAcceleration; inputSpeed = reverseMaxSpeed * throttleInput; }
 
         //post boost sustain
         postBoost = currentSpeed > maxSpeed + 0.01f;
@@ -106,19 +104,21 @@ public class BallKart : CartPhysics
     public override void FixedUpdate()
     {
 
+        if (GameManager.Instance.GetCurrentRaceState() != GameManager.RaceState.Racing) return; 
+        
         if (isSpinningOut)
-        {
-            spinOutTimer += Time.fixedDeltaTime;
-            kartNormal.Rotate(Vector3.up * spinOutDirection * 400f * Time.fixedDeltaTime, Space.Self);
-
-            if (spinOutTimer >= spinOutDuration)
             {
-                isSpinningOut = false;
-                targetModelScale = Vector3.one; // scale reset
-                rb.drag = originalDrag;
+                spinOutTimer += Time.fixedDeltaTime;
+                kartNormal.Rotate(Vector3.up * spinOutDirection * 400f * Time.fixedDeltaTime, Space.Self);
+
+                if (spinOutTimer >= spinOutDuration)
+                {
+                    isSpinningOut = false;
+                    targetModelScale = Vector3.one; // scale reset
+                    rb.drag = originalDrag;
+                }
+                return; // Skip normal movement while spinning out
             }
-            return; // Skip normal movement while spinning out
-        }
 
         float dt = Time.deltaTime;
         rb.AddForce(kartTransform.forward * currentSpeed, ForceMode.Acceleration);
