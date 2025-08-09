@@ -24536,6 +24536,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2411059216770904760, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
+      propertyPath: idleDecelleration
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2411059216770904760, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
       propertyPath: kartOrientationRayLength
       value: 4
       objectReference: {fileID: 0}
@@ -24764,6 +24769,11 @@ PrefabInstance:
       propertyPath: raceUI
       value: 
       objectReference: {fileID: 1961703386}
+    - target: {fileID: 5524160064769919392, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: stepBpm
+      value: 175
+      objectReference: {fileID: 0}
     - target: {fileID: 5524160064769919392, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: barcodeInputReader
