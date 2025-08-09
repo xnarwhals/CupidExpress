@@ -182,6 +182,7 @@ MonoBehaviour:
   reverseStepCount: 1
   initialStepThrottle: 0.5
   barcodeInputReader: {fileID: 0}
+  raceUI: {fileID: 0}
 --- !u!114 &822252519090528844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,7 +361,7 @@ MonoBehaviour:
   driftMaxAngularVelocity: 50
   modelSteerOffset: 15
   modelDriftOffset: 20
-  modelSteerOffsetSmoothing: 9999999
+  modelSteerOffsetSmoothing: 1
   kartOrientationRayLength: 1
   rampSmoothing: 8
   airSmoothing: 0.1

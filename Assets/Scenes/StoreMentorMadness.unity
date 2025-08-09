@@ -13782,6 +13782,7 @@ MonoBehaviour:
   uiSource: {fileID: 562648592}
   menuMusic: {fileID: 0}
   raceMusic: {fileID: 8300000, guid: 213f3cc560a5849abbb38b3b1788120f, type: 3}
+  lastLapMusic: {fileID: 0}
   victoryMusic: {fileID: 0}
   defeatMusic: {fileID: 0}
   countDownBeep: {fileID: 0}
@@ -20271,7 +20272,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lapText: {fileID: 1351098615}
-  endTimeText: {fileID: 545834689}
+  timerText: {fileID: 0}
   playerCart: {fileID: 2030325070}
   lapTextFormat: Lap {0}/{1}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -25647,12 +25648,17 @@ PrefabInstance:
     - target: {fileID: 4469715261113797987, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 11.51
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 4469715261113797987, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_FollowOffset.z
-      value: -28.32
+      value: -44
+      objectReference: {fileID: 0}
+    - target: {fileID: 4469715261113798012, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: m_LookaheadTime
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 4469715261113798012, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
@@ -25662,7 +25668,7 @@ PrefabInstance:
     - target: {fileID: 4469715261113798012, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_TrackedObjectOffset.y
-      value: 7.35
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 4469715261113798012, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
@@ -25672,32 +25678,32 @@ PrefabInstance:
     - target: {fileID: 4469715261451338295, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.6442857
+      value: 2.5714283
       objectReference: {fileID: 0}
     - target: {fileID: 4469715261451338295, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.045714
+      value: -6.285714
       objectReference: {fileID: 0}
     - target: {fileID: 4469715261451338295, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.99434334
+      value: 0.99495965
       objectReference: {fileID: 0}
     - target: {fileID: 4469715261451338295, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.106213756
+      value: 0.100275986
       objectReference: {fileID: 0}
     - target: {fileID: 4469715261451338295, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000023778922
+      value: -0.000000040896268
       objectReference: {fileID: 0}
     - target: {fileID: 4469715261451338295, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000025400166
+      value: 0.0000000041216888
       objectReference: {fileID: 0}
     - target: {fileID: 5131178486098561828, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
@@ -25772,32 +25778,32 @@ PrefabInstance:
     - target: {fileID: 5209604189566679447, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.6442857
+      value: 2.5714283
       objectReference: {fileID: 0}
     - target: {fileID: 5209604189566679447, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.045714
+      value: -6.285714
       objectReference: {fileID: 0}
     - target: {fileID: 5209604189566679447, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.99434334
+      value: 0.99495965
       objectReference: {fileID: 0}
     - target: {fileID: 5209604189566679447, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.10621373
+      value: 0.100276
       objectReference: {fileID: 0}
     - target: {fileID: 5209604189566679447, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000023778918
+      value: -0.00000004089627
       objectReference: {fileID: 0}
     - target: {fileID: 5209604189566679447, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000002540016
+      value: 0.000000004121689
       objectReference: {fileID: 0}
     - target: {fileID: 8702622490716018280, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
@@ -44223,7 +44229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lapText: {fileID: 129044198}
-  endTimeText: {fileID: 799778231}
+  timerText: {fileID: 0}
   playerCart: {fileID: 0}
   lapTextFormat: Lap {0}/{1}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
