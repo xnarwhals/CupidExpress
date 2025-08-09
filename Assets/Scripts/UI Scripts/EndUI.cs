@@ -5,13 +5,14 @@ public class EndUI : MonoBehaviour
 {
     public TMP_Text leaderboardText;
     public GameObject leaderboardPanel;
+    public GameObject temp;
     public GameObject[] other;
     // position 1st, 2nd, etc. + cart name + new line
     private string leaderboardFormat = "{0}. {1}\n";
 
     private void Awake()
     {
-        if (leaderboardText == null || leaderboardPanel == null)
+        if (leaderboardText == null || leaderboardPanel == null || temp == null)
         {
             Debug.LogError("Leaderboard text or panel is missing on EndUI.");
         }
@@ -38,6 +39,7 @@ public class EndUI : MonoBehaviour
     public void ShowLeaderboard()
     {
         leaderboardPanel.SetActive(true);
+        temp.SetActive(true);
         GenerateLeaderboard();
 
         if (other != null)
@@ -52,7 +54,7 @@ public class EndUI : MonoBehaviour
     public void HideLeaderboard()
     {
         leaderboardPanel.SetActive(false);
-
+        temp.SetActive(false);
         if (other != null)
         {
             foreach (var go in other)

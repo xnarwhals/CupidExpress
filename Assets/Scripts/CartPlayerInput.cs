@@ -214,6 +214,11 @@ public class CartPlayerInput : MonoBehaviour
         {
             GameManager.Instance.RestartRace();
         }
+
+        if (input.Player.Restart.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Finished)
+        {
+            GameManager.Instance.RestartRace();
+        }
         
         
 

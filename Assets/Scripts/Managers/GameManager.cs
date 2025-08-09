@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Splines;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -158,8 +159,9 @@ public class GameManager : MonoBehaviour
     public void RestartRace()
     {
         Time.timeScale = 1f; // Ensure time is running
-        SceneLoader.Instance.LoadScene(0);
-        // InitializeRace();
+        // SceneLoader.Instance.LoadScene(0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); 
+        InitializeRace();
     }
 
 
