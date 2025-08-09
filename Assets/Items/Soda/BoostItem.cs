@@ -1,3 +1,4 @@
+using System.Drawing.Printing;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Kart Item/Boost")]
@@ -16,6 +17,7 @@ public class BoostItem : KartItem
 
             AudioManager.Instance.PlaySodaBlast();
         }
+        else Debug.Log("ok");
     }
 
 }

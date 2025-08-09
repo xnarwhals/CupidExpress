@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tomato Store
   m_EditorClassIdentifier: 
   itemName: Tomato
-  icon: {fileID: 21300000, guid: 08bbaa903304d45f0843f2a95e4dc936, type: 3}
+  icon: {fileID: 21300000, guid: 8ef6130ce02c1aa4f8d40c4b5646d4e1, type: 3}
   visualPrefab: {fileID: 5677725279836058035, guid: 1f97bf91d0cea4cb38ee437b7151db1e,
     type: 3}
   throwForce: 80
