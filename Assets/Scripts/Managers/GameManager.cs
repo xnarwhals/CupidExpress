@@ -110,6 +110,8 @@ public class GameManager : MonoBehaviour
         {
             lastCountdownNumber = currentNum;
             OnCountdownUpdate?.Invoke(currentNum);
+
+            AudioManager.Instance.PlayUISFX(AudioManager.Instance.countDownBeep, 1.0f);
         }
 
         if (countdownTimer <= 0f)
@@ -117,6 +119,8 @@ public class GameManager : MonoBehaviour
             CountdownGO?.Invoke();
             SetRaceState(RaceState.Racing);
             raceStartTime = Time.time;
+
+            AudioManager.Instance.PlayUISFX(AudioManager.Instance.raceStartSound, 1.0f);
         }
     }
 
@@ -136,6 +140,8 @@ public class GameManager : MonoBehaviour
         {
             SetRaceState(RaceState.Paused);
             Time.timeScale = 0f; // assuming we used delta time correctly elsewhere
+
+            AudioManager.Instance.PlayUISFX(AudioManager.Instance.pauseSound, 1.0f);
         }
     }
 
@@ -145,6 +151,8 @@ public class GameManager : MonoBehaviour
         {
             SetRaceState(RaceState.Racing);
             Time.timeScale = 1f;
+
+            AudioManager.Instance.PlayUISFX(AudioManager.Instance.unpauseSound, 1.0f);
         }
     }
 

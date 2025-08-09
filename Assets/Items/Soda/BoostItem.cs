@@ -13,6 +13,8 @@ public class BoostItem : KartItem
         if (cartUsingItem != null)
         {
             cartUsingItem.ApplyBoost(boostDuration, speedMultiplier);
+
+            AudioManager.Instance.PlaySodaBlast();
         }
     }
 
