@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c058208511e5742e482024bbd62e7101, type: 3}
+  m_Name: Tomato Store
+  m_EditorClassIdentifier: 
+  itemName: Tomato
+  icon: {fileID: 21300000, guid: 08bbaa903304d45f0843f2a95e4dc936, type: 3}
+  visualPrefab: {fileID: 5677725279836058035, guid: 1f97bf91d0cea4cb38ee437b7151db1e,
+    type: 3}
+  throwForce: 80
+  arcHeight: 15
+  throwableTomatoPrefab: {fileID: 5677725279836058035, guid: 32c52701b5d7fb04fa35bb881e48aaa0,
+    type: 3}
+  ketchupSplatPrefab: {fileID: 4791624648453179910, guid: 6496fada685e147cab48ce1214a6879a,
+    type: 3}
+  splatRadius: 20
+  splatDuration: 10
+  directHitSpinOutDuration: 3
+  enterKetchupSpinOutDuration: 1.5
