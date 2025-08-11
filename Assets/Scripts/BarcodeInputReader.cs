@@ -40,6 +40,13 @@ public class BarcodeInputReader : MonoBehaviour
     //     }
     // }
 
+    private void Start()
+    {
+        // if (Gamepad.current != null) Debug.Log("Connected to gamepad");
+        // if (Joystick.current != null) Debug.Log("Connected to joystick");
+        
+    }
+
     private void ProcessBarcode()
     {
      if (buffer.Length == 0) return;

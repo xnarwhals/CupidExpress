@@ -1,50 +1,62 @@
 using UnityEngine.Splines;
 using UnityEngine;
+using Cinemachine;
 
 public class EndAnimationTransition : MonoBehaviour
 {
     private SplineAnimate splineAnimator;
-    public GameObject cameraEndPos;
-    public Camera mainCamera;
+    private SplineContainer spline;
+    public CinemachineVirtualCamera vCam;
+    private BallKart ballKart;
+    [SerializeField] private float splineProgressStart = 0.3f; // change based on spline
 
-    private void OnEnable()
-    {
-        GameManager.Instance.OnRaceStateChanged += OnRaceStateChanged;
-    }
 
     private void OnDisable()
     {
-        GameManager.Instance.OnRaceStateChanged -= OnRaceStateChanged;
+        GameManager.Instance.OnRaceFinished -= OnRaceFinished;
     }
 
     private void Awake()
     {
-        splineAnimator = GetComponent<SplineAnimate>();
-        if (splineAnimator == null)
-        {
-            Debug.LogError("SplineAnimate component not found on this Transform.");
-        }
+        ballKart = FindFirstObjectByType<BallKart>();
     }
 
-    private void OnRaceStateChanged(GameManager.RaceState newState)
+    private void Start()
     {
-        if (newState == GameManager.RaceState.Finished)
-        {
-            if (splineAnimator != null && cameraEndPos != null && mainCamera != null)
-            {
-                // Set the spline animator to the end position
-                splineAnimator.enabled = true;
-                splineAnimator.Play();
+        spline = GameManager.Instance.raceTrack;
 
-                // Move the camera to the end position
-                mainCamera.transform.position = cameraEndPos.transform.position;
-                mainCamera.transform.rotation = cameraEndPos.transform.rotation;
-            }
-            else
-            {
-                Debug.LogWarning("SplineAnimator or Camera End Position is not set.");
-            }
+        GameManager.Instance.OnRaceFinished += OnRaceFinished;
+        if (spline == null)
+        {
+            Debug.LogError("SplineContainer not found in GameManager!");
+            return;
         }
+        if (vCam == null)
+        {
+            Debug.LogError("CinemachineVirtualCamera not assigned!");
+            return;
+        }
+
+    } 
+
+    // 0 10 -30
+    private void OnRaceFinished()
+    {
+        // animate this trannsition 
+        var transposer = vCam.GetCinemachineComponent<CinemachineTransposer>();
+        if (transposer != null)
+        {
+            transposer.m_FollowOffset = new Vector3(0, 7.5f, 22); // Adjust camera offset for end animation
+        }
+
+        splineAnimator = gameObject.AddComponent<SplineAnimate>();
+        splineAnimator.PlayOnAwake = false;
+        splineAnimator.Container = spline;
+        splineAnimator.AnimationMethod = SplineAnimate.Method.Speed;
+        splineAnimator.MaxSpeed = 30f;
+        splineAnimator.NormalizedTime = splineProgressStart;
+        splineAnimator.Play();
+
     }
 
 }

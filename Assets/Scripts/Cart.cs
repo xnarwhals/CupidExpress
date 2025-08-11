@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Cart : MonoBehaviour
 {
@@ -16,12 +18,9 @@ public class Cart : MonoBehaviour
     private CartPhysics cartPhysics;
     private BallKart ballKart;
     private KetchupEffect ketchupEffect; // player
-    private AIDriver aiDriver; // AI
+    private SimpleAIDriver aiDriver; // AI
     private CartPlayerInput[] playerInputs;
     private PlayerSplineProgress splineProgress;
-
-    public bool isLeader = false; // ignore
-
     public string CartName => cartName;
     public int CartID => cartID;
     public CartPhysics CartPhysics => cartPhysics;
@@ -32,23 +31,32 @@ public class Cart : MonoBehaviour
         cartPhysics = GetComponent<CartPhysics>();
         ballKart = GetComponent<BallKart>();
         splineProgress = GetComponent<PlayerSplineProgress>();
-
-        //if (cartPhysics == null) print((CartPhysics)GetComponent<BallKart>());
-
-        // if (cartPhysics == null || ballKart == null) print((CartPhysics)GetComponent<BallKart>());
+        aiDriver = GetComponent<SimpleAIDriver>();
 
 
         playerInputs = GetComponentsInChildren<CartPlayerInput>();
         ketchupEffect = GetComponent<KetchupEffect>();
-        aiDriver = GetComponent<AIDriver>();
+        // aiDriver = GetComponent<AIDriver>();
     }
 
     // Testing
     private void Start()
     {
         if (cartID == 0) cartName = PlayerData.PlayerName;
-        if (splineProgress == null) Debug.LogWarning("PlayerSplineProgress component not found on Cart!");
-        
+        if (CartID == 0 && splineProgress == null) Debug.LogWarning("PlayerSplineProgress component not found on Player!");
+        if (cartID != 0 && aiDriver == null) Debug.LogWarning("SimpleAIDriver component not found on AI Cart!");   
+    }
+
+    private void Update()
+    {
+        // if (Gamepad.current != null && Gamepad.current.buttonNorth.wasPressedThisFrame)
+        // if (Joystick.current != null && Joystick.current.trigger.wasPressedThisFrame)
+        // {
+        //     if (cartID == 0) return;
+        //     SpinOut(3f);
+        //     ApplyBoost(5f, 1.5f);
+        //     Shock(3f);
+        // }
     }
 
     #region Cart Methods
@@ -56,7 +64,7 @@ public class Cart : MonoBehaviour
     {
         if (cartID == 0 && splineProgress != null) return splineProgress.splineProgress; // player
         else if (aiDriver != null) return aiDriver.GetSplineProgress(); // AI
-        return 0f; 
+        return 0f;
 
     }
 
@@ -75,14 +83,14 @@ public class Cart : MonoBehaviour
     public bool IsSpinningOut()
     {
         if (cartID == 0) return cartPhysics.isSpinningOut;
-        else return aiDriver != null && aiDriver.StateController.currentState == AIDriverState.SpinningOut;
+        else return aiDriver != null && aiDriver.CurrentState == AIDriverState.SpinningOut;
 
     }
 
     public void ApplyBoost(float duration, float speedMultiplier)
     {
-        if (cartID == 0) ballKart.ApplyInstantBoost(20f);
-        else aiDriver.ApplyBoost(duration, speedMultiplier);
+        if (cartID == 0) ballKart.ApplyInstantBoost(100f);
+        else aiDriver.StartBoost(duration, speedMultiplier);
     }
 
     public void Shock(float duration)

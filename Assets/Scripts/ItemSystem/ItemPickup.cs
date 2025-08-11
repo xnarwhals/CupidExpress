@@ -36,7 +36,6 @@ public class ItemPickup : MonoBehaviour
         
         if (cart != null)
         {
-            Debug.Log($"Item collected by cart: {cart.CartID}");
             CollectItem(cart);
             // if (!ItemManager.Instance.CartHasMaxItems(cart))
         }
