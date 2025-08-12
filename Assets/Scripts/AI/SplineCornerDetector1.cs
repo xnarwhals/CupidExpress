@@ -143,55 +143,21 @@ public class SplineCornerDetector : MonoBehaviour
             }
         }
     }
-    
+
     private void DrawCurvatureAnalysis()
     {
+        if (splineContainer == null || splineContainer.Spline == null) return;
         var spline = splineContainer.Spline;
-        int sampleCount = 50; // Number of points to sample along spline
-        
-        for (int i = 0; i < sampleCount; i++)
+        float step = 0.1f;
+        for (float t = 0f; t <= 1f; t += step)
         {
-            float t = (float)i / sampleCount;
-            Vector3 position = splineContainer.EvaluatePosition(t);
-            float curvature = CalculateCurvatureAtProgress(t);
-            
-            // Color based on curvature
-            if (curvature > curvatureThreshold)
-            {
-                // Potential corner (red)
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(position, 0.5f);
-            }
-            else if (curvature > curvatureThreshold * 0.5f)
-            {
-                // Moderate curve (yellow)
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawWireSphere(position, 0.3f);
-            }
-            else
-            {
-                // Straight section (green)
-                Gizmos.color = Color.green;
-                Gizmos.DrawWireSphere(position, 0.2f);
-            }
-            
+            Vector3 pos = splineContainer.EvaluatePosition(t);
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(pos, 0.25f);
 #if UNITY_EDITOR
-            // Show curvature value
-            if (curvature > 5f) // Only show for curves
-            {
-                UnityEditor.Handles.Label(position + Vector3.up, $"{curvature:F1}°");
-            }
+        UnityEditor.Handles.Label(pos + Vector3.up * 0.5f, $"t={t:0.0}");
 #endif
         }
         
-#if UNITY_EDITOR
-        // Legend
-        Vector3 legendPos = splineContainer.transform.position + Vector3.up * 5f;
-        UnityEditor.Handles.Label(legendPos, 
-            $"Curvature Analysis:\n" +
-            $"🔴 Red: Corner (>{curvatureThreshold:F0}°)\n" +
-            $"🟡 Yellow: Curve (>{curvatureThreshold * 0.5f:F0}°)\n" +
-            $"🟢 Green: Straight (<{curvatureThreshold * 0.5f:F0}°)");
-#endif
     }
 }
