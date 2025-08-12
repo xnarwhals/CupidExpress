@@ -21,6 +21,8 @@ public class ShockItem : KartItem
                     ItemManager.Instance.ClearCartItems(cart);
                 }
             }
+
+            AudioManager.Instance.PlayTomatoThrow();
         }
     }
 

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Shock
   m_EditorClassIdentifier: 
   itemName: Thunda
-  icon: {fileID: 21300000, guid: ba0bd6db0109945629deca874d376141, type: 3}
+  icon: {fileID: 21300000, guid: af7f0fc379e50514880f675b05035379, type: 3}
   visualPrefab: {fileID: 3694981861136816911, guid: e98c37bbb855e4ec991782916df72e5c,
     type: 3}
+  shockDuration: 3.5

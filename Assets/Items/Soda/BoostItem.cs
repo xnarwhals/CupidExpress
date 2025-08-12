@@ -1,3 +1,4 @@
+using System.Drawing.Printing;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Kart Item/Boost")]
@@ -13,7 +14,10 @@ public class BoostItem : KartItem
         if (cartUsingItem != null)
         {
             cartUsingItem.ApplyBoost(boostDuration, speedMultiplier);
+
+            AudioManager.Instance.PlaySodaBlast();
         }
+        else Debug.Log("ok");
     }
 
 }

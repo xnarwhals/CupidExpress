@@ -64,6 +64,8 @@ public class TomatoProjectile : MonoBehaviour
 
         hitCart.SpinOut(tomato.directHitSpinOutDuration);
 
+        AudioManager.Instance.PlayTomatoHit();
+
         Destroy(gameObject);
     }
 
@@ -72,6 +74,9 @@ public class TomatoProjectile : MonoBehaviour
         hasHit = true;
         CreateKetchupSplat(transform.position);
         // Debug.Log("Tomato on floor alert");
+
+        AudioManager.Instance.PlayTomatoHit();
+
         Destroy(gameObject);
     }
 
