@@ -42,6 +42,8 @@ public class Tomato : KartItem
         {
             tomatoProjectile.Initialize(this, user, throwDirection);
         }
+
+        AudioManager.Instance.PlayTomatoThrow();
     }
 
 }
