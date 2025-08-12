@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Splines;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -80,7 +81,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (currentRaceState == RaceState.CountDown) 
+        
+
+        if (currentRaceState == RaceState.CountDown)
         {
             UpdateCountdown();
         }
@@ -90,6 +93,7 @@ public class GameManager : MonoBehaviour
             UpdateRaceTime();
             CheckForRaceCompletion();
         }
+
 
         if (debugMode)
         {
@@ -144,11 +148,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
     private void SetRaceState(RaceState newState)
     {
         currentRaceState = newState;
         OnRaceStateChanged?.Invoke(currentRaceState);
         // Debug.Log($"Race State: {currentRaceState}");
+    }
+
+    public void RestartRace()
+    {
+        Time.timeScale = 1f; // Ensure time is running
+        // SceneLoader.Instance.LoadScene(0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); 
+        InitializeRace();
     }
 
 
@@ -173,27 +186,26 @@ public class GameManager : MonoBehaviour
     }
     public void OnCartPassedCheckpoint(Cart cart, int checkpointIndex)
     {
-        if (!cartRaceData.ContainsKey(cart) || currentRaceState != RaceState.Racing) return; // not racing or cart not registered
+        if (!cartRaceData.ContainsKey(cart) || currentRaceState != RaceState.Racing) return;
+        var data = cartRaceData[cart];
 
-        var data = cartRaceData[cart]; // who passed the checkpoint?
-
-        if (checkpointIndex == data.nextCheckpointIndex) // passed in order?
+        if (checkpointIndex == data.nextCheckpointIndex)
         {
-            data.nextCheckpointIndex = (checkpointIndex + 1) % checkpoints.Length; // wrap 
-
-            if (checkpointIndex == 0 && data.nextCheckpointIndex == 1 && data.curLap > 1)
-            {
-                CompleteLap(cart); // lap complete?
-            }
-            else if (checkpointIndex == 0 && data.firstLoopCheck) // ignore
-            {
-                CompleteLap(cart);
-            }
-
+            data.lastCheckpointPassed = checkpointIndex;
+            // If last checkpoint, set flag
             if (checkpointIndex == checkpoints.Length - 1)
             {
-                data.firstLoopCheck = true;
+                data.hasPassedLastCheckpoint = true;
             }
+
+            // If start checkpoint (0) and has passed last checkpoint, complete lap
+            if (checkpointIndex == 0 && data.hasPassedLastCheckpoint)
+            {
+                CompleteLap(cart);
+                data.hasPassedLastCheckpoint = false; // Reset for next lap
+            }
+
+            data.nextCheckpointIndex = (checkpointIndex + 1) % checkpoints.Length;
         }
         NotifyCartPositions();
     }
@@ -275,13 +287,18 @@ public class GameManager : MonoBehaviour
     }
 
     public List<Cart> GetCartLeaderboard()
-    {   
+    {
         // first filter finished carts, then order by lap and checkpoint
-        return cartRaceData.Keys
+        var unfinished = cartRaceData.Keys
             .Where(cart => !cartRaceData[cart].isFinished)
             .OrderByDescending(cart => cartRaceData[cart].curLap)
-            .ThenByDescending(cart => cartRaceData[cart].nextCheckpointIndex)
+            .ThenByDescending(cart => cartRaceData[cart].lastCheckpointPassed)
+            .ThenByDescending(cart => cart.GetSplineProgress()) // spline 
             .ToList();
+
+        var full = new List<Cart>(finishedCarts);
+        full.AddRange(unfinished);
+        return full;
     }
 
     public Cart GetLeaderCart()
@@ -299,9 +316,9 @@ public class GameManager : MonoBehaviour
         }
 
         if (cartRaceData[cart].isFinished)
-            {
-                return finishedCarts.IndexOf(cart) + 1;
-            }
+        {
+            return finishedCarts.IndexOf(cart) + 1;
+        }
 
         // use leaderboard if not finished
         var leaderboard = GetCartLeaderboard();
@@ -341,7 +358,10 @@ public class GameManager : MonoBehaviour
 
 
         // find carts in scene to register
-        Cart[] carts = FindObjectsOfType<Cart>();
+        Cart[] carts = FindObjectsOfType<Cart>()
+            .OrderBy(cart => cart.CartID) // sort by ID
+            .ToArray();
+
         foreach (Cart cart in carts)
         {
             RegisterCart(cart);
@@ -360,13 +380,26 @@ public class GameManager : MonoBehaviour
 
     private void CheckForRaceCompletion()
     {
-        if (finishedCarts.Count == cartRaceData.Count || (maxRaceTime > 0 && currentRaceTime >= maxRaceTime))
+        bool playerCartFinished = finishedCarts.Any(cart => cart.CartID == 0);
+
+        // (maxRaceTime > 0 && currentRaceTime >= maxRaceTime)
+        if (playerCartFinished)
         {
+            var playerCart = finishedCarts.First(cart => cart.CartID == 0);
+            float playerFinishTime = cartRaceData[playerCart].finishTime;
+            LocalLeaderboard.AddTime(playerFinishTime, playerCart.CartName);
+
             SetRaceState(RaceState.Finished);
             OnRaceFinished?.Invoke();
+            // SceneLoader.Instance.LoadScene(0); 
         }
     }
 
+    public bool AICanMoveState()
+    {
+        return currentRaceState == RaceState.Racing || currentRaceState == RaceState.Finished;
+    }
+    
     private void DebugRaceInfo()
     {
         if (currentRaceState == RaceState.Racing && cartRaceData.Count > 0)
@@ -391,6 +424,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public float GetCheckpointProgress(Cart cart)
+    {
+        var data = cartRaceData[cart];
+        // If nextCheckpointIndex is 0, treat it as being just after the last checkpoint
+        return (data.nextCheckpointIndex == 0 ? checkpoints.Length : data.nextCheckpointIndex);
+    }           
+
     #endregion
 
     [Serializable]
@@ -399,11 +439,12 @@ public class GameManager : MonoBehaviour
         public Cart cart;
         public int curLap = 1;
         public int nextCheckpointIndex = 0;
+        public int lastCheckpointPassed = -1;
         public float raceStartTime;
         public float lastLapTime;
         public float finishTime;
         public bool isFinished = false;
-        public bool firstLoopCheck = false;
+        public bool hasPassedLastCheckpoint = false;
         public List<float> lapTimes = new List<float>();
     }
 }

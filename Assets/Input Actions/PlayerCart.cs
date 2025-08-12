@@ -171,6 +171,24 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""8a143159-4893-4345-a83d-20066e54e7da"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Restart"",
+                    ""type"": ""Button"",
+                    ""id"": ""731a02b4-f4a3-47e2-988d-70f5993bcc4a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -178,6 +196,17 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""d8ecd3f4-bead-479b-ba9f-b0beff8ce24a"",
                     ""path"": ""<Gamepad>/leftStick/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Steer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ce1e5611-6432-4faf-ac7e-3a7d61d9a617"",
+                    ""path"": ""<Joystick>/stick/x"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -209,8 +238,8 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""37b0a748-4bdb-41ea-acc8-5193194c2086"",
-                    ""path"": ""<Keyboard>/1"",
+                    ""id"": ""852b93ef-ba28-4822-a4ce-9ecbd45d7f2a"",
+                    ""path"": ""<HID::Wireless Xbox Controller>/button7"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -220,8 +249,8 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""c8181621-d4d9-4572-b046-e9032f087466"",
-                    ""path"": ""<Keyboard>/2"",
+                    ""id"": ""189311a6-c82b-4e2e-afa2-c5c87157d679"",
+                    ""path"": ""<HID::Wireless Xbox Controller>/button8"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -253,6 +282,17 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""88281020-0cf7-4ac6-af96-ba5cc3b651bb"",
+                    ""path"": ""<Joystick>/trigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Brake"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""f988a956-1764-45cb-b7aa-458c776f3466"",
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
@@ -275,6 +315,17 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""37318e62-af90-4941-9306-39b105d7f61e"",
+                    ""path"": ""<HID::Wireless Xbox Controller>/button2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Accelerate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""267e5569-6aaa-49c6-8d0e-a3753942e132"",
                     ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
@@ -288,6 +339,17 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""76e92cfb-4c28-4a8e-9114-adadd4ac62c8"",
                     ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StartGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b51c8da1-581c-4ba6-b1d5-4dd94e32104c"",
+                    ""path"": ""<HID::Wireless Xbox Controller>/button4"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -330,12 +392,89 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""34f29f9e-9c6b-41e7-ac8a-d7a6ce136f49"",
+                    ""path"": ""<HID::Wireless Xbox Controller>/hat/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DebugBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""9ee9f4fe-bbea-4b21-ba79-cda0bc350d4f"",
                     ""path"": ""<Gamepad>/select"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Reset"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""274b874b-a666-46b4-baf3-838642d65bb4"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a265ab2b-b0f7-4b25-ae24-6aa15587ebe5"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""caf8f6f5-f1b7-46c0-9b05-125423345622"",
+                    ""path"": ""<HID::Wireless Xbox Controller>/button12"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""629cd720-2a01-476f-b2d5-51918e9eb401"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Restart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""34e697eb-a1bd-44d2-af60-09c650928d4b"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Restart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""475e7a46-72fe-4195-8dbf-5b5e0df56e50"",
+                    ""path"": ""<HID::Wireless Xbox Controller>/hat/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Restart"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -355,6 +494,8 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
         m_Player_Drift = m_Player.FindAction("Drift", throwIfNotFound: true);
         m_Player_DebugBtn = m_Player.FindAction("DebugBtn", throwIfNotFound: true);
         m_Player_Reset = m_Player.FindAction("Reset", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
+        m_Player_Restart = m_Player.FindAction("Restart", throwIfNotFound: true);
     }
 
     ~@PlayerCart()
@@ -444,6 +585,8 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Drift;
     private readonly InputAction m_Player_DebugBtn;
     private readonly InputAction m_Player_Reset;
+    private readonly InputAction m_Player_Pause;
+    private readonly InputAction m_Player_Restart;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -491,6 +634,14 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Reset".
         /// </summary>
         public InputAction @Reset => m_Wrapper.m_Player_Reset;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/Pause".
+        /// </summary>
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/Restart".
+        /// </summary>
+        public InputAction @Restart => m_Wrapper.m_Player_Restart;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -544,6 +695,12 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
             @Reset.started += instance.OnReset;
             @Reset.performed += instance.OnReset;
             @Reset.canceled += instance.OnReset;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
+            @Restart.started += instance.OnRestart;
+            @Restart.performed += instance.OnRestart;
+            @Restart.canceled += instance.OnRestart;
         }
 
         /// <summary>
@@ -582,6 +739,12 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
             @Reset.started -= instance.OnReset;
             @Reset.performed -= instance.OnReset;
             @Reset.canceled -= instance.OnReset;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
+            @Restart.started -= instance.OnRestart;
+            @Restart.performed -= instance.OnRestart;
+            @Restart.canceled -= instance.OnRestart;
         }
 
         /// <summary>
@@ -685,5 +848,19 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnReset(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Pause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPause(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Restart" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRestart(InputAction.CallbackContext context);
     }
 }

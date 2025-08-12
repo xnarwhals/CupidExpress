@@ -7,7 +7,7 @@ public class LapUI : MonoBehaviour
 {
     [Header("UI Ref")]
     public TextMeshProUGUI lapText;
-    public TextMeshProUGUI endTimeText;
+    public TextMeshProUGUI timerText;
 
     [Header("Cart Ref")]
     public Cart playerCart;
@@ -32,6 +32,19 @@ public class LapUI : MonoBehaviour
         UpdateLapUI();
     }
 
+    private void Update()
+    {
+        if (timerText == null || playerCart == null || GameManager.Instance == null)
+            return;
+
+        var raceState = GameManager.Instance.GetCurrentRaceState();
+        if (raceState == GameManager.RaceState.Racing)
+        {
+            float raceTime = GameManager.Instance.GetCartRaceTime(playerCart);
+            timerText.text = "Time: " + raceTime.ToString("F2") + "s";
+        }
+    }
+
     private void OnDestroy()
     {
         if (GameManager.Instance != null)
@@ -47,6 +60,7 @@ public class LapUI : MonoBehaviour
         if (cart == playerCart) // bots dont have ui
         {
             UpdateLapUI();
+            UpdateRaceTimer();
             // complete lap sound
         }
     }
@@ -86,8 +100,8 @@ public class LapUI : MonoBehaviour
             case GameManager.RaceState.Finished:
                 lapText.text = "Finished!";
                 lapText.color = finalLapColor;
-                if (endTimeText != null)
-                    endTimeText.text = "Time: " + GameManager.Instance.GetCartRaceTime(playerCart).ToString("F2") + "s";
+                if (timerText != null)
+                    timerText.text = "Time: " + GameManager.Instance.GetCartRaceTime(playerCart).ToString("F2") + "s";
                 break;
 
             case GameManager.RaceState.Paused:
@@ -101,6 +115,14 @@ public class LapUI : MonoBehaviour
     {
         countdownNumber = number;
         UpdateLapUI();
+    }
+
+    private void UpdateRaceTimer()
+    {
+        if (timerText == null || playerCart == null || GameManager.Instance == null) return;
+
+        float raceTime = GameManager.Instance.GetCartRaceTime(playerCart);
+        timerText.text = "Time: " + raceTime.ToString("F2") + "s";
     }
 
 }

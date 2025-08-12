@@ -14,6 +14,7 @@ public class AudioManager : MonoBehaviour
     [Header("Race Music")]
     public AudioClip menuMusic;
     public AudioClip raceMusic;
+    public AudioClip lastLapMusic;
     public AudioClip victoryMusic; // optional
     public AudioClip defeatMusic; // optional
 
@@ -42,6 +43,7 @@ public class AudioManager : MonoBehaviour
 
     private AudioClip currentMusic;
     private bool isMusicPlaying = false;
+    private bool isOnLastLap = false;
 
     private void Awake()
     {
@@ -138,19 +140,24 @@ public class AudioManager : MonoBehaviour
         {
             // Menu
             case GameManager.RaceState.WaitingToStart:
+                isOnLastLap = false;
                 PlayMusic(menuMusic);
                 break;
             case GameManager.RaceState.CountDown:
                 // PlaySFX(countDownBeep);
                 break;
             case GameManager.RaceState.Racing:
-                PlayMusic(raceMusic);
+                if (isOnLastLap) 
+                    PlayMusic(lastLapMusic);
+                else
+                    PlayMusic(raceMusic);
                 break;
             case GameManager.RaceState.Paused:
                 PauseMusic();
                 PlayUISFX(pauseSound);
                 break;
             case GameManager.RaceState.Finished:
+                PauseMusic();
                 // win/lose music 
                 break;
         }
@@ -173,9 +180,12 @@ public class AudioManager : MonoBehaviour
         if (cart.CartID == 0)
         {
             PlaySFX(lapCompleteSound, 0.7f);
-        }
-        {
-            PlaySFX(lapCompleteSound, 0.7f);
+            if (lapNumber == GameManager.Instance.totalLaps)
+            {
+                Debug.Log("Last lap reached");
+                isOnLastLap = true;
+                PlayMusic(lastLapMusic);
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections.Generic;
+using UnityEngine.InputSystem.LowLevel;
 
 public enum CartRole
 {
@@ -16,7 +16,8 @@ public class CartPlayerInput : MonoBehaviour
     private PlayerCart input; // bad name, "CartPlayerControls"
     public TestItemEffect testItemEffect;
     [SerializeField] private int playerIndex = 0; // distinguish players using same script
-    [SerializeField] bool printRawInput = false;
+    /*[SerializeField]*/ bool printRawInput = false;
+    [SerializeField] bool EnableArduinoReverse = false;
 
     [Header("Arduino")] //organize later?
     public float maxPressL = 80.0f;
@@ -28,6 +29,7 @@ public class CartPlayerInput : MonoBehaviour
     public float itemLThreshold = 200.0f;
     public float stepBpm = 50.0f;
     public float reverseStepCount = 1.0f;
+    public float initialStepThrottle = 0.5f;
 
     float prevStepTime;
     bool prevStep; //false is left, true is right
@@ -35,6 +37,10 @@ public class CartPlayerInput : MonoBehaviour
     float currentThrottle = 0.0f;
 
     ArduinoMessageHandler messageHandler;
+
+    [Header("BarCode")]
+    public BarcodeInputReader barcodeInputReader;
+    public RaceUI raceUI;
 
     private void Awake()
     {
@@ -116,8 +122,9 @@ public class CartPlayerInput : MonoBehaviour
                 {
                     Step(true);
                 }
-                else if (stepL > stepThreshold && stepR > stepThreshold && Time.time - prevStepTime > (60.0f / (stepBpm / reverseStepCount)))
+                else if (stepL > stepThreshold && stepR > stepThreshold && Time.time - prevStepTime > (60.0f / (stepBpm / reverseStepCount))) //step both
                 {
+                    if (EnableArduinoReverse)
                     currentThrottle = -1.0f;
                 }
 
@@ -143,8 +150,8 @@ public class CartPlayerInput : MonoBehaviour
             //drift
 
 
-                //cartPhysics.Drift(input.Player.Drift.IsPressed());
-                cartPhysics.Drift(input.Player.Drift.ReadValue<float>() > 0.5f);
+            //cartPhysics.Drift(input.Player.Drift.IsPressed());
+            cartPhysics.Drift(input.Player.Drift.ReadValue<float>() > 0.5f);
 
             // east btn accelerates, south btn brakes/reverses
             if (input.Player.Accelerate.IsPressed()) currentThrottle = 1f;
@@ -154,15 +161,20 @@ public class CartPlayerInput : MonoBehaviour
             cartPhysics.SetThrottle(currentThrottle);
         }
 
+        if (barcodeInputReader != null)
+        {
+            string barcodeInput = barcodeInputReader.GetInput();
+            if (!string.IsNullOrEmpty(barcodeInput))
+            {
+                ItemManager.Instance.UseItem(cart, barcodeInput[0] == '2'); 
+            }
+        }
+
 
         // ITEM USE CODE
         if (role == CartRole.Driver && input.Player.UseItem.triggered)
         {
             bool throwItBack = false;
-
-            // Check if '2' key was pressed this frame
-            if (Keyboard.current != null && Keyboard.current.digit2Key.wasPressedThisFrame)
-                throwItBack = true;
 
             // Also check for left trigger (gamepad)
             InputControl itemTrigger = input.Player.UseItem.activeControl;
@@ -172,11 +184,43 @@ public class CartPlayerInput : MonoBehaviour
             ItemManager.Instance.UseItem(cart, throwItBack);
         }
 
+        // start
         if (input.Player.StartGame.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.WaitingToStart)
         {
             // Debug.Log("Game started");
             GameManager.Instance.StartRace();
         }
+
+        // pause
+        if (input.Player.Pause.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Racing)
+        {
+            GameManager.Instance.PauseRace();
+            if (raceUI != null)
+            {
+                raceUI.showPauseMenu();
+            }
+
+        } else if (input.Player.Pause.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Paused)
+        {
+            GameManager.Instance.ResumeRace();
+            if (raceUI != null)
+            {
+                raceUI.hidePauseMenu();
+            }
+        }
+
+        // restart 
+        if (input.Player.Restart.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Paused)
+        {
+            GameManager.Instance.RestartRace();
+        }
+
+        if (input.Player.Restart.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Finished)
+        {
+            GameManager.Instance.RestartRace();
+        }
+        
+        
 
         if (testItemEffect != null && input.Player.DebugBtn.WasPressedThisFrame())
         {
@@ -195,6 +239,10 @@ public class CartPlayerInput : MonoBehaviour
             }*/
 
             currentThrottle = Mathf.Clamp((60.0f / stepBpm) / (Time.time - prevStepTime), 0.0f, 1.0f);
+        }
+        else if (currentThrottle <= 0.01f)
+        {
+            currentThrottle = initialStepThrottle;
         }
 
         prevStep = side;

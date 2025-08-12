@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
@@ -31,7 +32,8 @@ public class ItemPickup : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Cart cart = other.GetComponent<Cart>();
+        Cart cart = other.gameObject.GetComponent<Cart>();
+        
         if (cart != null)
         {
             CollectItem(cart);

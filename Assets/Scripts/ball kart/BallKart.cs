@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BallKart : CartPhysics
@@ -8,7 +6,7 @@ public class BallKart : CartPhysics
     [SerializeField] Transform kartNormal; //the kart child of transform, parent of model
     [SerializeField] Transform kartModel; //the actual model
     public Vector3 targetModelScale = Vector3.one;
-    private float scaleLerpSpeed = 10f; 
+    private float scaleLerpSpeed = 10f;
 
     [Header("Movement Settings")]
     [SerializeField] float floorGravity = 25f;
@@ -38,7 +36,7 @@ public class BallKart : CartPhysics
     [SerializeField] Transform resetTransform;
     private float spinOutDirection = 1f;
 
-    float currentSpeed = 0.0f;
+    public float currentSpeed = 0.0f;
     float currentRotate = 0.0f;
     float inputSpeed; //in case we want a more dynamic throttle system
     float inputRotation; //jik ^
@@ -58,7 +56,7 @@ public class BallKart : CartPhysics
     [SerializeField] float postBoostDecay = 0.01f;
     bool postBoost = false;
     private void Update()
-    {   
+    {
         // Shock minify
         kartModel.localScale = Vector3.Lerp(kartModel.localScale, targetModelScale, Time.deltaTime * scaleLerpSpeed);
 
@@ -66,18 +64,16 @@ public class BallKart : CartPhysics
         float dt = Time.deltaTime;
         if (invertSteering) steerInput = -steerInput;
 
-        if (!isSpinningOut)
-        {
-            //setting inputs to be used in fixed
-            inputSpeed = maxSpeed * throttleInput; //in case we want a more dynamic throttle system
-            inputRotation = steerInput * steerPower; //jik ^
-            currentAcceleration = acceleration;
+        if (isSpinningOut || GameManager.Instance.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
 
-            //throttle forward vs backward acceleration & speed
-            if (Mathf.Abs(throttleInput) <= 0.01f) currentAcceleration = idleDecelleration; //if no input, idle, uses rb drag in combination
-            else if (throttleInput < 0) { currentAcceleration = reverseAcceleration; inputSpeed = reverseMaxSpeed * throttleInput; }
-        }
+        //setting inputs to be used in fixed
+        inputSpeed = maxSpeed * throttleInput; //in case we want a more dynamic throttle system
+        inputRotation = steerInput * steerPower; //jik ^
+        currentAcceleration = acceleration;
 
+        //throttle forward vs backward acceleration & speed
+        if (Mathf.Abs(throttleInput) <= 0.01f) currentAcceleration = idleDecelleration; //if no input, idle, uses rb drag in combination
+        else if (throttleInput < 0) { currentAcceleration = reverseAcceleration; inputSpeed = reverseMaxSpeed * throttleInput; }
 
         //post boost sustain
         postBoost = currentSpeed > maxSpeed + 0.01f;
@@ -101,10 +97,13 @@ public class BallKart : CartPhysics
         float steerDir = steerInput;
         steerDir *= DriftInput ? modelDriftOffset : modelSteerOffset;
         kartModel.localRotation = Quaternion.Euler(Vector3.Lerp(kartModel.localEulerAngles, new Vector3(0, (steerDir), kartModel.localEulerAngles.z), modelSteerOffsetSmoothing)); //model steering
+
     }
 
     public override void FixedUpdate()
     {
+
+        if (GameManager.Instance.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
 
         if (isSpinningOut)
         {
@@ -163,7 +162,7 @@ public class BallKart : CartPhysics
     public override void SpinOut(float duration)
     {
         base.SpinOut(duration);
-        spinOutDirection = Random.value > 0.5f ? 1f : -1f;
+        spinOutDirection = UnityEngine.Random.value > 0.5f ? 1f : -1f;
         originalDrag = rb.drag;
         rb.drag = 1.5f;
     }
@@ -223,4 +222,5 @@ public class BallKart : CartPhysics
             rb.AddForce(kartTransform.forward * force, ForceMode.VelocityChange);
         }
     }
+
 }

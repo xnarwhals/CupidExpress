@@ -7,13 +7,8 @@ public class AIBehaviorController : MonoBehaviour
 
     [Header("Proximity")]
     [Range(0.5f, 5f)]
-    public float proximityCheckFrequency = 1f; // Distance to check for nearby carts
-    private AIDriver aiDriver;
-
-    // before personality modifications
-    private float baseMaxSpeed;
-    private float baseAcceleration;
-    private float baseTurnSpeed;
+    public float proximityCheckFrequency = 1f; // how often to check for nearby carts in seconds
+    private SimpleAIDriver aiDriver; 
 
     private bool cartInProximity = false;
     private Cart curCartInProximity = null; 
@@ -21,15 +16,15 @@ public class AIBehaviorController : MonoBehaviour
 
     private void Awake()
     {
-        aiDriver = GetComponent<AIDriver>();
+        aiDriver = GetComponent<SimpleAIDriver>();
     }
 
     private void Start()
     {
         // Store original values before personality modifications
-        baseMaxSpeed = aiDriver.maxSpeed;
-        baseAcceleration = aiDriver.acceleration;
-        baseTurnSpeed = aiDriver.turnSpeed;
+        // baseMaxSpeed = aiDriver.maxSpeed;
+        // baseAcceleration = aiDriver.acceleration;
+        // baseTurnSpeed = aiDriver.turnSpeed;
 
         // ApplyPersonalityValues();
     }
@@ -40,9 +35,9 @@ public class AIBehaviorController : MonoBehaviour
         if (personality == null) return;
 
         // Apply personality modifiers to base values
-        aiDriver.maxSpeed = baseMaxSpeed + (personality.aggressiveness * 5f);
-        aiDriver.acceleration = baseAcceleration * Mathf.Lerp(0.6f, 1.3f, personality.aggressiveness);
-        aiDriver.turnSpeed = baseTurnSpeed * Mathf.Lerp(0.8f, 1.1f, personality.aggressiveness);
+        // aiDriver.maxSpeed = baseMaxSpeed + (personality.aggressiveness * 5f);
+        // aiDriver.acceleration = baseAcceleration * Mathf.Lerp(0.6f, 1.3f, personality.aggressiveness);
+        // aiDriver.turnSpeed = baseTurnSpeed * Mathf.Lerp(0.8f, 1.1f, personality.aggressiveness);
 
         // Debug.Log($"AI Personality Applied: Speed={aiDriver.maxSpeed:F1}, Accel={aiDriver.acceleration:F1}, Turn={aiDriver.turnSpeed:F1}");
     }
@@ -77,11 +72,7 @@ public class AIBehaviorController : MonoBehaviour
             default:
                 break;
         } 
-        
-
     }
-
-
 
     #region Item Usage
 
