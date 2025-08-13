@@ -1316,8 +1316,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7c355dd4cd354949b13c15fb9411d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerRigidBody: {fileID: 1087455708306816637}
   animator: {fileID: 8409481386568365519}
+  runPercentage: 0.95
+  stopDeadzone: 0.2
 --- !u!4 &5192917469600283787 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f1aac015d43600b4186f5f898d3fbb25,
