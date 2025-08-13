@@ -242,6 +242,8 @@ public class SimpleAIDriver : MonoBehaviour
         UnityEditor.Handles.Label(
         transform.position + Vector3.up * 2.5f,
         $"Position: {pos}\n" +
+        $"Lap: {GameManager.Instance.GetCartLap(ThisCart)}\n" +
+        $"Checkpoint: {GameManager.Instance.GetCartCheckpoint(ThisCart)}\n" +
         $"Spline Progress: {GetSplineProgress():P2}"
     );
 #endif

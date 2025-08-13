@@ -274,6 +274,11 @@ public class GameManager : MonoBehaviour
         return cartRaceData.ContainsKey(cart) ? cartRaceData[cart].curLap : 0;
     }
 
+    public int GetCartCheckpoint(Cart cart)
+    {
+        return cartRaceData.ContainsKey(cart) ? cartRaceData[cart].nextCheckpointIndex : 0;
+    }
+
     public bool PlayerCartWon()
     {
         Cart finishedCarts = GetCartLeaderboard().FirstOrDefault();
