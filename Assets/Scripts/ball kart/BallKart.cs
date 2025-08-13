@@ -44,12 +44,14 @@ public class BallKart : CartPhysics
     float currentAcceleration;
     private float originalDrag;
     bool grounded = false;
+    Rigidbody kartTransformRb;
 
     Vector3 kartOffset; //makes it flush with the floor
 
     public override void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        kartTransformRb = kartTransform.gameObject.GetComponent<Rigidbody>();
 
         kartOffset = kartTransform.position - transform.position;
     }
@@ -62,10 +64,10 @@ public class BallKart : CartPhysics
         // Shock minify
         kartModel.localScale = Vector3.Lerp(kartModel.localScale, targetModelScale, Time.deltaTime * scaleLerpSpeed);
 
-        //Update()
         float dt = Time.deltaTime;
         if (invertSteering) steerInput = -steerInput;
 
+        //spinnout
         if (isSpinningOut || GameManager.Instance.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
 
         //setting inputs to be used in fixed
@@ -77,6 +79,7 @@ public class BallKart : CartPhysics
         if (Mathf.Abs(throttleInput) <= 0.01f) currentAcceleration = idleDecelleration; //if no input, idle, uses rb drag in combination
         else if (throttleInput < 0) { currentAcceleration = reverseAcceleration; inputSpeed = reverseMaxSpeed * throttleInput; }
 
+        //Setting Speed
         postBoost = currentSpeed > maxSpeed + 0.01f;
         if (postBoost && inputSpeed > 0.01f) //if we're post boost and we want to go forward
         {
@@ -90,12 +93,14 @@ public class BallKart : CartPhysics
             currentSpeed = Mathf.SmoothStep(currentSpeed, inputSpeed, dt * currentAcceleration * accelMultiplier); //acceleration
         }
 
+        //rotation
         currentRotate = Mathf.Lerp(currentRotate, inputRotation, dt * steerAccelleration);
 
         //Drift(?)
 
         //tie the kart to the sphere
-        kartTransform.position = transform.position + kartOffset;
+        //kartTransform.position = transform.position + kartOffset; //use rb instead?
+        kartTransformRb.MovePosition(transform.position + kartOffset);
 
         //model steering exaggeration/offset
         float steerDir = steerInput;
