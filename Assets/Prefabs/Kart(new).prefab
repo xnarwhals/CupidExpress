@@ -155,7 +155,6 @@ MonoBehaviour:
   forwardRef: {fileID: 0}
   cartName: Player Cart
   cartID: 0
-  isLeader: 0
 --- !u!114 &5524160064769919392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,9 +179,11 @@ MonoBehaviour:
   deadzoneScale: 0
   stepThreshold: 200
   itemLThreshold: 200
+  stepDeadzoneLowerOffset: 10
   stepBpm: 300
   reverseStepCount: 1
   initialStepThrottle: 0.5
+  idleTime: 0.5
   barcodeInputReader: {fileID: 0}
   raceUI: {fileID: 0}
 --- !u!114 &822252519090528844
@@ -359,6 +360,7 @@ MonoBehaviour:
   idleDecelleration: 3
   reverseAcceleration: 20
   reverseMaxSpeed: 15
+  AirControl: 0
   maxAngularVelocity: 7
   driftMaxAngularVelocity: 50
   modelSteerOffset: 15
