@@ -44,12 +44,14 @@ public class BallKart : CartPhysics
     float currentAcceleration;
     private float originalDrag;
     bool grounded = false;
+    Rigidbody kartTransformRb;
 
     Vector3 kartOffset; //makes it flush with the floor
 
     public override void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        kartTransformRb = kartTransform.gameObject.GetComponent<Rigidbody>();
 
         kartOffset = kartTransform.position - transform.position;
     }
@@ -97,7 +99,8 @@ public class BallKart : CartPhysics
         //Drift(?)
 
         //tie the kart to the sphere
-        kartTransform.position = transform.position + kartOffset; //use rb instead?
+        //kartTransform.position = transform.position + kartOffset; //use rb instead?
+        kartTransformRb.MovePosition(transform.position + kartOffset);
 
         //model steering exaggeration/offset
         float steerDir = steerInput;
