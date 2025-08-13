@@ -244,7 +244,8 @@ public class SimpleAIDriver : MonoBehaviour
         $"Position: {pos}\n" +
         $"Lap: {GameManager.Instance.GetCartLap(ThisCart)}\n" +
         $"Checkpoint: {GameManager.Instance.GetCartCheckpoint(ThisCart)}\n" +
-        $"Spline Progress: {GetSplineProgress():P2}"
+        $"Spline Progress: {GetSplineProgress():P2}\n"
+        
     );
 #endif
 

@@ -304,14 +304,23 @@ public class GameManager : MonoBehaviour
         // first filter finished carts, then order by lap and checkpoint
         var unfinished = cartRaceData.Keys
             .Where(cart => !cartRaceData[cart].isFinished)
-            .OrderByDescending(cart => cartRaceData[cart].curLap)
-            .ThenByDescending(cart => cartRaceData[cart].lastCheckpointPassed)
-            .ThenByDescending(cart => cart.GetSplineProgress()) // spline 
+            .OrderByDescending(cart => GetTrackProgress(cart)) // sort by progress
             .ToList();
 
         var full = new List<Cart>(finishedCarts);
         full.AddRange(unfinished);
         return full;
+    }
+
+    public float GetTrackProgress(Cart cart)
+    {
+        var data = cartRaceData[cart];
+        int lap = data.curLap;
+        int checkpoint = data.lastCheckpointPassed;
+        float splineProgress = cart.GetSplineProgress(); // normalized 0-1 between checkpoints
+
+        // Combine all into a single value
+        return lap * checkpoints.Length + checkpoint + splineProgress;
     }
 
     public Cart GetLeaderCart()

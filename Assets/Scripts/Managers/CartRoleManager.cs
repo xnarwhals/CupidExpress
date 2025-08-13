@@ -13,10 +13,14 @@ public class CartRoleManager : MonoBehaviour
     private void Awake()
     {
         if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        else
+        {
+            Debug.LogWarning("Multiple instances of CartRoleManager detected. Destroying duplicate.");
+            Destroy(gameObject);
+        }
 
         // Initialize sync events
-        roleSwapSync.OnSyncStarted += OnRoleSwapStarted;
+            roleSwapSync.OnSyncStarted += OnRoleSwapStarted;
         roleSwapSync.OnSyncSuccess += OnRoleSwapSuccess;
         roleSwapSync.OnSyncFailed += OnRoleSwapFailed;
 
