@@ -14942,15 +14942,15 @@ MonoBehaviour:
   lastLapMusic: {fileID: 8300000, guid: 447ef8fe24b724520aeabb43ba40874c, type: 3}
   victoryMusic: {fileID: 0}
   defeatMusic: {fileID: 0}
-  countDownBeep: {fileID: 0}
-  raceStartSound: {fileID: 0}
+  countDownBeep: {fileID: 8300000, guid: 96e2c4f572db3a044a59cbef84b7488c, type: 3}
+  raceStartSound: {fileID: 8300000, guid: e6eb8caf3b4050f46844412b261d981c, type: 3}
   lapCompleteSound: {fileID: 0}
-  itemPickupSound: {fileID: 0}
-  tomatoThrowSound: {fileID: 0}
-  tomatoHitSound: {fileID: 0}
-  sodaBlastSound: {fileID: 0}
-  pauseSound: {fileID: 0}
-  unpauseSound: {fileID: 0}
+  itemPickupSound: {fileID: 8300000, guid: f21a102e4c5228f49afd0d48667e6bc1, type: 3}
+  tomatoThrowSound: {fileID: 8300000, guid: 00dade7d804e5324cb1145b093db6ebd, type: 3}
+  tomatoHitSound: {fileID: 8300000, guid: bea246fc663b7514d8502e838e809231, type: 3}
+  sodaBlastSound: {fileID: 8300000, guid: 845843d1f35e1514ab818ab507f4cbda, type: 3}
+  pauseSound: {fileID: 8300000, guid: 4f76e26f5ce0cd34f93e688b76423f12, type: 3}
+  unpauseSound: {fileID: 8300000, guid: 7dc88569d7fe64644ba1a9121f7a72da, type: 3}
   masterVolume: 0.79
   musicVolume: 1
   sfxVolume: 0.5
@@ -26891,7 +26891,7 @@ PrefabInstance:
     - target: {fileID: 2411059216770904760, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: kartOrientationRayLength
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2612920084346247355, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
@@ -27121,13 +27121,28 @@ PrefabInstance:
     - target: {fileID: 5524160064769919392, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: stepBpm
-      value: 175
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 5524160064769919392, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: stepThreshold
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 5524160064769919392, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: barcodeInputReader
       value: 
       objectReference: {fileID: 1910542016}
+    - target: {fileID: 5524160064769919392, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: initialStepThrottle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5524160064769919392, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: EnableArduinoReverse
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8466242275031884585, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_Enabled
@@ -39183,7 +39198,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -191, y: 0}
+  m_AnchoredPosition: {x: -191, y: -21.9}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1396046634

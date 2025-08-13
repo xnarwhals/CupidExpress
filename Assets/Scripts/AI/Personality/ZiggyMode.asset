@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e09f8e0690ed4803bdc79abd59627dc, type: 3}
   m_Name: ZiggyMode
   m_EditorClassIdentifier: 
-  aggressiveness: 0.2
-  drivingLane: 2
+  aggressiveness: 0.65
+  drivingLane: 1
   laneOffset: 8
-  chanceToUseItem: 0.4
+  chanceToUseItem: 0.625
   proximityRadius: 5

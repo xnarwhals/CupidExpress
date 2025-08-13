@@ -7,7 +7,7 @@ public class EndAnimationTransition : MonoBehaviour
     private SplineAnimate splineAnimator;
     private SplineContainer spline;
     public CinemachineVirtualCamera vCam;
-    private BallKart ballKart;
+    [SerializeField] private Animator ray;
     [SerializeField] private float splineProgressStart = 0.3f; // change based on spline
 
 
@@ -18,7 +18,7 @@ public class EndAnimationTransition : MonoBehaviour
 
     private void Awake()
     {
-        ballKart = FindFirstObjectByType<BallKart>();
+        ray = GetComponentInChildren<Animator>();
     }
 
     private void Start()
@@ -36,6 +36,11 @@ public class EndAnimationTransition : MonoBehaviour
             Debug.LogError("CinemachineVirtualCamera not assigned!");
             return;
         }
+        if (ray == null)
+        {
+            Debug.LogError("Ray Animator not found");
+            return;
+        }
 
     } 
 
@@ -48,6 +53,8 @@ public class EndAnimationTransition : MonoBehaviour
         {
             transposer.m_FollowOffset = new Vector3(0, 7.5f, 22); // Adjust camera offset for end animation
         }
+
+        ray.SetTrigger("EndAnimation");
 
         splineAnimator = gameObject.AddComponent<SplineAnimate>();
         splineAnimator.PlayOnAwake = false;

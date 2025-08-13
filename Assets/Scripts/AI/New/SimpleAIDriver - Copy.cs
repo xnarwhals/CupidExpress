@@ -25,7 +25,15 @@ public class SimpleAIDriver : MonoBehaviour
     public Vector3 localOffset = Vector3.zero;
 
     private float splineLength;
-    private float progress = 0f; // modify 
+    [SerializeField] private float progress = 0f; // modify based on track 
+    private bool transitioningToSpline = true;
+    private Vector3 splineStartTarget;
+    // blend 
+    private bool blendingToSpline = false;
+    private float blendTimer = 0f;
+    private float blendDuration = 0.3f; // Adjust for desired smoothness
+    private Vector3 blendStartPos;
+    private Quaternion blendStartRot;
 
 
     private void OnEnable()
@@ -60,11 +68,71 @@ public class SimpleAIDriver : MonoBehaviour
 
         splineLength = spline.Spline.GetLength();
         baseSpeed = speed;
+
+        float3 pos = SplineUtility.EvaluatePosition(spline.Spline, progress);
+        Vector3 worldPos = spline.transform.TransformPoint(pos);
+        Quaternion rot = Quaternion.LookRotation(
+            spline.transform.TransformDirection(SplineUtility.EvaluateTangent(spline.Spline, progress)),
+            spline.transform.up
+        );
+        splineStartTarget = worldPos + rot * localOffset;
+
     }
 
     private void Update()
     {
         if (spline == null || !GameManager.Instance.AICanMoveState()) return; // idk you can be more fancy for finish or smth
+
+        if (transitioningToSpline)
+        {
+            // Move towards spline start target
+            transform.position = Vector3.MoveTowards(transform.position, splineStartTarget, speed * Time.deltaTime);
+            Vector3 dir = (splineStartTarget - transform.position).normalized;
+            if (dir.sqrMagnitude > 0.01f)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(dir, spline.transform.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+            }
+
+            if (Vector3.Distance(transform.position, splineStartTarget) < 0.1f)
+            {
+                transitioningToSpline = false;
+                blendingToSpline = true;
+                blendTimer = 0f;
+                blendStartPos = transform.position;
+                blendStartRot = transform.rotation;
+                return;
+            }
+
+            return;
+        }
+
+        if (blendingToSpline)
+        {
+            blendTimer += Time.deltaTime;
+            float t = Mathf.Clamp01(blendTimer / blendDuration);
+
+            // Compute spline-following position/rotation for current progress
+            float3 pos = SplineUtility.EvaluatePosition(spline.Spline, progress);
+            float3 tangent = SplineUtility.EvaluateTangent(spline.Spline, progress);
+            Vector3 worldPos = spline.transform.TransformPoint(pos);
+            Vector3 worldTangent = spline.transform.TransformDirection(tangent);
+            Vector3 worldNormal = spline.transform.up;
+            Quaternion rot = Quaternion.LookRotation(worldTangent, worldNormal);
+            Vector3 offsetPos = worldPos + rot * localOffset;
+
+            // Lerp from blendStart to spline-following
+            transform.position = Vector3.Lerp(blendStartPos, offsetPos, t);
+            transform.rotation = Quaternion.Slerp(blendStartRot, rot, t);
+
+            if (t >= 1f)
+            {
+                blendingToSpline = false;
+            }
+            return;
+        }
+
+
 
         // Handle scale and rotation lerping based on state
         if (modelTransform != null)
@@ -104,6 +172,7 @@ public class SimpleAIDriver : MonoBehaviour
             transform.rotation = rot;
         }
     }
+
 
     public void SetLaneOffset(float offsetAmount)
     {
@@ -173,6 +242,8 @@ public class SimpleAIDriver : MonoBehaviour
         UnityEditor.Handles.Label(
         transform.position + Vector3.up * 2.5f,
         $"Position: {pos}\n" +
+        $"Lap: {GameManager.Instance.GetCartLap(ThisCart)}\n" +
+        $"Checkpoint: {GameManager.Instance.GetCartCheckpoint(ThisCart)}\n" +
         $"Spline Progress: {GetSplineProgress():P2}"
     );
 #endif
