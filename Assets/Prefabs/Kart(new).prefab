@@ -365,7 +365,7 @@ MonoBehaviour:
   driftMaxAngularVelocity: 50
   modelSteerOffset: 15
   modelDriftOffset: 20
-  modelSteerOffsetSmoothing: 1
+  modelSteerOffsetSmoothing: 0.2
   kartOrientationRayLength: 1
   rampSmoothing: 8
   airSmoothing: 0.1

@@ -106,8 +106,7 @@ public class BallKart : CartPhysics
         //model steering exaggeration/offset
         float steerDir = steerInput;
         steerDir *= DriftInput ? modelDriftOffset : modelSteerOffset;
-        kartModel.localRotation = Quaternion.Euler(Vector3.Lerp(kartModel.localEulerAngles, new Vector3(0, (steerDir), kartModel.localEulerAngles.z), modelSteerOffsetSmoothing)); //model steering
-
+        kartModel.localRotation = Quaternion.Lerp(kartModel.localRotation, Quaternion.Euler(new Vector3(0, (steerDir), kartModel.localEulerAngles.z)), modelSteerOffsetSmoothing); //model steering
     }
 
     public override void FixedUpdate()
