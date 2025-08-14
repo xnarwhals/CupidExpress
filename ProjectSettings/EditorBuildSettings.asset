@@ -8,16 +8,22 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/andrew racetrack.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 5ccb802a214eeac41a83fb1875b8d2cb
+  - enabled: 1
+    path: Assets/Scenes/Kais Track Test.unity
+    guid: 5f9474a93c328c74fa99d5355ee92a9a
   - enabled: 0
     path: Assets/Scenes/BUildTest.unity
     guid: 1380633c7d0b49349ba604883eab4fb0
   - enabled: 0
     path: Assets/Scenes/Ziggy's Kart.unity
     guid: ca5ef8db36042c842b1e0c697decbc37
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Race/Start.unity
     guid: 31ae33b0a141f4be48cf488f2eeaee61
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Race/XavierDesign.unity
     guid: 27dc9606b75fb4bcaac4305604ebeb51
   - enabled: 0
