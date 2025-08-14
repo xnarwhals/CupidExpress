@@ -22,7 +22,20 @@ public class Teleporter : MonoBehaviour
     {
         if (targetTransform == null) { Debug.LogWarning("Target Transform not assigned on teleporter!"); return; }
 
+        try
+        {
+            Transform kartTransform = other.GetComponent<BallKart>().kartTransform;
+            kartTransform.rotation = targetTransform.rotation;
+        }
+        catch { other.transform.rotation = targetTransform.rotation; }
+
+        try
+        {
+            Rigidbody rb = other.GetComponent<Rigidbody>();
+
+            rb.velocity = targetTransform.forward * rb.velocity.magnitude;
+        } catch { }
+
         other.transform.position = targetTransform.position;
-        other.transform.rotation = targetTransform.rotation;
     }
 }

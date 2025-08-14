@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BallKart : CartPhysics
 {
-    [SerializeField] Transform kartTransform; //the parent of the kart (used for movement)
+    public           Transform kartTransform; //the parent of the kart (used for movement)
     [SerializeField] Transform kartNormal; //the kart child of transform, parent of model
     [SerializeField] Transform kartModel; //the actual model
     public Vector3 targetModelScale = Vector3.one;
