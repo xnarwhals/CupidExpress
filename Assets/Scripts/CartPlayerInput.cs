@@ -27,12 +27,20 @@ public class CartPlayerInput : MonoBehaviour
     public float deadzoneScale = 1.0f;
     public float stepThreshold = 200.0f;
     public float itemLThreshold = 200.0f;
+    public int   stepDeadzoneLowerOffset = 10;
     public float stepBpm = 50.0f;
     public float reverseStepCount = 1.0f;
     public float initialStepThrottle = 0.5f;
+    public float idleTime = 0.5f;
 
     float prevStepTime;
     bool prevStep; //false is left, true is right
+
+    /*int prevStepL = 0;
+    int prevStepR = 0;
+
+    bool stepLActive = false;
+    bool stepRActive = false;*/
 
     float currentThrottle = 0.0f;
 
@@ -92,7 +100,7 @@ public class CartPlayerInput : MonoBehaviour
             // Left-stick X or force sensors control steering
             float steer = 0.0f;
 
-            if (currentThrottle != 0.0f && Time.time - prevStepTime > (60.0f / stepBpm)) currentThrottle = 0.0f; //stop the cart from going if no step has happened yet
+            if (currentThrottle != 0.0f && Time.time - prevStepTime > idleTime) { currentThrottle = 0.0f;  } //stop the cart from going if no step has happened yet
             if (messageHandler != null) //if arduino
             {
                 //steer
@@ -111,8 +119,8 @@ public class CartPlayerInput : MonoBehaviour
                 }
 
                 //stepping
-                float stepL = messageHandler.input2;
-                float stepR = messageHandler.input3;
+                int stepL = messageHandler.input2;
+                int stepR = messageHandler.input3;
 
                 if (stepL > stepThreshold && stepR < stepThreshold) //step left
                 {
@@ -127,6 +135,41 @@ public class CartPlayerInput : MonoBehaviour
                     if (EnableArduinoReverse)
                     currentThrottle = -1.0f;
                 }
+
+                /*EdgeHelper.Edge edgeL = EdgeHelper.DetectEdge(prevStepL, stepL, stepDeadzone);
+                EdgeHelper.Edge edgeR = EdgeHelper.DetectEdge(prevStepR, stepR, stepDeadzone);
+
+                if (edgeL == EdgeHelper.Edge.positive && edgeR == EdgeHelper.Edge.positive)
+                {
+                    //step both
+                }
+                else if (edgeL == EdgeHelper.Edge.positive) Step(false); //left
+                else if (edgeR == EdgeHelper.Edge.positive) Step(true);  //right
+
+                prevStepL = stepL;
+                prevStepR = stepR;*/
+
+                /*
+                bool risingL = false, risingR = false;
+                if (stepL > stepThreshold && !stepLActive) risingL = true;
+                if (stepR > stepThreshold && !stepRActive) risingR = true;
+
+                if (risingL && risingR)
+                {
+                    bool coinFlip = Random.Range(0, 2) == 0;
+                    Step(coinFlip);
+
+                    print("both");
+                }
+                else if (!risingL && !risingR) { print("neither");  }
+                else Step(risingR);
+
+                if (risingL) stepLActive = true; //in
+                if (risingR) stepRActive = true;
+
+                if (stepL < stepThreshold - stepDeadzoneLowerOffset) stepLActive = false; //out
+                if (stepR < stepThreshold - stepDeadzoneLowerOffset) stepRActive = false;
+                */
 
                 //items
                 float itemL = messageHandler.input4;
@@ -231,7 +274,13 @@ public class CartPlayerInput : MonoBehaviour
 
     void Step (bool side)
     {
-        if (prevStep == !side)
+        if (currentThrottle <= 0.01f && currentThrottle >= 0.01f)
+        {
+            currentThrottle = initialStepThrottle;
+
+            print("initialStep");
+        }
+        else if (prevStep == !side)
         {
             /*if (Time.time - prevStepTime <= (60.0f / stepBpm))
             {
@@ -239,11 +288,10 @@ public class CartPlayerInput : MonoBehaviour
             }*/
 
             currentThrottle = Mathf.Clamp((60.0f / stepBpm) / (Time.time - prevStepTime), 0.0f, 1.0f);
+
+            print(side ? "right" : "left");
         }
-        else if (currentThrottle <= 0.01f)
-        {
-            currentThrottle = initialStepThrottle;
-        }
+        else return;
 
         prevStep = side;
         prevStepTime = Time.time;

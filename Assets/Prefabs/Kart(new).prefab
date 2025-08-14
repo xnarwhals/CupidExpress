@@ -155,7 +155,6 @@ MonoBehaviour:
   forwardRef: {fileID: 0}
   cartName: Player Cart
   cartID: 0
-  isLeader: 0
 --- !u!114 &5524160064769919392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,9 +179,11 @@ MonoBehaviour:
   deadzoneScale: 0
   stepThreshold: 200
   itemLThreshold: 200
+  stepDeadzoneLowerOffset: 10
   stepBpm: 300
   reverseStepCount: 1
   initialStepThrottle: 0.5
+  idleTime: 0.5
   barcodeInputReader: {fileID: 0}
   raceUI: {fileID: 0}
 --- !u!114 &822252519090528844
@@ -359,6 +360,7 @@ MonoBehaviour:
   idleDecelleration: 3
   reverseAcceleration: 20
   reverseMaxSpeed: 15
+  AirControl: 0
   maxAngularVelocity: 7
   driftMaxAngularVelocity: 50
   modelSteerOffset: 15
@@ -1314,8 +1316,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7c355dd4cd354949b13c15fb9411d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerRigidBody: {fileID: 1087455708306816637}
   animator: {fileID: 8409481386568365519}
+  runPercentage: 0.95
+  stopDeadzone: 0.2
 --- !u!4 &5192917469600283787 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f1aac015d43600b4186f5f898d3fbb25,

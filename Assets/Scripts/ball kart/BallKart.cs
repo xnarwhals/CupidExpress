@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BallKart : CartPhysics
 {
-    [SerializeField] Transform kartTransform; //the parent of the kart (used for movement)
+    public           Transform kartTransform; //the parent of the kart (used for movement)
     [SerializeField] Transform kartNormal; //the kart child of transform, parent of model
     [SerializeField] Transform kartModel; //the actual model
     public Vector3 targetModelScale = Vector3.one;
@@ -16,6 +16,7 @@ public class BallKart : CartPhysics
     [SerializeField] float idleDecelleration = 1.0f;
     [SerializeField] float reverseAcceleration = 2.0f;
     [SerializeField] float reverseMaxSpeed = 15.0f;
+    [SerializeField, Range(0.0f, 1.0f)] float AirControl = 0.5f;
     [SerializeField] float maxAngularVelocity = 7.0f;
     [SerializeField] float driftMaxAngularVelocity = 7.0f;
 
@@ -42,12 +43,15 @@ public class BallKart : CartPhysics
     float inputRotation; //jik ^
     float currentAcceleration;
     private float originalDrag;
+    bool grounded = false;
+    Rigidbody kartTransformRb;
 
     Vector3 kartOffset; //makes it flush with the floor
 
     public override void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        kartTransformRb = kartTransform.gameObject.GetComponent<Rigidbody>();
 
         kartOffset = kartTransform.position - transform.position;
     }
@@ -60,10 +64,10 @@ public class BallKart : CartPhysics
         // Shock minify
         kartModel.localScale = Vector3.Lerp(kartModel.localScale, targetModelScale, Time.deltaTime * scaleLerpSpeed);
 
-        //Update()
         float dt = Time.deltaTime;
         if (invertSteering) steerInput = -steerInput;
 
+        //spinnout
         if (isSpinningOut || GameManager.Instance.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
 
         //setting inputs to be used in fixed
@@ -75,23 +79,28 @@ public class BallKart : CartPhysics
         if (Mathf.Abs(throttleInput) <= 0.01f) currentAcceleration = idleDecelleration; //if no input, idle, uses rb drag in combination
         else if (throttleInput < 0) { currentAcceleration = reverseAcceleration; inputSpeed = reverseMaxSpeed * throttleInput; }
 
-        //post boost sustain
+        //Setting Speed
         postBoost = currentSpeed > maxSpeed + 0.01f;
         if (postBoost && inputSpeed > 0.01f) //if we're post boost and we want to go forward
         {
-            currentSpeed = Mathf.SmoothStep(currentSpeed, currentSpeed - postBoostDecay, dt * postBoostDecceleration);
+            currentSpeed = Mathf.SmoothStep(currentSpeed, currentSpeed - postBoostDecay, dt * postBoostDecceleration); //post boost sustain
         }
         else
         {
-            currentSpeed = Mathf.SmoothStep(currentSpeed, inputSpeed, dt * currentAcceleration);
+            float accelMultiplier = 1.0f;
+            if (!grounded) accelMultiplier = AirControl;
+
+            currentSpeed = Mathf.SmoothStep(currentSpeed, inputSpeed, dt * currentAcceleration * accelMultiplier); //acceleration
         }
 
+        //rotation
         currentRotate = Mathf.Lerp(currentRotate, inputRotation, dt * steerAccelleration);
 
         //Drift(?)
 
         //tie the kart to the sphere
-        kartTransform.position = transform.position + kartOffset;
+        //kartTransform.position = transform.position + kartOffset; //use rb instead?
+        kartTransformRb.MovePosition(transform.position + kartOffset);
 
         //model steering exaggeration/offset
         float steerDir = steerInput;
@@ -125,7 +134,7 @@ public class BallKart : CartPhysics
         RaycastHit hitGravCheck;
         Physics.Raycast(kartTransform.position + (kartTransform.up * .1f), Vector3.down, out hitGravCheck, 2.0f, floorLayerMask); //find floor
 
-        bool grounded = hitGravCheck.collider;
+        grounded = hitGravCheck.collider;
 
         float gravity = airGravity;
         if (grounded) gravity = floorGravity;
