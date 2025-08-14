@@ -274,7 +274,7 @@ public class CartPlayerInput : MonoBehaviour
 
     void Step (bool side)
     {
-        if (currentThrottle <= 0.01f && currentThrottle >= 0.01f)
+        if (currentThrottle <= 0.01f && currentThrottle >= -0.01f)
         {
             currentThrottle = initialStepThrottle;
 
@@ -289,7 +289,7 @@ public class CartPlayerInput : MonoBehaviour
 
             currentThrottle = Mathf.Clamp((60.0f / stepBpm) / (Time.time - prevStepTime), 0.0f, 1.0f);
 
-            print(side ? "right" : "left");
+            //print(side ? "right" : "left");
         }
         else return;
 

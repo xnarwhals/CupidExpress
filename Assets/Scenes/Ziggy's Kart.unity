@@ -389,6 +389,25 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 918157173}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &293755337 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2657709680721527605, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+    type: 3}
+  m_PrefabInstance: {fileID: 3771026360320765210}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &293755339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293755337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f7672e0bed05604897ba7eab98666f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  kart: {fileID: 0}
 --- !u!4 &322381970 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2581800735424805860, guid: 1060f28bab45ab94eb490830df68466e,
@@ -5979,6 +5998,11 @@ PrefabInstance:
       propertyPath: idleDecelleration
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 2411059216770904760, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: modelSteerOffsetSmoothing
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2612920084346247355, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: driverSeat
@@ -6039,6 +6063,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5209604189566679447, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.99734807
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209604189566679447, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.07277924
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209604189566679447, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 5.529061e-16
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209604189566679447, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -4.0347084e-17
+      objectReference: {fileID: 0}
     - target: {fileID: 5524160064769919392, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: EnableArduinoReverse
@@ -6069,6 +6113,10 @@ PrefabInstance:
     - {fileID: 8617728698250155882, guid: 8f7acc948d9052e45b9d50d83b857cf8, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2657709680721527605, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 293755339}
     - targetCorrespondingSourceObject: {fileID: 3124911817533669709, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       insertIndex: -1
