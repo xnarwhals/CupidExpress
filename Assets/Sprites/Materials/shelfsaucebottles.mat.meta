@@ -1,8 +1,14 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Sprites/Materials/shelfsaucebottles.mat.meta
 guid: 58cefba308570e6499f5dad4fdda450b
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 2100000
+========
+guid: b0ab4c5b6c03a461baded5a3965a33f1
+PrefabImporter:
+  externalObjects: {}
+>>>>>>>> origin/Programming:Assets/Prefabs/Managers.prefab.meta
   userData: 
   assetBundleName: 
   assetBundleVariant: 

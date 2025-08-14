@@ -18,6 +18,8 @@ public class ItemSpawner : MonoBehaviour
 
     [Header("Spawn Points")]
     [Tooltip("Where can items spawn")]
+    public Transform spawnPointParent;
+    [HideInInspector]
     public Transform[] spawnPoints;
 
     [Header("Current State")]
@@ -26,11 +28,26 @@ public class ItemSpawner : MonoBehaviour
 
     private void Start()
     {
-        if (spawnPoints.Length == 0)
+        if (spawnPointParent == null)
         {
-            Debug.LogError("No spawn points assigned for ItemSpawner.");
+            Debug.LogError("No spawn points parent given for ItemSpawner.");
             return;
         }
+
+        spawnPoints = new Transform[spawnPointParent.childCount];
+        for (int i = 0; i < spawnPointParent.childCount; i++)
+        {
+            spawnPoints[i] = spawnPointParent.GetChild(i);
+        }
+
+        if (spawnPoints.Length == 0)
+        {
+            Debug.LogError("No spawn points found in ItemSpawner.");
+            return;
+        }
+
+
+
         TrySpawnAtEmptyPoints(); // initial spawn
         nextSpawnTime = Time.time + spawnInterval;
     }

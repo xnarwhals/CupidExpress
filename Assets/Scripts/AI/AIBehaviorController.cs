@@ -5,25 +5,10 @@ public class AIBehaviorController : MonoBehaviour
 {
     [SerializeField] private AIPersonality personality; // scriptable object
 
-    [Header("Corner Detection")]
-    public SplineCornerDetector cornerDetector;
-    [Range(0.05f, 0.2f)]
-    public float cornerLookAhead = 0.1f; // How far ahead to check for corners
-
-    [Header("Corner Settings")]
-    [Range(5f, 30f)]
-    public float distanceBeforeSlowDown = 10f;
-    [Range(0.3f, 0.8f)]
-    public float slowDownFactor = 0.6f;
-
     [Header("Proximity")]
     [Range(0.5f, 5f)]
-    public float proximityCheckFrequency = 1f; // Distance to check for nearby carts
-
-    private AIDriver aiDriver;
-    private float baseMaxSpeed;
-    private float baseAcceleration;
-    private float baseTurnSpeed;
+    public float proximityCheckFrequency = 1f; // how often to check for nearby carts in seconds
+    private SimpleAIDriver aiDriver; 
 
     private bool cartInProximity = false;
     private Cart curCartInProximity = null; 
@@ -31,39 +16,39 @@ public class AIBehaviorController : MonoBehaviour
 
     private void Awake()
     {
-        aiDriver = GetComponent<AIDriver>();
+        aiDriver = GetComponent<SimpleAIDriver>();
     }
 
     private void Start()
     {
         // Store original values before personality modifications
-        baseMaxSpeed = aiDriver.maxSpeed;
-        baseAcceleration = aiDriver.acceleration;
-        baseTurnSpeed = aiDriver.turnSpeed;
-        
-        ApplyPersonalityValues();
+        // baseMaxSpeed = aiDriver.maxSpeed;
+        // baseAcceleration = aiDriver.acceleration;
+        // baseTurnSpeed = aiDriver.turnSpeed;
+
+        // ApplyPersonalityValues();
     }
 
+    // Change in needed will need testing for tunning
     private void ApplyPersonalityValues()
     {
         if (personality == null) return;
 
         // Apply personality modifiers to base values
-        aiDriver.maxSpeed = baseMaxSpeed + (personality.aggressiveness * 5f);
-        aiDriver.acceleration = baseAcceleration * Mathf.Lerp(0.6f, 1.3f, personality.aggressiveness);
-        aiDriver.turnSpeed = baseTurnSpeed * Mathf.Lerp(0.8f, 1.5f, personality.aggressiveness);
-        
-        Debug.Log($"AI Personality Applied: Speed={aiDriver.maxSpeed:F1}, Accel={aiDriver.acceleration:F1}, Turn={aiDriver.turnSpeed:F1}");
+        // aiDriver.maxSpeed = baseMaxSpeed + (personality.aggressiveness * 5f);
+        // aiDriver.acceleration = baseAcceleration * Mathf.Lerp(0.6f, 1.3f, personality.aggressiveness);
+        // aiDriver.turnSpeed = baseTurnSpeed * Mathf.Lerp(0.8f, 1.1f, personality.aggressiveness);
+
+        // Debug.Log($"AI Personality Applied: Speed={aiDriver.maxSpeed:F1}, Accel={aiDriver.acceleration:F1}, Turn={aiDriver.turnSpeed:F1}");
     }
 
     private void Update()
     {
         if (personality == null || aiDriver == null) return;
 
-        // Apply lane offset based on personality
         ApplyLaneOffset();
 
-        if (Time.time - lastProximityCheckTime >= proximityCheckFrequency)
+        if (Time.time - lastProximityCheckTime >= proximityCheckFrequency) // not every frame
         {
             CheckProximityState();
             lastProximityCheckTime = Time.time;
@@ -72,97 +57,26 @@ public class AIBehaviorController : MonoBehaviour
 
     private void ApplyLaneOffset()
     {
-        if (personality == null) return;
-        
-        // Get current spline progress
-        float currentProgress = aiDriver.GetCurrentSplineProgress();
-        
-        // Calculate lane offset vector
-        Vector3 offsetVector = CalculateLaneOffsetVector(currentProgress);
-        
-        // Apply offset to AIDriver
-        aiDriver.SetTargetOffset(offsetVector);
-    }
+        if (personality == null || aiDriver == null) return;
 
-    private Vector3 CalculateLaneOffsetVector(float progress)
-    {
-        // No offset for center lane or zero offset
-        if (personality.drivingLane == DrivingLane.Center || personality.laneOffset <= 0f)
-            return Vector3.zero;
-        
-        // Calculate track direction at this progress point
-        Vector3 trackDirection = GetSplineDirection(progress);
-        
-        // Get perpendicular direction (right side of track)
-        Vector3 rightDirection = Vector3.Cross(trackDirection, Vector3.up).normalized;
-        
-        // Calculate offset vector based on lane preference
-        Vector3 offsetVector = Vector3.zero;
         switch (personality.drivingLane)
         {
+            case DrivingLane.Center:
+                break;
             case DrivingLane.Left:
-                offsetVector = -rightDirection * personality.laneOffset; // Negative = left
+                aiDriver.SetLaneOffset(-personality.laneOffset);
                 break;
             case DrivingLane.Right:
-                offsetVector = rightDirection * personality.laneOffset; // Positive = right
+                aiDriver.SetLaneOffset(personality.laneOffset);
                 break;
-        }
-        
-        // Apply lane commitment (how strictly to follow the offset)
-        offsetVector *= personality.laneCommitment;
-        
-        return offsetVector;
+            default:
+                break;
+        } 
     }
-
-    private Vector3 GetSplineDirection(float progress)
-    {
-        // Sample two points close together to calculate direction
-        float sampleDistance = 0.01f; // 1% of spline
-        float nextProgress = Mathf.Min(1f, progress + sampleDistance);
-        
-        Vector3 currentPos = aiDriver.spline.EvaluatePosition(progress);
-        Vector3 nextPos = aiDriver.spline.EvaluatePosition(nextProgress);
-        
-        return (nextPos - currentPos).normalized;
-    }
-
-    // private void SlowDownOnCorner()
-    // {
-    //     Vector3 curTarget = aiDriver.CurTarget;
-
-    //     if (aiDriver.NextWaypointIsCorner() == false) return;
-
-    //     float distanceToCorner = Vector3.Distance(transform.position, curTarget);
-
-    //     float speedModifier = CalculateSpeedModifer(distanceToCorner); // without personality range (0.6 - 1)
-    //     speedModifier = ApplyPersonalityToCornerSpeed(speedModifier); // with personality :D range (0.3 - 1.2)
-
-    //     aiDriver.SetSpeedModifier(speedModifier);
-    // }
-
-    // private float CalculateSpeedModifer(float distanceToCorner)
-    // {
-    //     if (distanceToCorner > distanceBeforeSlowDown)
-    //         return 1f; // No slowdown when far enough
-
-    //     // interpolate full speed to slow down
-    //     float distanceRatio = distanceToCorner / distanceBeforeSlowDown;
-    //     return Mathf.Lerp(slowDownFactor, 1f, distanceRatio); 
-    // }
-
-    // private float ApplyPersonalityToCornerSpeed(float baseSpeedModifier)
-    // {
-    //     if (personality == null) return baseSpeedModifier; // (0.6 - 1)
-
-    //     float agroBonous = personality.aggressiveness * 0.22f; // agro levels .9+ hit the clamp
-    //     return Mathf.Clamp(baseSpeedModifier + agroBonous, 0.3f, 1.2f); // 30% to 120% of base speed modifier
-    // }
-
 
     #region Item Usage
 
-    // Based on personality, useItem check is done in two cases
-    // 1. When close to other carts (proximity detection)
+    // Based on personality, useItem check is done when close to other carts (proximity detection)
 
     public void UseItemCheck()
     {
@@ -226,10 +140,7 @@ public class AIBehaviorController : MonoBehaviour
 
         return dot < -0.3f; 
     }
-
-
-    #endregion
-
+    
     // item roll check once per proximity check
     // if cart is nearby useItem is rolled once, only roll again if the cart leaves and re-enters proximity
     private void CheckProximityState()
@@ -241,7 +152,7 @@ public class AIBehaviorController : MonoBehaviour
         {
             if (!cartInProximity)
             {
-                if (!cartInProximity || nearbyCart != curCartInProximity)
+                if (nearbyCart != curCartInProximity)
                 {
                     cartInProximity = true;
                     curCartInProximity = nearbyCart;
@@ -259,39 +170,13 @@ public class AIBehaviorController : MonoBehaviour
         }
     }
 
+    #endregion
+
     private void OnDrawGizmos()
     {
-        if (aiDriver == null || cornerDetector == null) return;
-
-        float currentProgress = aiDriver.GetCurrentSplineProgress();
-        bool cornerAhead = cornerDetector.IsCornerAhead(currentProgress, cornerLookAhead);
-        
-        // Draw corner detection range
-        Gizmos.color = cornerAhead ? Color.red : Color.green;
-        Gizmos.DrawWireSphere(transform.position, 3f);
-        
-        // Draw personality info
-        if (personality != null)
-        {
-            // Lane indicator cube above car
-            Vector3 cubePos = transform.position + Vector3.up * 3f;
-            Gizmos.color = personality.drivingLane == DrivingLane.Left ? Color.red : 
-                          personality.drivingLane == DrivingLane.Right ? Color.blue : Color.white;
-            Gizmos.DrawWireCube(cubePos, Vector3.one * 0.5f);
-            
-#if UNITY_EDITOR
-            string laneInfo = personality.drivingLane == DrivingLane.Center ? "Center" :
-                             personality.drivingLane == DrivingLane.Left ? $"Left ({personality.laneOffset:F1}m)" :
-                             $"Right ({personality.laneOffset:F1}m)";
-            
-            UnityEditor.Handles.Label(transform.position + Vector3.up * 4f,
-                $"Personality: {personality.name}\n" +
-                $"Aggressiveness: {personality.aggressiveness:F2}\n" +
-                $"Lane: {laneInfo}\n" +
-                $"Commitment: {personality.laneCommitment:F2}\n" +
-                $"Speed: {aiDriver.maxSpeed:F1} / {baseMaxSpeed:F1}\n" +
-                $"Corner Ahead: {cornerAhead}");
-#endif
-        }
+        if (aiDriver == null || personality == null) return;
+        // proximity sphere
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, personality.proximityRadius);
     }
 }

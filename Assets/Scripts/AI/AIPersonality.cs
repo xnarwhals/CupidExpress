@@ -12,12 +12,8 @@ public class AIPersonality : ScriptableObject
     public DrivingLane drivingLane = DrivingLane.Center;
 
     [Tooltip("Offset from center path in meters")]
-    [Range(0f, 8f)]
+    [Range(0f, 15f)]
     public float laneOffset = 2f;
-
-    [Tooltip("How strictly the AI follows the lane (0 = flex, 1 = strict)")]
-    [Range(0f, 1f)]
-    public float laneCommitment = 0.7f;
 
     [Header("Item Behavior")]
     [Range(0f, 1f)]

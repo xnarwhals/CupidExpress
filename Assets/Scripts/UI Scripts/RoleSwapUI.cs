@@ -8,6 +8,22 @@ public class RoleSwapUI : MonoBehaviour
     public Image DriverIcon;
     public Image PassengerIcon;
 
+    private void Awake()
+    {
+        if (swapArrowDriver == null || swapArrowPassenger == null)
+        {
+            Debug.LogError("Swap arrows are not assigned in the RoleSwapUI script.");
+            return;
+        }
+
+        if (DriverIcon == null || PassengerIcon == null)
+        {
+            Debug.LogError("Driver or Passenger icons are not assigned in the RoleSwapUI script.");
+            return;
+            
+        }
+    } 
+
     public void DriverRequestSwap(bool show)
     {
         swapArrowDriver.SetActive(show);

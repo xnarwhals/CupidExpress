@@ -124,6 +124,7 @@ public abstract class AbstractSerialThread
     // device, reading messages and sending messages. This loop can be stopped
     // by invoking 'RequestStop'.
     // ------------------------------------------------------------------------
+    bool alreadySentMsg = false;
     public void RunForever()
     {
         // This 'try' is for having a log message in case of an unexpected
@@ -146,7 +147,12 @@ public abstract class AbstractSerialThread
                     // A disconnection happened, or there was a problem
                     // reading/writing to the device. Log the detailed message
                     // to the console and notify the listener.
-                    Debug.LogWarning("Exception: " + ioe.Message + " StackTrace: " + ioe.StackTrace);
+                    if (!alreadySentMsg) //only do it once
+                    {
+                        Debug.LogWarning("Exception: " + ioe.Message + " StackTrace: " + ioe.StackTrace);
+                        alreadySentMsg = true;
+                    }
+
                     if (enqueueStatusMessages)
                         inputQueue.Enqueue(SerialController.SERIAL_DEVICE_DISCONNECTED);
 
@@ -256,7 +262,7 @@ public abstract class AbstractSerialThread
                 }
                 else
                 {
-                    Debug.LogWarning("Queue is full. Dropping message: " + inputMessage);
+                    //Debug.LogWarning("Queue is full. Dropping message: " + inputMessage);
                 }
             }
         }

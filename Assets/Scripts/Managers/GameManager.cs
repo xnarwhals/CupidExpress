@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
+using UnityEngine.Splines;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,8 +17,11 @@ public class GameManager : MonoBehaviour
     [Tooltip("Max race time")]
     public float maxRaceTime = 300f; // 5 minutes
 
-    [Header("checkpoints")]
+    [Header("checkpoints/race track")]
+    public Transform checkpointHolder;
     public Transform[] checkpoints;
+    public SplineContainer raceTrack;
+
 
     [Header("Debug")]
     [SerializeField] private bool debugMode = false;
@@ -51,6 +55,7 @@ public class GameManager : MonoBehaviour
     public Action<float> OnRaceTimeUpdate;
     public Action OnRaceFinished;
     public Action<int> OnCountdownUpdate; // For UI 
+    public Action<Cart, int> OnCartPositionChanged;
     public Action CountdownGO;
 
 
@@ -65,16 +70,20 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        InitializeRace();
     }
 
     private void Start()
     {
-        InitializeRace();
+        // PrintLeaderboardPositions();
     }
 
     private void Update()
     {
-        if (currentRaceState == RaceState.CountDown) 
+        
+
+        if (currentRaceState == RaceState.CountDown)
         {
             UpdateCountdown();
         }
@@ -84,6 +93,7 @@ public class GameManager : MonoBehaviour
             UpdateRaceTime();
             CheckForRaceCompletion();
         }
+
 
         if (debugMode)
         {
@@ -100,6 +110,8 @@ public class GameManager : MonoBehaviour
         {
             lastCountdownNumber = currentNum;
             OnCountdownUpdate?.Invoke(currentNum);
+
+            AudioManager.Instance.PlayUISFX(AudioManager.Instance.countDownBeep, 1.0f);
         }
 
         if (countdownTimer <= 0f)
@@ -107,6 +119,8 @@ public class GameManager : MonoBehaviour
             CountdownGO?.Invoke();
             SetRaceState(RaceState.Racing);
             raceStartTime = Time.time;
+
+            AudioManager.Instance.PlayUISFX(AudioManager.Instance.raceStartSound, 1.0f);
         }
     }
 
@@ -126,6 +140,8 @@ public class GameManager : MonoBehaviour
         {
             SetRaceState(RaceState.Paused);
             Time.timeScale = 0f; // assuming we used delta time correctly elsewhere
+
+            AudioManager.Instance.PlayUISFX(AudioManager.Instance.pauseSound, 1.0f);
         }
     }
 
@@ -135,14 +151,25 @@ public class GameManager : MonoBehaviour
         {
             SetRaceState(RaceState.Racing);
             Time.timeScale = 1f;
+
+            AudioManager.Instance.PlayUISFX(AudioManager.Instance.unpauseSound, 1.0f);
         }
     }
+
 
     private void SetRaceState(RaceState newState)
     {
         currentRaceState = newState;
         OnRaceStateChanged?.Invoke(currentRaceState);
         // Debug.Log($"Race State: {currentRaceState}");
+    }
+
+    public void RestartRace()
+    {
+        Time.timeScale = 1f; // Ensure time is running
+        // SceneLoader.Instance.LoadScene(0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); 
+        InitializeRace();
     }
 
 
@@ -167,28 +194,28 @@ public class GameManager : MonoBehaviour
     }
     public void OnCartPassedCheckpoint(Cart cart, int checkpointIndex)
     {
-        if (!cartRaceData.ContainsKey(cart) || currentRaceState != RaceState.Racing) return; // not racing or cart not registered
+        if (!cartRaceData.ContainsKey(cart) || currentRaceState != RaceState.Racing) return;
+        var data = cartRaceData[cart];
 
-        var data = cartRaceData[cart]; // who passed the checkpoint?
-
-        if (checkpointIndex == data.nextCheckpointIndex) // passed in order?
+        if (checkpointIndex == data.nextCheckpointIndex)
         {
-            data.nextCheckpointIndex = (checkpointIndex + 1) % checkpoints.Length; // wrap 
-
-            if (checkpointIndex == 0 && data.nextCheckpointIndex == 1 && data.curLap > 1)
-            {
-                CompleteLap(cart); // lap complete?
-            }
-            else if (checkpointIndex == 0 && data.firstLoopCheck) // ignore
-            {
-                CompleteLap(cart); 
-            }
-
+            data.lastCheckpointPassed = checkpointIndex;
+            // If last checkpoint, set flag
             if (checkpointIndex == checkpoints.Length - 1)
             {
-                data.firstLoopCheck = true; 
+                data.hasPassedLastCheckpoint = true;
             }
+
+            // If start checkpoint (0) and has passed last checkpoint, complete lap
+            if (checkpointIndex == 0 && data.hasPassedLastCheckpoint)
+            {
+                CompleteLap(cart);
+                data.hasPassedLastCheckpoint = false; // Reset for next lap
+            }
+
+            data.nextCheckpointIndex = (checkpointIndex + 1) % checkpoints.Length;
         }
+        NotifyCartPositions();
     }
 
     private void CompleteLap(Cart cart)
@@ -199,13 +226,15 @@ public class GameManager : MonoBehaviour
         data.lastLapTime = Time.time;
 
         OnCartLapCompleted?.Invoke(cart, data.curLap);
-        // Debug.Log($"{cart.CartName} completed lap {data.curLap - 1}! Total laps: {data.curLap - 1}/{totalLaps}");
+        Debug.Log($"{cart.CartName} completed lap {data.curLap - 1}! Total laps: {data.curLap - 1}/{totalLaps}");
 
         // Check if finished + leaderboard stuff later
         if (data.curLap > totalLaps)
         {
             FinishRace(cart);
         }
+        
+        NotifyCartPositions();
     }
 
     private void FinishRace(Cart cart)
@@ -222,18 +251,32 @@ public class GameManager : MonoBehaviour
         OnCartFinished?.Invoke(cart, position);
         Debug.Log($"{cart.CartName} finish in {position}. Time: {data.finishTime:F2} seconds");
     }
+    
+    private void NotifyCartPositions()
+    {
+        var leaderboard = GetCartLeaderboard();
+        for (int i = 0; i < leaderboard.Count; i++)
+        {
+            OnCartPositionChanged?.Invoke(leaderboard[i], i + 1); // 1-based position
+        }
+    }
 
     #endregion
 
     #region Race Info
 
-    public RaceState GetCurrentRaceState() 
+    public RaceState GetCurrentRaceState()
     {
         return currentRaceState;
     }
     public int GetCartLap(Cart cart)
     {
         return cartRaceData.ContainsKey(cart) ? cartRaceData[cart].curLap : 0;
+    }
+
+    public int GetCartCheckpoint(Cart cart)
+    {
+        return cartRaceData.ContainsKey(cart) ? cartRaceData[cart].nextCheckpointIndex : 0;
     }
 
     public bool PlayerCartWon()
@@ -257,17 +300,43 @@ public class GameManager : MonoBehaviour
     }
 
     public List<Cart> GetCartLeaderboard()
-    {   
+    {
         // first filter finished carts, then order by lap and checkpoint
-        return cartRaceData.Keys
+        var unfinished = cartRaceData.Keys
             .Where(cart => !cartRaceData[cart].isFinished)
-            .OrderByDescending(cart => cartRaceData[cart].curLap)
-            .ThenByDescending(cart => cartRaceData[cart].nextCheckpointIndex)
+            .OrderByDescending(cart => GetTrackProgress(cart)) // sort by progress
             .ToList();
+
+        var full = new List<Cart>(finishedCarts);
+        full.AddRange(unfinished);
+        return full;
+    }
+
+    public float GetTrackProgress(Cart cart)
+    {
+        var data = cartRaceData[cart];
+        int lap = data.curLap;
+        int checkpoint = data.lastCheckpointPassed;
+        float splineProgress = cart.GetSplineProgress(); // normalized 0-1 between checkpoints
+
+        // Combine all into a single value
+        return lap * checkpoints.Length + checkpoint + splineProgress;
+    }
+
+    public Cart GetLeaderCart()
+    {
+        var leaderboard = GetCartLeaderboard();
+        return leaderboard.Count > 0 ? leaderboard[0] : null; // first place
     }
 
     public int GetCartPosition(Cart cart)
     {
+        if (!cartRaceData.ContainsKey(cart))
+        {
+            Debug.LogWarning($"Cart {cart.CartName} not found");
+            return -1; // not registered
+        }
+
         if (cartRaceData[cart].isFinished)
         {
             return finishedCarts.IndexOf(cart) + 1;
@@ -278,6 +347,16 @@ public class GameManager : MonoBehaviour
         return leaderboard.IndexOf(cart) + 1;
     }
 
+    //testing
+    public void SetCartLap(Cart cart, int lap)
+    {
+        if (cartRaceData.ContainsKey(cart))
+        {
+            cartRaceData[cart].curLap = lap;
+            cartRaceData[cart].nextCheckpointIndex = 0;
+        }
+    }
+
     #endregion
 
     #region Utills
@@ -286,13 +365,31 @@ public class GameManager : MonoBehaviour
         currentRaceTime = 0f;
         finishedCarts.Clear();
 
+        // checkpoint assignment
+        if (checkpointHolder != null)
+        {
+            checkpoints = checkpointHolder.GetComponentsInChildren<Transform>()
+                .Where(t => t != checkpointHolder.transform) // exclude the holder itself
+                .ToArray();
+        }
+        else
+        {
+            Debug.LogWarning("Checkpoint holder not assigned! Please assign it in the GameManager.");
+            checkpoints = new Transform[0];
+        }
+
+
         // find carts in scene to register
-        Cart[] carts = FindObjectsOfType<Cart>();
+        Cart[] carts = FindObjectsOfType<Cart>()
+            .OrderBy(cart => cart.CartID) // sort by ID
+            .ToArray();
+
         foreach (Cart cart in carts)
         {
             RegisterCart(cart);
         }
         Debug.Log($"Race initialized with {carts.Length} carts and {totalLaps} laps");
+
     }
 
     private void UpdateRaceTime()
@@ -305,13 +402,26 @@ public class GameManager : MonoBehaviour
 
     private void CheckForRaceCompletion()
     {
-        if (finishedCarts.Count == cartRaceData.Count || (maxRaceTime > 0 && currentRaceTime >= maxRaceTime))
+        bool playerCartFinished = finishedCarts.Any(cart => cart.CartID == 0);
+
+        // (maxRaceTime > 0 && currentRaceTime >= maxRaceTime)
+        if (playerCartFinished)
         {
+            var playerCart = finishedCarts.First(cart => cart.CartID == 0);
+            float playerFinishTime = cartRaceData[playerCart].finishTime;
+            LocalLeaderboard.AddTime(playerFinishTime, playerCart.CartName);
+
             SetRaceState(RaceState.Finished);
             OnRaceFinished?.Invoke();
+            // SceneLoader.Instance.LoadScene(0); 
         }
     }
 
+    public bool AICanMoveState()
+    {
+        return currentRaceState == RaceState.Racing || currentRaceState == RaceState.Finished;
+    }
+    
     private void DebugRaceInfo()
     {
         if (currentRaceState == RaceState.Racing && cartRaceData.Count > 0)
@@ -325,6 +435,24 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    private void PrintLeaderboardPositions()
+    {
+        var leaderboard = GetCartLeaderboard();
+        for (int i = 0; i < leaderboard.Count; i++)
+        {
+            var cart = leaderboard[i];
+            Debug.Log($"{i + 1}: {cart.CartName} (Lap {cartRaceData[cart].curLap}/{totalLaps}, Checkpoint {cartRaceData[cart].nextCheckpointIndex + 1}/{checkpoints.Length})");
+        }
+    }
+
+    public float GetCheckpointProgress(Cart cart)
+    {
+        var data = cartRaceData[cart];
+        // If nextCheckpointIndex is 0, treat it as being just after the last checkpoint
+        return (data.nextCheckpointIndex == 0 ? checkpoints.Length : data.nextCheckpointIndex);
+    }           
+
     #endregion
 
     [Serializable]
@@ -333,11 +461,12 @@ public class GameManager : MonoBehaviour
         public Cart cart;
         public int curLap = 1;
         public int nextCheckpointIndex = 0;
+        public int lastCheckpointPassed = -1;
         public float raceStartTime;
         public float lastLapTime;
         public float finishTime;
         public bool isFinished = false;
-        public bool firstLoopCheck = false;
+        public bool hasPassedLastCheckpoint = false;
         public List<float> lapTimes = new List<float>();
     }
 }

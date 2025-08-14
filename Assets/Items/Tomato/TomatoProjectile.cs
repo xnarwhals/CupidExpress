@@ -13,43 +13,37 @@ public class TomatoProjectile : MonoBehaviour
     {
         tomato = itemData;
         throwingCart = cart;
-        rb = GetComponent<Rigidbody>();
-        Rigidbody cartRb = throwingCart.GetComponent<Rigidbody>();
-        Vector3 cartVelocity = cartRb != null ? cartRb.velocity : Vector3.zero;
+        rb = GetComponent<Rigidbody>(); // tomato rb
 
+        Vector3 cartVelocity = Vector3.zero;
+
+        if (throwingCart != null)
+        {
+            Rigidbody cartRb = throwingCart.GetComponent<Rigidbody>();
+            cartVelocity = cartRb != null ? cartRb.velocity : Vector3.zero;
+        }
 
         LaunchTomato(throwDirection, cartVelocity);
         Destroy(gameObject, 10f); // Destroy after 10 seconds if freaky behavior occurs
     }
 
     private void LaunchTomato(Vector3 throwDirection, Vector3 cartVelocity)
-    {   
-        // Arc that thang
-        Vector3 velocity = throwDirection.normalized * tomato.throwForce;
-        velocity.y = Mathf.Sqrt(2 * Mathf.Abs(Physics.gravity.y) * tomato.arcHeight); // Adjust for arc height
+    {
+  
+        Vector3 velocity = throwDirection * tomato.throwForce;
+        velocity.y += Mathf.Sqrt(2 * Mathf.Abs(Physics.gravity.y) * tomato.arcHeight); // Adjust for arc height
 
-        Vector3 finalVelocity;
-        bool isForwardThrow = Vector3.Dot(throwDirection.normalized, throwingCart.transform.forward) > 0;
-
-        if (!isForwardThrow)
-        {
-            finalVelocity = velocity;
-        }
-        else
-        {
-            finalVelocity = velocity + cartVelocity; // Momentum
-        }
-
-        rb.velocity = finalVelocity;
+        rb.velocity = velocity + cartVelocity;
         rb.angularVelocity = Random.insideUnitSphere * 5f; // Add some spin
     }
 
     private void OnCollisionEnter(Collision other)
     {
         if (hasHit) return; // Prevent multiple hits
+        // Debug.Log($"Tomato hit {other.gameObject.name}");
 
         Cart hitCart = other.gameObject.GetComponent<Cart>(); 
-        if (hitCart != null && hitCart != throwingCart)
+        if (hitCart != null && (throwingCart == null || hitCart != throwingCart)) // testing 
         {
             HitCart(hitCart);
             return;
@@ -66,12 +60,11 @@ public class TomatoProjectile : MonoBehaviour
         hasHit = true;
         Debug.Log($"Tomato hit {hitCart.CartName}!");
 
-        if (hitCart.CartID == 0)
-        {
-            hitCart.StartKetchupEffect(); 
-        }
+        if (hitCart.CartID == 0) hitCart.StartKetchupEffect(); 
 
         hitCart.SpinOut(tomato.directHitSpinOutDuration);
+
+        AudioManager.Instance.PlayTomatoHit();
 
         Destroy(gameObject);
     }
@@ -81,11 +74,17 @@ public class TomatoProjectile : MonoBehaviour
         hasHit = true;
         CreateKetchupSplat(transform.position);
         // Debug.Log("Tomato on floor alert");
+
+        AudioManager.Instance.PlayTomatoHit();
+
         Destroy(gameObject);
     }
 
     private void CreateKetchupSplat(Vector3 splatPosition)
     {
+
+        splatPosition += Vector3.up * 0.9f;
+
         if (Physics.Raycast(splatPosition, Vector3.down, out RaycastHit hit, 10f))
         {
             splatPosition = hit.point; // ensure its on the floor

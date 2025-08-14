@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Cart : MonoBehaviour
 {
@@ -6,39 +8,73 @@ public class Cart : MonoBehaviour
     public Transform driverSeat;
     public Transform passengerSeat;
     public Transform itemSlot;
+    public Transform forwardRef; // where items are thrown from
 
     [Header("Cart Properties")]
-    [SerializeField] private string cartName = "Player Cart";
-    [SerializeField] private int cartID = 0; // AI later
+    public string cartName = "Player Cart";
+    public int cartID = 0; // AI later
 
     [Header("Ref Components")]
     private CartPhysics cartPhysics;
+    private BallKart ballKart;
     private KetchupEffect ketchupEffect; // player
-    private AIDriver aiDriver; // AI
+    private SimpleAIDriver aiDriver; // AI
     private CartPlayerInput[] playerInputs;
-
+    private PlayerSplineProgress splineProgress;
     public string CartName => cartName;
     public int CartID => cartID;
     public CartPhysics CartPhysics => cartPhysics;
+    public BallKart BallKart => ballKart;
 
     private void Awake()
     {
         cartPhysics = GetComponent<CartPhysics>();
-        if (cartPhysics == null ) print((CartPhysics)GetComponent<BallKart>());
+        ballKart = GetComponent<BallKart>();
+        splineProgress = GetComponent<PlayerSplineProgress>();
+        aiDriver = GetComponent<SimpleAIDriver>();
+
+
         playerInputs = GetComponentsInChildren<CartPlayerInput>();
         ketchupEffect = GetComponent<KetchupEffect>();
-        aiDriver = GetComponent<AIDriver>();
+        // aiDriver = GetComponent<AIDriver>();
+    }
+
+    // Testing
+    private void Start()
+    {
+        if (cartID == 0) cartName = PlayerData.PlayerName;
+        if (CartID == 0 && splineProgress == null) Debug.LogWarning("PlayerSplineProgress component not found on Player!");
+        if (cartID != 0 && aiDriver == null) Debug.LogWarning("SimpleAIDriver component not found on AI Cart!");   
+    }
+
+    private void Update()
+    {
+        // if (Gamepad.current != null && Gamepad.current.buttonNorth.wasPressedThisFrame)
+        // if (Joystick.current != null && Joystick.current.trigger.wasPressedThisFrame)
+        // {
+        //     if (cartID == 0) return;
+        //     SpinOut(3f);
+        //     ApplyBoost(5f, 1.5f);
+        //     Shock(3f);
+        // }
     }
 
     #region Cart Methods
+    public float GetSplineProgress()
+    {
+        if (cartID == 0 && splineProgress != null) return splineProgress.splineProgress; // player
+        else if (aiDriver != null) return aiDriver.GetSplineProgress(); // AI
+        return 0f;
+
+    }
 
     public void SpinOut(float duration)
     {
-        Debug.Log("spin out");
-        // if (cartID == 0) if (cartPhysics != null) cartPhysics.SpinOut(duration);
-        // else if (aiDriver != null) aiDriver.SpinOut(duration);
+        if (cartID == 0) cartPhysics.SpinOut(duration);
+        else if (aiDriver != null) aiDriver.SpinOut(duration);
     }
 
+    // Player only
     public void StartKetchupEffect()
     {
         if (ketchupEffect != null) ketchupEffect.StartKetchupEffect();
@@ -46,21 +82,22 @@ public class Cart : MonoBehaviour
 
     public bool IsSpinningOut()
     {
-        // if (cartID == 0) return cartPhysics != null && cartPhysics.IsSpinningOut();
-        // else return aiDriver != null && aiDriver.IsSpinningOut();
-        return false;
+        if (cartID == 0) return cartPhysics.isSpinningOut;
+        else return aiDriver != null && aiDriver.CurrentState == AIDriverState.SpinningOut;
+
     }
 
-    public void ApplyBoost(float force)
-    {   
-        Debug.Log("apply boost");
-        // if (cartID == 0) cartPhysics.ApplyBoost(force);
-        // else aiDriver.ApplyBoost(force);
+    public void ApplyBoost(float duration, float speedMultiplier)
+    {
+        if (cartID == 0) ballKart.ApplyInstantBoost(100f);
+        else aiDriver.StartBoost(duration, speedMultiplier);
+    }
+
+    public void Shock(float duration)
+    {
+        if (cartID == 0) ballKart.Shock(duration);
+        else aiDriver.Shock(duration);
     }
 
     #endregion
-
-
-
-
 }
