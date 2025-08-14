@@ -4881,7 +4881,6 @@ MonoBehaviour:
   forwardRef: {fileID: 1171363893}
   cartName: Ziggy
   cartID: 2
-  isLeader: 0
 --- !u!54 &202417501
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -16570,7 +16569,6 @@ MonoBehaviour:
   forwardRef: {fileID: 1748517569}
   cartName: Homero
   cartID: 6
-  isLeader: 0
 --- !u!54 &654099388
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -18103,7 +18101,6 @@ MonoBehaviour:
   forwardRef: {fileID: 641974859}
   cartName: Xavier
   cartID: 1
-  isLeader: 0
 --- !u!54 &731870691
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -19187,6 +19184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leaderboardText: {fileID: 1194208665}
   leaderboardPanel: {fileID: 571251098}
+  temp: {fileID: 0}
   other:
   - {fileID: 2125128320}
   - {fileID: 1399897909}
@@ -34371,7 +34369,6 @@ MonoBehaviour:
   forwardRef: {fileID: 254703428}
   cartName: Xavier
   cartID: 1
-  isLeader: 0
 --- !u!65 &1290450340
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -46265,7 +46262,6 @@ MonoBehaviour:
   forwardRef: {fileID: 1775109959}
   cartName: Angle
   cartID: 4
-  isLeader: 0
 --- !u!54 &1782899670
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -46656,7 +46652,6 @@ MonoBehaviour:
   forwardRef: {fileID: 1426608242}
   cartName: Adonis
   cartID: 7
-  isLeader: 0
 --- !u!54 &1808695317
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -48020,6 +48015,74 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1853857071}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1857954463
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: ff5e442147a6ced429234b7b385505d5,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 26.582363
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ff5e442147a6ced429234b7b385505d5,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.735
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ff5e442147a6ced429234b7b385505d5,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 94.479
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ff5e442147a6ced429234b7b385505d5,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7372773
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ff5e442147a6ced429234b7b385505d5,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.6755902
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ff5e442147a6ced429234b7b385505d5,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ff5e442147a6ced429234b7b385505d5,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ff5e442147a6ced429234b7b385505d5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ff5e442147a6ced429234b7b385505d5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ff5e442147a6ced429234b7b385505d5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ff5e442147a6ced429234b7b385505d5,
+        type: 3}
+      propertyPath: m_Name
+      value: wetfloor
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ff5e442147a6ced429234b7b385505d5, type: 3}
 --- !u!1 &1858977348
 GameObject:
   m_ObjectHideFlags: 0
@@ -48666,7 +48729,6 @@ MonoBehaviour:
   forwardRef: {fileID: 1548367974}
   cartName: Kai
   cartID: 3
-  isLeader: 0
 --- !u!54 &1889134811
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -53889,7 +53951,6 @@ MonoBehaviour:
   forwardRef: {fileID: 288593990}
   cartName: Andrew
   cartID: 5
-  isLeader: 0
 --- !u!54 &2114461222
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -55123,3 +55184,4 @@ SceneRoots:
   - {fileID: 754840596}
   - {fileID: 454330945}
   - {fileID: 1773113034}
+  - {fileID: 1857954463}
