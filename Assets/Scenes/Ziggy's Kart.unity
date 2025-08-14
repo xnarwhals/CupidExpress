@@ -857,39 +857,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 339817083}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &469876134 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8877267527248790556, guid: 8f7acc948d9052e45b9d50d83b857cf8,
-    type: 3}
-  m_PrefabInstance: {fileID: 3771026360320765210}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &469876136
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 469876134}
-  serializedVersion: 4
-  m_Mass: 0.0000001
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!4 &472112106 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2581800735424805860, guid: 1060f28bab45ab94eb490830df68466e,
@@ -6102,10 +6069,6 @@ PrefabInstance:
     - {fileID: 8617728698250155882, guid: 8f7acc948d9052e45b9d50d83b857cf8, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8877267527248790556, guid: 8f7acc948d9052e45b9d50d83b857cf8,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 469876136}
     - targetCorrespondingSourceObject: {fileID: 3124911817533669709, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       insertIndex: -1

@@ -100,7 +100,8 @@ public class BallKart : CartPhysics
 
         //tie the kart to the sphere
         //kartTransform.position = transform.position + kartOffset; //use rb instead?
-        kartTransformRb.MovePosition(transform.position + kartOffset);
+        try { kartTransformRb.MovePosition(transform.position + kartOffset); }
+        catch { kartTransform.position = transform.position + kartOffset; }
 
         //model steering exaggeration/offset
         float steerDir = steerInput;
