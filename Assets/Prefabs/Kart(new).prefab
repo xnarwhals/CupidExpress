@@ -365,7 +365,7 @@ MonoBehaviour:
   driftMaxAngularVelocity: 50
   modelSteerOffset: 15
   modelDriftOffset: 20
-  modelSteerOffsetSmoothing: 1
+  modelSteerOffsetSmoothing: 0.2
   kartOrientationRayLength: 1
   rampSmoothing: 8
   airSmoothing: 0.1
@@ -758,6 +758,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3081895025488656485}
+  - component: {fileID: 2586833661470580827}
   m_Layer: 3
   m_Name: kartTransform
   m_TagString: Untagged
@@ -781,6 +782,33 @@ Transform:
   - {fileID: 7846623329250319345}
   m_Father: {fileID: 5131178486098561828}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &2586833661470580827
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8877267527248790556}
+  serializedVersion: 4
+  m_Mass: 0.0000001
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &8931734999363503700
 GameObject:
   m_ObjectHideFlags: 0
@@ -1060,11 +1088,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1216192436407230110, guid: 3cfd8734150b7884fa1e69108310776a,
-        type: 3}
-      propertyPath: m_CollideAgainst.m_Bits
-      value: 128
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1316,8 +1339,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7c355dd4cd354949b13c15fb9411d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerRigidBody: {fileID: 1087455708306816637}
   animator: {fileID: 8409481386568365519}
+  runPercentage: 0.95
+  stopDeadzone: 0.2
 --- !u!4 &5192917469600283787 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f1aac015d43600b4186f5f898d3fbb25,

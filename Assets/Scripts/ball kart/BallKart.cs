@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BallKart : CartPhysics
 {
-    [SerializeField] Transform kartTransform; //the parent of the kart (used for movement)
+    public           Transform kartTransform; //the parent of the kart (used for movement)
     [SerializeField] Transform kartNormal; //the kart child of transform, parent of model
     [SerializeField] Transform kartModel; //the actual model
     public Vector3 targetModelScale = Vector3.one;
@@ -44,12 +44,14 @@ public class BallKart : CartPhysics
     float currentAcceleration;
     private float originalDrag;
     bool grounded = false;
+    Rigidbody kartTransformRb;
 
     Vector3 kartOffset; //makes it flush with the floor
 
     public override void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        kartTransformRb = kartTransform.gameObject.GetComponent<Rigidbody>();
 
         kartOffset = kartTransform.position - transform.position;
     }
@@ -62,10 +64,10 @@ public class BallKart : CartPhysics
         // Shock minify
         kartModel.localScale = Vector3.Lerp(kartModel.localScale, targetModelScale, Time.deltaTime * scaleLerpSpeed);
 
-        //Update()
         float dt = Time.deltaTime;
         if (invertSteering) steerInput = -steerInput;
 
+        //spinnout
         if (isSpinningOut || GameManager.Instance.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
 
         //setting inputs to be used in fixed
@@ -77,6 +79,7 @@ public class BallKart : CartPhysics
         if (Mathf.Abs(throttleInput) <= 0.01f) currentAcceleration = idleDecelleration; //if no input, idle, uses rb drag in combination
         else if (throttleInput < 0) { currentAcceleration = reverseAcceleration; inputSpeed = reverseMaxSpeed * throttleInput; }
 
+        //Setting Speed
         postBoost = currentSpeed > maxSpeed + 0.01f;
         if (postBoost && inputSpeed > 0.01f) //if we're post boost and we want to go forward
         {
@@ -90,18 +93,10 @@ public class BallKart : CartPhysics
             currentSpeed = Mathf.SmoothStep(currentSpeed, inputSpeed, dt * currentAcceleration * accelMultiplier); //acceleration
         }
 
+        //rotation
         currentRotate = Mathf.Lerp(currentRotate, inputRotation, dt * steerAccelleration);
 
         //Drift(?)
-
-        //tie the kart to the sphere
-        kartTransform.position = transform.position + kartOffset;
-
-        //model steering exaggeration/offset
-        float steerDir = steerInput;
-        steerDir *= DriftInput ? modelDriftOffset : modelSteerOffset;
-        kartModel.localRotation = Quaternion.Euler(Vector3.Lerp(kartModel.localEulerAngles, new Vector3(0, (steerDir), kartModel.localEulerAngles.z), modelSteerOffsetSmoothing)); //model steering
-
     }
 
     public override void FixedUpdate()
@@ -138,7 +133,7 @@ public class BallKart : CartPhysics
 
         kartTransform.eulerAngles = Vector3.Lerp(kartTransform.eulerAngles, new Vector3(0, kartTransform.eulerAngles.y + currentRotate, 0), dt * steerAcceleration2);
 
-        //Drift
+        //Drift (drift input is disabled rn)
         if (DriftInput)
         {
             rb.maxAngularVelocity = driftMaxAngularVelocity;
@@ -148,7 +143,7 @@ public class BallKart : CartPhysics
         //AIR CONTROL!!!!!!
 
 
-        //kart puppeting
+        //kart normal orienting
         RaycastHit hitNear;
         Physics.Raycast(kartTransform.position + (kartTransform.up * .1f), Vector3.down, out hitNear, kartOrientationRayLength, floorLayerMask); //find floor
         if (hitNear.collider) //if hit ground
@@ -160,6 +155,16 @@ public class BallKart : CartPhysics
             kartNormal.up = Vector3.Lerp(kartNormal.up, new Vector3(0, 1, 0), dt * airSmoothing); //correct rotation
         }
         kartNormal.Rotate(0, kartTransform.eulerAngles.y, 0);
+
+        //tie the kart to the sphere
+        try { kartTransformRb.MovePosition(transform.position + kartOffset); }
+        catch { kartTransform.position = transform.position + kartOffset; }
+
+        //model steering exaggeration/offset
+        float steerDir = steerInput;
+        steerDir *= DriftInput ? modelDriftOffset : modelSteerOffset;
+        kartModel.localRotation = Quaternion.Lerp(kartModel.localRotation,
+            Quaternion.Euler(new Vector3(0, (steerDir), kartModel.localEulerAngles.z)), modelSteerOffsetSmoothing); //model steering
     }
 
 
