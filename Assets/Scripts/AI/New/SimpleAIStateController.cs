@@ -54,6 +54,9 @@ public class SimpleAIStateController : MonoBehaviour
             case AIDriverState.Stunned:
                 HandleStunnedState();
                 break;
+            case AIDriverState.Rubberbanding:
+                HandleRubberBandingState();
+                break;
         }
     }
 
@@ -81,7 +84,7 @@ public class SimpleAIStateController : MonoBehaviour
         EnterNewState(newState);
         OnStateChanged?.Invoke(oldState, newState);
 
-        Debug.Log($"AI State: {oldState} -> {newState}");
+        // Debug.Log($"AI State: {oldState} -> {newState}");
         return true;
     }
 
@@ -100,13 +103,19 @@ public class SimpleAIStateController : MonoBehaviour
                 return newState == AIDriverState.Recovering; // Spinout must go to recovery
 
             case AIDriverState.Recovering:
-                return newState == AIDriverState.Normal || newState == AIDriverState.SpinningOut;
+                return newState == AIDriverState.Normal || newState == AIDriverState.SpinningOut || 
+                       newState == AIDriverState.Boosting || newState == AIDriverState.Rubberbanding;
 
             case AIDriverState.Boosting:
                 return newState != AIDriverState.Recovering; // Can't recover while boosting
 
             case AIDriverState.Stunned:
                 return newState == AIDriverState.Normal;
+
+            case AIDriverState.Rubberbanding:
+                return newState == AIDriverState.Normal
+                || newState == AIDriverState.Boosting
+                || newState == AIDriverState.SpinningOut; 
 
             default:
                 return false;
@@ -137,7 +146,6 @@ public class SimpleAIStateController : MonoBehaviour
     {
         SimpleAIDriver.modelTransform.Rotate(Vector3.up * 450f * Time.deltaTime, Space.World);
 
-
         if (stateTimer >= spinOutDuration)
         {
             TryChangeState(AIDriverState.Recovering);
@@ -167,6 +175,14 @@ public class SimpleAIStateController : MonoBehaviour
         {
             TryChangeState(AIDriverState.Normal);
         }
+    }
+
+    private void HandleRubberBandingState()
+    {
+        // if (!SimpleAIDriver.ShouldRubberBand()) 
+        // {
+        //     TryChangeState(AIDriverState.Normal);
+        // }
     }
 
     #endregion
@@ -210,7 +226,7 @@ public class SimpleAIStateController : MonoBehaviour
 
     public bool IsInState(AIDriverState state) => currentState == state;
     public bool CanMove() => currentState != AIDriverState.Stunned && currentState != AIDriverState.SpinningOut; 
-    public bool CanUseItems() => currentState == AIDriverState.Normal || currentState == AIDriverState.Boosting;
+    public bool CanUseItems() => currentState == AIDriverState.Normal || currentState == AIDriverState.Boosting || currentState == AIDriverState.Rubberbanding;
 
     public float GetStateProgress()
     {

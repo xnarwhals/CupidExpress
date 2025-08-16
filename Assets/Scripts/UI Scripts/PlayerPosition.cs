@@ -1,14 +1,29 @@
-using TMPro;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class PlayerPosition : MonoBehaviour
 {
-    public TextMeshProUGUI positionText;
+    // public TextMeshProUGUI positionText;
     public Cart playerCart;
+    private Image positionIcon;
+    public Sprite[] placeIcons; // Assign in Inspector: 0 = 1st, 1 = 2nd, etc.
+
+    private void Awake()
+    {
+        positionIcon = GetComponent<Image>();
+        if (positionIcon == null)
+        {
+            Debug.LogError("PlayerPosition script requires an Image component to display position icon.");
+        }
+    }
 
     private void Start()
     {
-        if (playerCart == null) return;
+        if (playerCart == null)
+        {
+            Debug.LogWarning("No cart assigned to PlayerPosition.");
+            return;
+        }
 
         if (GameManager.Instance != null)
         {
@@ -46,21 +61,27 @@ public class PlayerPosition : MonoBehaviour
 
     private void FormatPosition(int position)
     {
-        if (position == 1)
+
+        if (placeIcons != null && position > 0 && position <= placeIcons.Length)
         {
-            positionText.text = "1st";
+            positionIcon.sprite = placeIcons[position - 1];
         }
-        else if (position == 2)
-        {
-            positionText.text = "2nd";
-        }
-        else if (position == 3)
-        {
-            positionText.text = "3rd";
-        }
-        else
-        {
-            positionText.text = position + "th";
-        }
+
+        // if (position == 1)
+        // {
+        //     positionText.text = "1st";
+        // }
+        // else if (position == 2)
+        // {
+        //     positionText.text = "2nd";
+        // }
+        // else if (position == 3)
+        // {
+        //     positionText.text = "3rd";
+        // }
+        // else
+        // {
+        //     positionText.text = position + "th";
+        // }
     }
 }

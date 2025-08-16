@@ -56,7 +56,7 @@ public class SplineCornerDetector : MonoBehaviour
             cornerData.Add(data);
         }
         
-        Debug.Log($"Auto-detected {cornerData.FindAll(c => c.isCorner).Count} corners out of {knotCount} knots");
+        // Debug.Log($"Auto-detected {cornerData.FindAll(c => c.isCorner).Count} corners out of {knotCount} knots");
     }
     
     public SplineCornerData GetCornerDataAtProgress(float progress)

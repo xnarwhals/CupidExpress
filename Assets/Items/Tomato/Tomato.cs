@@ -8,6 +8,9 @@ public class Tomato : KartItem
     public float arcHeight = 3f;
     public GameObject throwableTomatoPrefab; 
     public GameObject ketchupSplatPrefab;
+    [Range(0.1f, 25f)]
+    public float lockOnDistance = 6f; 
+
 
     // Ketchup Splat Properties (Hit ground)
     public float splatRadius = 2f;

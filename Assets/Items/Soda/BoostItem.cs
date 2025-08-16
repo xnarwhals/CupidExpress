@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Kart Item/Boost")]
 public class BoostItem : KartItem
 {
-    // public float boostForce = 1500f;
+    public float boostForce = 60f;
     public float boostDuration = 2f;
     public float speedMultiplier = 1.5f;
     
@@ -13,7 +13,7 @@ public class BoostItem : KartItem
     {
         if (cartUsingItem != null)
         {
-            cartUsingItem.ApplyBoost(boostDuration, speedMultiplier);
+            cartUsingItem.ApplyBoost(boostDuration, speedMultiplier, boostForce);
 
             AudioManager.Instance.PlaySodaBlast();
         }

@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviour
     // Track all carts
     private Dictionary<Cart, CartRaceData> cartRaceData = new Dictionary<Cart, CartRaceData>(); // Each cart has it's race data
     private List<Cart> finishedCarts = new List<Cart>();
+    private Cart[] allCarts;
+    public Cart[] AllCarts => allCarts;
 
     // Event section
     public Action<RaceState> OnRaceStateChanged;
@@ -77,6 +79,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // PrintLeaderboardPositions();
+        allCarts = FindObjectsOfType<Cart>()
+            .OrderBy(cart => cart.CartID) // sort by ID
+            .ToArray();
     }
 
     private void Update()
@@ -451,7 +456,12 @@ public class GameManager : MonoBehaviour
         var data = cartRaceData[cart];
         // If nextCheckpointIndex is 0, treat it as being just after the last checkpoint
         return (data.nextCheckpointIndex == 0 ? checkpoints.Length : data.nextCheckpointIndex);
-    }           
+    }  
+
+    public Cart GetPlayerCart()
+    {
+        return cartRaceData.Keys.FirstOrDefault(cart => cart.CartID == 0); 
+    }         
 
     #endregion
 

@@ -25,6 +25,8 @@ public class Cart : MonoBehaviour
     public int CartID => cartID;
     public CartPhysics CartPhysics => cartPhysics;
     public BallKart BallKart => ballKart;
+    public SimpleAIDriver AIDriver => aiDriver;
+    public Collider col;
 
     private void Awake()
     {
@@ -32,6 +34,7 @@ public class Cart : MonoBehaviour
         ballKart = GetComponent<BallKart>();
         splineProgress = GetComponent<PlayerSplineProgress>();
         aiDriver = GetComponent<SimpleAIDriver>();
+        col = GetComponent<Collider>();
 
 
         playerInputs = GetComponentsInChildren<CartPlayerInput>();
@@ -44,7 +47,7 @@ public class Cart : MonoBehaviour
     {
         if (cartID == 0) cartName = PlayerData.PlayerName;
         if (CartID == 0 && splineProgress == null) Debug.LogWarning("PlayerSplineProgress component not found on Player!");
-        if (cartID != 0 && aiDriver == null) Debug.LogWarning("SimpleAIDriver component not found on AI Cart!");   
+        if (cartID != 0 && aiDriver == null) Debug.LogWarning("SimpleAIDriver component not found on AI Cart!");
     }
 
     private void Update()
@@ -87,9 +90,9 @@ public class Cart : MonoBehaviour
 
     }
 
-    public void ApplyBoost(float duration, float speedMultiplier)
+    public void ApplyBoost(float duration, float speedMultiplier, float force)
     {
-        if (cartID == 0) ballKart.ApplyInstantBoost(100f);
+        if (cartID == 0) ballKart.ApplyInstantBoost(force);
         else aiDriver.StartBoost(duration, speedMultiplier);
     }
 
@@ -98,6 +101,14 @@ public class Cart : MonoBehaviour
         if (cartID == 0) ballKart.Shock(duration);
         else aiDriver.Shock(duration);
     }
+
+    public Rigidbody GetRB()
+    {
+        if (cartPhysics != null) return cartPhysics.GetRB();
+        if (aiDriver != null) return aiDriver.GetRB();
+        return null;
+    }
+    
 
     #endregion
 }
