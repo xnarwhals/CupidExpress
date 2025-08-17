@@ -85,6 +85,15 @@ public class CartPlayerInput : MonoBehaviour
 
     private void Start()
     {
+        if (raceUI == null)
+        {
+            raceUI = FindObjectOfType<RaceUI>();
+        }
+        if (barcodeInputReader == null)
+        {
+            barcodeInputReader = FindObjectOfType<BarcodeInputReader>();
+        }
+        
         CartRoleManager.Instance.RegisterPlayer(this);
         GameManager.Instance.OnRaceStateChanged += OnRaceStateChanged;
     }

@@ -7,6 +7,18 @@ public class PlayerPosition : MonoBehaviour
     public Cart playerCart;
     private Image positionIcon;
     public Sprite[] placeIcons; // Assign in Inspector: 0 = 1st, 1 = 2nd, etc.
+    
+    [Header("Splat Feedback")]
+    [Tooltip("Scale multiplier when the icon splats.")]
+    public float splatScale = 1.4f;
+    [Tooltip("Total duration of the splat animation (seconds).")]
+    public float splatDuration = 0.25f;
+    [Tooltip("If true, animate only when the sprite actually changes.")]
+    public bool onlyOnChange = true;
+
+    // runtime
+    private Sprite previousSprite;
+    private Coroutine splatCoroutine;
 
     private void Awake()
     {
@@ -38,7 +50,7 @@ public class PlayerPosition : MonoBehaviour
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnCartPositionChanged -= OnCartPositionChanged;
-        }
+        } 
     }
 
     private void OnCartPositionChanged(Cart cart, int position)
@@ -64,7 +76,18 @@ public class PlayerPosition : MonoBehaviour
 
         if (placeIcons != null && position > 0 && position <= placeIcons.Length)
         {
-            positionIcon.sprite = placeIcons[position - 1];
+            Sprite newSprite = placeIcons[position - 1];
+            if (positionIcon != null)
+            {
+                bool changed = previousSprite != newSprite;
+                positionIcon.sprite = newSprite;
+                // if (!onlyOnChange || changed)
+                // {
+                //     if (splatCoroutine != null) StopCoroutine(splatCoroutine);
+                //     splatCoroutine = StartCoroutine(DoSplat());
+                // }
+                previousSprite = newSprite;
+            }
         }
 
         // if (position == 1)
@@ -83,5 +106,42 @@ public class PlayerPosition : MonoBehaviour
         // {
         //     positionText.text = position + "th";
         // }
+    }
+
+    private System.Collections.IEnumerator DoSplat()
+    {
+        if (positionIcon == null) yield break;
+
+        Transform t = positionIcon.transform;
+        Vector3 original = t.localScale;
+        Vector3 target = original * splatScale;
+
+        float half = splatDuration * 0.5f;
+        float elapsed = 0f;
+
+        // grow
+        while (elapsed < half)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float p = Mathf.Clamp01(elapsed / half);
+            // smooth ease
+            float e = Mathf.SmoothStep(0f, 1f, p);
+            t.localScale = Vector3.Lerp(original, target, e);
+            yield return null;
+        }
+
+        // shrink back
+        elapsed = 0f;
+        while (elapsed < half)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float p = Mathf.Clamp01(elapsed / half);
+            float e = Mathf.SmoothStep(0f, 1f, p);
+            t.localScale = Vector3.Lerp(target, original, e);
+            yield return null;
+        }
+
+        t.localScale = original;
+        splatCoroutine = null;
     }
 }

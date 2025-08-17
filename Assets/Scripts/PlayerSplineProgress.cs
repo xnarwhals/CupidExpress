@@ -9,6 +9,7 @@ public class PlayerSplineProgress : MonoBehaviour
 
     void Start()
     {
+        spline = GameManager.Instance.raceTrack;
     }
 
     void Update()

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class AIBehaviorController : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class AIBehaviorController : MonoBehaviour
 
     private void Start()
     {
+        aiDriver.SetBaseSpeed(personality.baseMaxSpeed); // set initial base speed
         // Store original values before personality modifications
         // baseMaxSpeed = aiDriver.maxSpeed;
         // baseAcceleration = aiDriver.acceleration;

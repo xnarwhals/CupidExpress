@@ -137,6 +137,7 @@ public class TomatoProjectile : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         if (hasHit) return; // Prevent multiple hits
+        if (other.gameObject == throwingCart.gameObject) return;
         // Debug.Log($"Tomato hit {other.gameObject.name}");
 
         Cart hitCart = other.gameObject.GetComponent<Cart>();
@@ -145,7 +146,7 @@ public class TomatoProjectile : MonoBehaviour
             HitCart(hitCart);
             return;
         }
-        
+
         HitGround();
     }
 

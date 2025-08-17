@@ -52,7 +52,7 @@ public class Destructable : MonoBehaviour
             respawnTimer -= Time.deltaTime;
             if (respawnTimer <= 0f)
             {
-                Debug.Log("Respawning destructable object");
+                // Debug.Log("Respawning destructable object");
                 Respawn();
             }
         }
@@ -74,9 +74,9 @@ public class Destructable : MonoBehaviour
         // Impact speed ALONG THE NORMAL (how 'hard' the bump is)
         // Positive when the other object is moving into us along the normal.
         float normalSpeed = Mathf.Max(0f, Vector3.Dot(collision.relativeVelocity, -contact.normal));
-        if (normalSpeed < minTriggerSpeed) return;
 
         triggered = true;
+        AudioManager.Instance.PlayHitCone(); 
         respawnTimer = respawnAfterTriggered;
 
         // Map speed -> impulse

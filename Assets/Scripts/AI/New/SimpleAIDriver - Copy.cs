@@ -1,5 +1,4 @@
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Splines;
 
@@ -295,6 +294,11 @@ public class SimpleAIDriver : MonoBehaviour
         float distance = toTarget.magnitude;
         float travelTime = distance / speed;
         return aimPoint + targetVelocity * travelTime;
+    }
+
+    public void SetBaseSpeed(float newSpeed)
+    {
+        speed = newSpeed;
     }
 
 

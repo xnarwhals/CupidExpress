@@ -5,7 +5,9 @@ public class EndUI : MonoBehaviour
 {
     public TMP_Text leaderboardText;
     public GameObject leaderboardPanel;
+    public GameObject secondLeaderboardPanel;
     public GameObject temp;
+    public GameObject backButton;
     public GameObject[] other;
     // position 1st, 2nd, etc. + cart name + new line
     private string leaderboardFormat = "{0}. {1}\n";
@@ -20,7 +22,8 @@ public class EndUI : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Finished)
+        bool finished = GameManager.Instance != null && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Finished;
+        if (finished)
         {
             if (!leaderboardPanel.activeSelf)
             {
@@ -39,6 +42,8 @@ public class EndUI : MonoBehaviour
     public void ShowLeaderboard()
     {
         leaderboardPanel.SetActive(true);
+        secondLeaderboardPanel.SetActive(true);
+        backButton.SetActive(true);
         temp.SetActive(true);
         GenerateLeaderboard();
 
@@ -54,7 +59,9 @@ public class EndUI : MonoBehaviour
     public void HideLeaderboard()
     {
         leaderboardPanel.SetActive(false);
+        secondLeaderboardPanel.SetActive(false);
         temp.SetActive(false);
+        backButton.SetActive(false);
         if (other != null)
         {
             foreach (var go in other)
@@ -74,5 +81,10 @@ public class EndUI : MonoBehaviour
             leaderboardText.text += string.Format(leaderboardFormat, count, cartName);
             count++;
         }
+    }
+
+    public void BackToMenu()
+    {
+        SceneLoader.Instance.LoadScene(0); // Assuming 0 is the main menu scene
     }
 }

@@ -11,7 +11,7 @@ public class Cart : MonoBehaviour
     public Transform forwardRef; // where items are thrown from
 
     [Header("Cart Properties")]
-    public string cartName = "Player Cart";
+    public string cartName = "Beefer";
     public int cartID = 0; // AI later
 
     [Header("Ref Components")]
