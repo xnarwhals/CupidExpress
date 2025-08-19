@@ -5056,6 +5056,7 @@ MonoBehaviour:
   forwardRef: {fileID: 1171363893}
   cartName: Ziggy
   cartID: 2
+  col: {fileID: 0}
 --- !u!54 &202417501
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6059,8 +6060,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0513ef1205bb9414299608a5a7a4efa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionText: {fileID: 1867607905}
   playerCart: {fileID: 969457528}
+  placeIcons: []
+  splatScale: 1.4
+  splatDuration: 0.25
+  onlyOnChange: 1
 --- !u!114 &233751317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14940,11 +14944,12 @@ MonoBehaviour:
   menuMusic: {fileID: 8300000, guid: 398767000cf9d4ca6941a1014bd20834, type: 3}
   raceMusic: {fileID: 8300000, guid: 663d55d9e0dd34ede97625cfc259c956, type: 3}
   lastLapMusic: {fileID: 8300000, guid: 447ef8fe24b724520aeabb43ba40874c, type: 3}
-  victoryMusic: {fileID: 0}
+  victoryMusic: {fileID: 8300000, guid: 3cd78ed29fe1e48faa72f1938466101e, type: 3}
   defeatMusic: {fileID: 0}
   countDownBeep: {fileID: 8300000, guid: 96e2c4f572db3a044a59cbef84b7488c, type: 3}
   raceStartSound: {fileID: 8300000, guid: e6eb8caf3b4050f46844412b261d981c, type: 3}
-  lapCompleteSound: {fileID: 0}
+  lapCompleteSound: {fileID: 8300000, guid: 220bff249f995f4428492845a9ac8b48, type: 3}
+  hitConeSound: {fileID: 0}
   itemPickupSound: {fileID: 8300000, guid: f21a102e4c5228f49afd0d48667e6bc1, type: 3}
   tomatoThrowSound: {fileID: 8300000, guid: 00dade7d804e5324cb1145b093db6ebd, type: 3}
   tomatoHitSound: {fileID: 8300000, guid: bea246fc663b7514d8502e838e809231, type: 3}
@@ -17806,6 +17811,7 @@ MonoBehaviour:
   forwardRef: {fileID: 1748517569}
   cartName: Homero
   cartID: 6
+  col: {fileID: 0}
 --- !u!54 &654099388
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -19528,6 +19534,7 @@ MonoBehaviour:
   forwardRef: {fileID: 641974859}
   cartName: Xavier
   cartID: 1
+  col: {fileID: 0}
 --- !u!54 &731870691
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -27068,6 +27075,11 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5209604189566679440, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: field of view
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 5209604189566679447, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -27275,6 +27287,7 @@ MonoBehaviour:
   forwardRef: {fileID: 20038525}
   cartName: Player Cart
   cartID: 0
+  col: {fileID: 0}
 --- !u!1 &973908194
 GameObject:
   m_ObjectHideFlags: 0
@@ -36117,6 +36130,7 @@ MonoBehaviour:
   forwardRef: {fileID: 254703428}
   cartName: Xavier
   cartID: 1
+  col: {fileID: 0}
 --- !u!65 &1290450340
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -48862,6 +48876,7 @@ MonoBehaviour:
   forwardRef: {fileID: 1775109959}
   cartName: Angle
   cartID: 4
+  col: {fileID: 0}
 --- !u!54 &1782899670
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -49336,6 +49351,7 @@ MonoBehaviour:
   forwardRef: {fileID: 1426608242}
   cartName: Adonis
   cartID: 7
+  col: {fileID: 0}
 --- !u!54 &1808695317
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -51200,6 +51216,7 @@ MonoBehaviour:
   forwardRef: {fileID: 1548367974}
   cartName: Kai
   cartID: 3
+  col: {fileID: 0}
 --- !u!54 &1889134811
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -53098,7 +53115,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leaderboardText: {fileID: 554967449}
   leaderboardPanel: {fileID: 361985534}
+  secondLeaderboardPanel: {fileID: 0}
   temp: {fileID: 97613484}
+  backButton: {fileID: 0}
   other:
   - {fileID: 233751314}
   - {fileID: 1945830614}
@@ -57622,6 +57641,7 @@ MonoBehaviour:
   forwardRef: {fileID: 288593990}
   cartName: Andrew
   cartID: 5
+  col: {fileID: 0}
 --- !u!54 &2114461222
 Rigidbody:
   m_ObjectHideFlags: 0
