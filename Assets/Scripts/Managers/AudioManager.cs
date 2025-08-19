@@ -13,6 +13,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource musicSource;
     public AudioSource sfxSource;
     public AudioSource uiSource;
+    public AudioSource eternalAmbience;
 
     [Header("Race Music")]
     public AudioClip menuMusic;
@@ -26,6 +27,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip raceStartSound;
     public AudioClip lapCompleteSound;
     public AudioClip hitConeSound;
+    public AudioClip environmental;
 
     [Header("Item SFX")]
     public AudioClip itemPickupSound;
@@ -73,6 +75,8 @@ public class AudioManager : MonoBehaviour
             isMenu = true;
             PlayMusic(menuMusic);
         }
+        else
+        PlayConstantAmbience();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -341,6 +345,12 @@ public class AudioManager : MonoBehaviour
     public void PlayHitCone()
     {
         PlaySFX(hitConeSound, 0.5f);
+    }
+
+    public void PlayConstantAmbience()
+    {
+        eternalAmbience.loop = true;
+        eternalAmbience.PlayOneShot(environmental, 1.0f);
     }
 
 

@@ -3,7 +3,26 @@ guid: a987f4e76820b43f99592c925f43bae3
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - audioMixer: {instanceID: 0}
+  - musicSource: {instanceID: 0}
+  - sfxSource: {instanceID: 0}
+  - uiSource: {instanceID: 0}
+  - menuMusic: {instanceID: 0}
+  - raceMusic: {instanceID: 0}
+  - lastLapMusic: {instanceID: 0}
+  - victoryMusic: {instanceID: 0}
+  - defeatMusic: {instanceID: 0}
+  - countDownBeep: {instanceID: 0}
+  - raceStartSound: {instanceID: 0}
+  - lapCompleteSound: {instanceID: 0}
+  - hitConeSound: {instanceID: 0}
+  - itemPickupSound: {instanceID: 0}
+  - tomatoThrowSound: {instanceID: 0}
+  - tomatoHitSound: {instanceID: 0}
+  - sodaBlastSound: {instanceID: 0}
+  - pauseSound: {instanceID: 0}
+  - unpauseSound: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
