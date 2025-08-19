@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class AudioManager : MonoBehaviour
 {
     private bool gameManagerSubscribed = false;
+    public bool isMenu = true;
     public static AudioManager Instance { get; private set; }
     public AudioMixer audioMixer;
 
@@ -67,11 +68,22 @@ public class AudioManager : MonoBehaviour
     {
         SubscribeToRaceStart();
         SceneManager.sceneLoaded += OnSceneLoaded;
-        if (SceneManager.GetActiveScene().buildIndex == 0) PlayMusic(menuMusic);
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            isMenu = true;
+            PlayMusic(menuMusic);
+        }
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.buildIndex == 1 || scene.buildIndex == 2) PauseMusic();
+        
+        if (scene.buildIndex == 0)
+        {
+            PauseMusic();
+            PlayMusic(menuMusic);
+        }
         TrySubscribeManagers();
     }
 
