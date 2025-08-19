@@ -36,6 +36,7 @@ public class BallKart : CartPhysics
     [SerializeField] LayerMask floorLayerMask;
     [SerializeField] Transform resetTransform;
     private float spinOutDirection = 1f;
+    private GameManager gm;
 
     public float currentSpeed = 0.0f;
     float currentRotate = 0.0f;
@@ -56,6 +57,16 @@ public class BallKart : CartPhysics
         kartOffset = kartTransform.position - transform.position;
     }
 
+    private void Start()
+    {
+        gm = GameManager.Instance;
+        if (gm == null)
+        {
+            Debug.LogError("GameManager instance not found in BallKart.");
+            return;
+        }
+    }
+
     [SerializeField] float postBoostDecceleration = 1.5f; //accel
     [SerializeField] float postBoostDecay = 0.01f;
     bool postBoost = false;
@@ -68,7 +79,7 @@ public class BallKart : CartPhysics
         if (invertSteering) steerInput = -steerInput;
 
         //spinnout
-        if (isSpinningOut || GameManager.Instance.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
+        if (isSpinningOut || gm.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
 
         //setting inputs to be used in fixed
         inputSpeed = maxSpeed * throttleInput; //in case we want a more dynamic throttle system
@@ -97,22 +108,12 @@ public class BallKart : CartPhysics
         currentRotate = Mathf.Lerp(currentRotate, inputRotation, dt * steerAccelleration);
 
         //Drift(?)
-
-        //tie the kart to the sphere
-        //kartTransform.position = transform.position + kartOffset; //use rb instead?
-        kartTransformRb.MovePosition(transform.position + kartOffset);
-
-        //model steering exaggeration/offset
-        float steerDir = steerInput;
-        steerDir *= DriftInput ? modelDriftOffset : modelSteerOffset;
-        kartModel.localRotation = Quaternion.Euler(Vector3.Lerp(kartModel.localEulerAngles, new Vector3(0, (steerDir), kartModel.localEulerAngles.z), modelSteerOffsetSmoothing)); //model steering
-
     }
 
     public override void FixedUpdate()
     {
 
-        if (GameManager.Instance.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
+        if (gm.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
 
         if (isSpinningOut)
         {
@@ -143,7 +144,7 @@ public class BallKart : CartPhysics
 
         kartTransform.eulerAngles = Vector3.Lerp(kartTransform.eulerAngles, new Vector3(0, kartTransform.eulerAngles.y + currentRotate, 0), dt * steerAcceleration2);
 
-        //Drift
+        //Drift (drift input is disabled rn)
         if (DriftInput)
         {
             rb.maxAngularVelocity = driftMaxAngularVelocity;
@@ -153,7 +154,7 @@ public class BallKart : CartPhysics
         //AIR CONTROL!!!!!!
 
 
-        //kart puppeting
+        //kart normal orienting
         RaycastHit hitNear;
         Physics.Raycast(kartTransform.position + (kartTransform.up * .1f), Vector3.down, out hitNear, kartOrientationRayLength, floorLayerMask); //find floor
         if (hitNear.collider) //if hit ground
@@ -165,6 +166,16 @@ public class BallKart : CartPhysics
             kartNormal.up = Vector3.Lerp(kartNormal.up, new Vector3(0, 1, 0), dt * airSmoothing); //correct rotation
         }
         kartNormal.Rotate(0, kartTransform.eulerAngles.y, 0);
+
+        //tie the kart to the sphere
+        try { kartTransformRb.MovePosition(transform.position + kartOffset); }
+        catch { kartTransform.position = transform.position + kartOffset; }
+
+        //model steering exaggeration/offset
+        float steerDir = steerInput;
+        steerDir *= DriftInput ? modelDriftOffset : modelSteerOffset;
+        kartModel.localRotation = Quaternion.Lerp(kartModel.localRotation,
+            Quaternion.Euler(new Vector3(0, (steerDir), kartModel.localEulerAngles.z)), modelSteerOffsetSmoothing); //model steering
     }
 
 

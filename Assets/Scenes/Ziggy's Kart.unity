@@ -857,39 +857,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 339817083}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &469876134 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8877267527248790556, guid: 8f7acc948d9052e45b9d50d83b857cf8,
-    type: 3}
-  m_PrefabInstance: {fileID: 3771026360320765210}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &469876136
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 469876134}
-  serializedVersion: 4
-  m_Mass: 0.0000001
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!4 &472112106 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2581800735424805860, guid: 1060f28bab45ab94eb490830df68466e,
@@ -2889,6 +2856,29 @@ Transform:
   - {fileID: 1788426609}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1023735265 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4469715261113797985, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+    type: 3}
+  m_PrefabInstance: {fileID: 3771026360320765210}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1023735270
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023735265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NoiseProfile: {fileID: 11400000, guid: a3dacaec0287d7444b4bd276816e1666, type: 2}
+  m_PivotOffset: {x: 0, y: 0, z: 0}
+  m_AmplitudeGain: 0.2
+  m_FrequencyGain: 1
+  mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!4 &1040606739 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2581800735424805860, guid: 1060f28bab45ab94eb490830df68466e,
@@ -6072,6 +6062,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5209604189566679446, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: m_UpdateMethod
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209604189566679447, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.99734807
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209604189566679447, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.07277924
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209604189566679447, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 5.529061e-16
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209604189566679447, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -4.0347084e-17
+      objectReference: {fileID: 0}
     - target: {fileID: 5524160064769919392, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: EnableArduinoReverse
@@ -6102,14 +6117,14 @@ PrefabInstance:
     - {fileID: 8617728698250155882, guid: 8f7acc948d9052e45b9d50d83b857cf8, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8877267527248790556, guid: 8f7acc948d9052e45b9d50d83b857cf8,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 469876136}
     - targetCorrespondingSourceObject: {fileID: 3124911817533669709, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1181688610}
+    - targetCorrespondingSourceObject: {fileID: 4469715261113797985, guid: 8f7acc948d9052e45b9d50d83b857cf8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1023735270}
   m_SourcePrefab: {fileID: 100100000, guid: 8f7acc948d9052e45b9d50d83b857cf8, type: 3}
 --- !u!1001 &4897569081686410529
 PrefabInstance:

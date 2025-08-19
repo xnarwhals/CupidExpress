@@ -24,6 +24,7 @@ public class boostPad : MonoBehaviour
         BallKart cartPhysics = other.gameObject.GetComponent<BallKart>();
         if (cartPhysics)
         {
+            AudioManager.Instance.PlaySodaBlast();
             cartPhysics.Boost(boostSpeed, boostAccelleration, true);
         }
     }

@@ -28,9 +28,12 @@ public class Destructable : MonoBehaviour
     public LayerMask reactToLayers = ~0; // default: everything
 
     private Rigidbody rb;
-    private Vector3 originalPosition;
     private bool triggered;
+    private Vector3 originalPosition;
+    private Quaternion originalRotation;
+    private float respawnTimer;
     [SerializeField] private float respawnAfterTriggered = 5f; 
+
 
 
     void Awake()
@@ -38,16 +41,19 @@ public class Destructable : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         if (!rb) Debug.LogError("Destructable requires a Rigidbody.");
         originalPosition = transform.position;
+        originalRotation = transform.rotation;
     }
 
     private void Update()
     {
-        if (triggered && respawnAfterTriggered > 0f)
+        if (!triggered) return;
+        if (respawnTimer > 0f)
         {
-            respawnAfterTriggered -= Time.deltaTime;
-            if (respawnAfterTriggered <= 0f)
+            respawnTimer -= Time.deltaTime;
+            if (respawnTimer <= 0f)
             {
-                Reset();
+                // Debug.Log("Respawning destructable object");
+                Respawn();
             }
         }
     }
@@ -68,9 +74,10 @@ public class Destructable : MonoBehaviour
         // Impact speed ALONG THE NORMAL (how 'hard' the bump is)
         // Positive when the other object is moving into us along the normal.
         float normalSpeed = Mathf.Max(0f, Vector3.Dot(collision.relativeVelocity, -contact.normal));
-        if (normalSpeed < minTriggerSpeed) return;
 
         triggered = true;
+        AudioManager.Instance.PlayHitCone(); 
+        respawnTimer = respawnAfterTriggered;
 
         // Map speed -> impulse
         float t = Mathf.InverseLerp(minTriggerSpeed, maxTriggerSpeed, normalSpeed);
@@ -113,23 +120,29 @@ public class Destructable : MonoBehaviour
         return (twist * localDir).normalized;
     }
 
-    private void Reset()
+    private void Respawn()
     {
-        // Reset position and state
-        triggered = false;
-        if (rb) rb.velocity = Vector3.zero;
-        transform.position = originalPosition;
-        transform.rotation = Quaternion.identity;
+        // Prevent immediate physics interaction while we snap back
+        if (rb)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
+        }
 
-        // Reset Rigidbody settings
+        // Reset transform to original pose
+        transform.position = originalPosition;
+        transform.rotation = originalRotation;
+
+        // Clear state and restore RB settings
+        triggered = false;
+        respawnTimer = 0f;
+        
         if (rb)
         {
             rb.isKinematic = false;
-            rb.useGravity = true;
-            rb.drag = 0f;
-            rb.angularDrag = 0.05f;
+            rb.angularDrag = 0.05f; // Reset to default angular drag
         }
-        respawnAfterTriggered = 5f; // Reset respawn timer    
     }
 
 
