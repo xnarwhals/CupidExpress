@@ -67,6 +67,7 @@ public class AudioManager : MonoBehaviour
     {
         SubscribeToRaceStart();
         SceneManager.sceneLoaded += OnSceneLoaded;
+        if (SceneManager.GetActiveScene().buildIndex == 0) PlayMusic(menuMusic);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
