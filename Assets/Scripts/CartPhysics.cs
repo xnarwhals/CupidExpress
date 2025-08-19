@@ -60,7 +60,12 @@ public class CartPhysics : MonoBehaviour
         isSpinningOut = true;
         spinOutTimer = 0f;
         spinOutDuration = duration;
-        
+
+    }
+    
+    public Rigidbody GetRB()
+    {
+        return rb;
     }
 
     // public void ApplyBoost(float force)
@@ -68,5 +73,5 @@ public class CartPhysics : MonoBehaviour
     //     if (isSpinningOut) return;
     //     rb.AddForce(transform.forward * force, ForceMode.VelocityChange);
     // }
-    
+
 }

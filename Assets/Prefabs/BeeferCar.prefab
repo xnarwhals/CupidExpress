@@ -144,11 +144,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4737247edf4d44f92afb47e6bbcc7cdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
+  speed: 30
   shockScaleMultiplier: 0.6
   modelTransform: {fileID: 9108068709706681987}
   localOffset: {x: 0, y: 2, z: 0}
   progress: 0.05
+  rubberBandDuration: 7
+  rubberBandSpeedMultiplier: 1.5
 --- !u!114 &8992757144076697563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,7 +167,7 @@ MonoBehaviour:
   passengerSeat: {fileID: 5227545665543842285}
   itemSlot: {fileID: 985516883287083906}
   forwardRef: {fileID: 985516883287083906}
-  cartName: Beefer
+  cartName: Xavier
   cartID: 1
 --- !u!114 &4383953826860346234
 MonoBehaviour:

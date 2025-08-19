@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Splines;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -47,6 +46,8 @@ public class GameManager : MonoBehaviour
     // Track all carts
     private Dictionary<Cart, CartRaceData> cartRaceData = new Dictionary<Cart, CartRaceData>(); // Each cart has it's race data
     private List<Cart> finishedCarts = new List<Cart>();
+    private Cart[] allCarts;
+    public Cart[] AllCarts => allCarts;
 
     // Event section
     public Action<RaceState> OnRaceStateChanged;
@@ -77,6 +78,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // PrintLeaderboardPositions();
+        allCarts = FindObjectsOfType<Cart>()
+            .OrderByDescending(cart => cart.CartID) // sort by ID
+            .ToArray();
     }
 
     private void Update()
@@ -111,7 +115,7 @@ public class GameManager : MonoBehaviour
             lastCountdownNumber = currentNum;
             OnCountdownUpdate?.Invoke(currentNum);
 
-            AudioManager.Instance.PlayUISFX(AudioManager.Instance.countDownBeep, 1.0f);
+            // AudioManager.Instance.PlayUISFX(AudioManager.Instance.countDownBeep, 1.0f);
         }
 
         if (countdownTimer <= 0f)
@@ -120,7 +124,7 @@ public class GameManager : MonoBehaviour
             SetRaceState(RaceState.Racing);
             raceStartTime = Time.time;
 
-            AudioManager.Instance.PlayUISFX(AudioManager.Instance.raceStartSound, 1.0f);
+            // AudioManager.Instance.PlayUISFX(AudioManager.Instance.raceStartSound, 1.0f);
         }
     }
 
@@ -167,9 +171,9 @@ public class GameManager : MonoBehaviour
     public void RestartRace()
     {
         Time.timeScale = 1f; // Ensure time is running
-        // SceneLoader.Instance.LoadScene(0);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); 
+        // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); 
         InitializeRace();
+        SceneLoader.Instance.LoadScene(0);
     }
 
 
@@ -451,7 +455,12 @@ public class GameManager : MonoBehaviour
         var data = cartRaceData[cart];
         // If nextCheckpointIndex is 0, treat it as being just after the last checkpoint
         return (data.nextCheckpointIndex == 0 ? checkpoints.Length : data.nextCheckpointIndex);
-    }           
+    }  
+
+    public Cart GetPlayerCart()
+    {
+        return cartRaceData.Keys.FirstOrDefault(cart => cart.CartID == 0); 
+    }         
 
     #endregion
 
