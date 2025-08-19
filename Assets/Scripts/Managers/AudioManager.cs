@@ -88,6 +88,8 @@ public class AudioManager : MonoBehaviour
             PauseMusic();
             PlayMusic(menuMusic);
         }
+        else PlayConstantAmbience();
+
         TrySubscribeManagers();
     }
 
@@ -349,8 +351,8 @@ public class AudioManager : MonoBehaviour
 
     public void PlayConstantAmbience()
     {
-        eternalAmbience.loop = true;
-        eternalAmbience.PlayOneShot(environmental, 1.0f);
+        eternalAmbience.clip = environmental;
+        eternalAmbience.Play();
     }
 
 
