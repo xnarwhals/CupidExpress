@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class AIBehaviorController : MonoBehaviour
 {
     [SerializeField] private AIPersonality personality; // scriptable object
@@ -21,6 +22,7 @@ public class AIBehaviorController : MonoBehaviour
 
     private void Start()
     {
+        aiDriver.SetBaseSpeed(personality.baseMaxSpeed); // set initial base speed
         // Store original values before personality modifications
         // baseMaxSpeed = aiDriver.maxSpeed;
         // baseAcceleration = aiDriver.acceleration;
@@ -44,6 +46,8 @@ public class AIBehaviorController : MonoBehaviour
 
     private void Update()
     {
+        aiDriver.SetBaseSpeed(personality.baseMaxSpeed);
+
         if (personality == null || aiDriver == null) return;
 
         ApplyLaneOffset();

@@ -27,18 +27,26 @@ public class CartPlayerInput : MonoBehaviour
     public float deadzoneScale = 1.0f;
     public float stepThreshold = 200.0f;
     public float itemLThreshold = 200.0f;
+    public int   stepDeadzoneLowerOffset = 10;
     public float stepBpm = 50.0f;
     public float reverseStepCount = 1.0f;
     public float initialStepThrottle = 0.5f;
+    public float idleTime = 0.5f;
 
     float prevStepTime;
     bool prevStep; //false is left, true is right
+
+    /*int prevStepL = 0;
+    int prevStepR = 0;
+
+    bool stepLActive = false;
+    bool stepRActive = false;*/
 
     float currentThrottle = 0.0f;
 
     ArduinoMessageHandler messageHandler;
 
-    [Header("BarCode")]
+    [Header("Misc")]
     public BarcodeInputReader barcodeInputReader;
     public RaceUI raceUI;
 
@@ -77,7 +85,23 @@ public class CartPlayerInput : MonoBehaviour
 
     private void Start()
     {
+        if (raceUI == null)
+        {
+            raceUI = FindObjectOfType<RaceUI>();
+        }
+        if (barcodeInputReader == null)
+        {
+            barcodeInputReader = FindObjectOfType<BarcodeInputReader>();
+        }
+        
         CartRoleManager.Instance.RegisterPlayer(this);
+        GameManager.Instance.OnRaceStateChanged += OnRaceStateChanged;
+    }
+
+    private void OnDisable()
+    {
+        input.Disable();
+        GameManager.Instance.OnRaceStateChanged -= OnRaceStateChanged;
     }
 
     private void Update()
@@ -92,7 +116,7 @@ public class CartPlayerInput : MonoBehaviour
             // Left-stick X or force sensors control steering
             float steer = 0.0f;
 
-            if (currentThrottle != 0.0f && Time.time - prevStepTime > (60.0f / stepBpm)) currentThrottle = 0.0f; //stop the cart from going if no step has happened yet
+            if (currentThrottle != 0.0f && Time.time - prevStepTime > idleTime) { currentThrottle = 0.0f; } //stop the cart from going if no step has happened yet
             if (messageHandler != null) //if arduino
             {
                 //steer
@@ -100,7 +124,7 @@ public class CartPlayerInput : MonoBehaviour
                 float right = messageHandler.input1;
 
 
-                if (left >  maxPressL && right >  maxPressR) steer = 0.0f; //if both on, go forward
+                if (left > maxPressL && right > maxPressR) steer = 0.0f; //if both on, go forward
                 else
                 {
                     //deadzones
@@ -111,8 +135,8 @@ public class CartPlayerInput : MonoBehaviour
                 }
 
                 //stepping
-                float stepL = messageHandler.input2;
-                float stepR = messageHandler.input3;
+                int stepL = messageHandler.input2;
+                int stepR = messageHandler.input3;
 
                 if (stepL > stepThreshold && stepR < stepThreshold) //step left
                 {
@@ -125,8 +149,43 @@ public class CartPlayerInput : MonoBehaviour
                 else if (stepL > stepThreshold && stepR > stepThreshold && Time.time - prevStepTime > (60.0f / (stepBpm / reverseStepCount))) //step both
                 {
                     if (EnableArduinoReverse)
-                    currentThrottle = -1.0f;
+                        currentThrottle = -1.0f;
                 }
+
+                /*EdgeHelper.Edge edgeL = EdgeHelper.DetectEdge(prevStepL, stepL, stepDeadzone);
+                EdgeHelper.Edge edgeR = EdgeHelper.DetectEdge(prevStepR, stepR, stepDeadzone);
+
+                if (edgeL == EdgeHelper.Edge.positive && edgeR == EdgeHelper.Edge.positive)
+                {
+                    //step both
+                }
+                else if (edgeL == EdgeHelper.Edge.positive) Step(false); //left
+                else if (edgeR == EdgeHelper.Edge.positive) Step(true);  //right
+
+                prevStepL = stepL;
+                prevStepR = stepR;*/
+
+                /*
+                bool risingL = false, risingR = false;
+                if (stepL > stepThreshold && !stepLActive) risingL = true;
+                if (stepR > stepThreshold && !stepRActive) risingR = true;
+
+                if (risingL && risingR)
+                {
+                    bool coinFlip = Random.Range(0, 2) == 0;
+                    Step(coinFlip);
+
+                    print("both");
+                }
+                else if (!risingL && !risingR) { print("neither");  }
+                else Step(risingR);
+
+                if (risingL) stepLActive = true; //in
+                if (risingR) stepRActive = true;
+
+                if (stepL < stepThreshold - stepDeadzoneLowerOffset) stepLActive = false; //out
+                if (stepR < stepThreshold - stepDeadzoneLowerOffset) stepRActive = false;
+                */
 
                 //items
                 float itemL = messageHandler.input4;
@@ -151,7 +210,7 @@ public class CartPlayerInput : MonoBehaviour
 
 
             //cartPhysics.Drift(input.Player.Drift.IsPressed());
-            cartPhysics.Drift(input.Player.Drift.ReadValue<float>() > 0.5f);
+            //cartPhysics.Drift(input.Player.Drift.ReadValue<float>() > 0.5f);
 
             // east btn accelerates, south btn brakes/reverses
             if (input.Player.Accelerate.IsPressed()) currentThrottle = 1f;
@@ -161,12 +220,13 @@ public class CartPlayerInput : MonoBehaviour
             cartPhysics.SetThrottle(currentThrottle);
         }
 
+        // BARCODE INPUT
         if (barcodeInputReader != null)
         {
             string barcodeInput = barcodeInputReader.GetInput();
             if (!string.IsNullOrEmpty(barcodeInput))
             {
-                ItemManager.Instance.UseItem(cart, barcodeInput[0] == '2'); 
+                ItemManager.Instance.UseItem(cart, barcodeInput[0] == '2');
             }
         }
 
@@ -184,14 +244,14 @@ public class CartPlayerInput : MonoBehaviour
             ItemManager.Instance.UseItem(cart, throwItBack);
         }
 
-        // start
+        // START GAME 
         if (input.Player.StartGame.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.WaitingToStart)
         {
             // Debug.Log("Game started");
             GameManager.Instance.StartRace();
         }
 
-        // pause
+        // PAUSE/RESUME GAME
         if (input.Player.Pause.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Racing)
         {
             GameManager.Instance.PauseRace();
@@ -200,7 +260,8 @@ public class CartPlayerInput : MonoBehaviour
                 raceUI.showPauseMenu();
             }
 
-        } else if (input.Player.Pause.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Paused)
+        }
+        else if (input.Player.Pause.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Paused)
         {
             GameManager.Instance.ResumeRace();
             if (raceUI != null)
@@ -209,19 +270,15 @@ public class CartPlayerInput : MonoBehaviour
             }
         }
 
-        // restart 
-        if (input.Player.Restart.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Paused)
+        // RESTART 
+        if (input.Player.Restart.triggered && (GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Paused
+        || GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Finished))
         {
             GameManager.Instance.RestartRace();
         }
 
-        if (input.Player.Restart.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Finished)
-        {
-            GameManager.Instance.RestartRace();
-        }
-        
-        
 
+        // IGNORE
         if (testItemEffect != null && input.Player.DebugBtn.WasPressedThisFrame())
         {
             testItemEffect.Test();
@@ -229,9 +286,20 @@ public class CartPlayerInput : MonoBehaviour
 
     }
 
+    private void OnRaceStateChanged(GameManager.RaceState newState)
+    {
+
+    }
+
     void Step (bool side)
     {
-        if (prevStep == !side)
+        if (currentThrottle <= 0.01f && currentThrottle >= -0.01f)
+        {
+            currentThrottle = initialStepThrottle;
+
+            print("initialStep");
+        }
+        else if (prevStep == !side)
         {
             /*if (Time.time - prevStepTime <= (60.0f / stepBpm))
             {
@@ -239,19 +307,13 @@ public class CartPlayerInput : MonoBehaviour
             }*/
 
             currentThrottle = Mathf.Clamp((60.0f / stepBpm) / (Time.time - prevStepTime), 0.0f, 1.0f);
+
+            //print(side ? "right" : "left");
         }
-        else if (currentThrottle <= 0.01f)
-        {
-            currentThrottle = initialStepThrottle;
-        }
+        else return;
 
         prevStep = side;
         prevStepTime = Time.time;
-    }
-
-    private void OnDisable()
-    {
-        input.Disable();
     }
 
     public void AssignRole(CartRole newRole)

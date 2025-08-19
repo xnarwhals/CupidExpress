@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: AngleMode
   m_EditorClassIdentifier: 
   aggressiveness: 0.68
+  baseMaxSpeed: 23.1
   drivingLane: 1
-  laneOffset: 4.4
+  laneOffset: 11.2
   chanceToUseItem: 0.24
-  proximityRadius: 5
+  proximityRadius: 10

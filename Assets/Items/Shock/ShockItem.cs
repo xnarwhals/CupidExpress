@@ -4,7 +4,7 @@ using UnityEngine;
 public class ShockItem : KartItem
 {
 
-    public float shockDuration = 3.5f; // duration of the shock effect
+    public float shockDuration = 2.5f; // duration of the shock effect
 
     public override void Use(Cart cartUsingItem, bool throwBackward)
     {

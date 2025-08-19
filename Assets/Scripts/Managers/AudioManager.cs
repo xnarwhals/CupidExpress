@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
+    private bool gameManagerSubscribed = false;
     public static AudioManager Instance { get; private set; }
     public AudioMixer audioMixer;
 
@@ -22,6 +24,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip countDownBeep;
     public AudioClip raceStartSound;
     public AudioClip lapCompleteSound;
+    public AudioClip hitConeSound;
 
     [Header("Item SFX")]
     public AudioClip itemPickupSound;
@@ -63,6 +66,22 @@ public class AudioManager : MonoBehaviour
     private void Start()
     {
         SubscribeToRaceStart();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        if (SceneManager.GetActiveScene().buildIndex == 0) PlayMusic(menuMusic);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        TrySubscribeManagers();
+    }
+
+    private void TrySubscribeManagers()
+    {
+        if (!gameManagerSubscribed && GameManager.Instance != null)
+        {
+            gameManagerSubscribed = true;
+            SubscribeToRaceStart();
+        }
     }
 
     private void InitializeAudioManager()
@@ -99,10 +118,10 @@ public class AudioManager : MonoBehaviour
         {
             GameManager.Instance.OnRaceStateChanged += HandleRaceStateChanged;
             GameManager.Instance.OnCartLapCompleted += HandleCartLapCompleted;
-            // GameManager.Instance.OnCartFinished += HandleCartFinished;
-            GameManager.Instance.OnCountdownUpdate += HandleRaceTimeUpdate; // note
+            GameManager.Instance.OnCartFinished += HandleCartFinished;
+            // GameManager.Instance.OnCountdownUpdate += HandleRaceTimeUpdate; // note
             GameManager.Instance.CountdownGO += HandleCountdownGO;
-            GameManager.Instance.OnRaceFinished += HandleRaceFinished;
+            // GameManager.Instance.OnRaceFinished += HandleRaceFinished;
         }
 
         if (ItemManager.Instance != null)
@@ -118,10 +137,10 @@ public class AudioManager : MonoBehaviour
         {
             GameManager.Instance.OnRaceStateChanged -= HandleRaceStateChanged;
             GameManager.Instance.OnCartLapCompleted -= HandleCartLapCompleted;
-            // GameManager.Instance.OnCartFinished -= HandleCartFinished;
-            GameManager.Instance.OnCountdownUpdate -= HandleRaceTimeUpdate;
+            GameManager.Instance.OnCartFinished -= HandleCartFinished;
+            // GameManager.Instance.OnCountdownUpdate -= HandleRaceTimeUpdate;
             GameManager.Instance.CountdownGO -= HandleCountdownGO;
-            GameManager.Instance.OnRaceFinished -= HandleRaceFinished;
+            // GameManager.Instance.OnRaceFinished -= HandleRaceFinished;
         }
 
         if (ItemManager.Instance != null)
@@ -144,7 +163,7 @@ public class AudioManager : MonoBehaviour
                 PlayMusic(menuMusic);
                 break;
             case GameManager.RaceState.CountDown:
-                // PlaySFX(countDownBeep);
+                PlaySFX(countDownBeep);
                 break;
             case GameManager.RaceState.Racing:
                 if (isOnLastLap) 
@@ -163,15 +182,15 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    private void HandleRaceTimeUpdate(int countdownNumber)
-    { // called elsewhere
-        PlaySFX(countDownBeep, 0.8f);
-    }
+    // private void HandleRaceTimeUpdate(int countdownNumber)
+    // { // called elsewhere
+    //     PlaySFX(countDownBeep, 0.8f);
+    // }
     
     // race start GO
     private void HandleCountdownGO()
     { // should be called once per game 
-        PlaySFX(raceStartSound, 1f);
+        // PlaySFX(raceStartSound, 1f);
         PlayMusic(raceMusic);
     }
 
@@ -189,23 +208,9 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // private void HandleCartFinished(Cart cart)
-    // {
-    //     int cartPosition = GameManager.Instance.GetCartPosition(cart);
-
-    //     if (cart.CartID == 0 && cartPosition >= 1 && cartPosition <= 3) // player cart and in top 3
-    //     {
-    //         PlaySFX(victoryMusic, 1f);
-    //     }
-    //     else
-    //     {
-    //         PlaySFX(defeatMusic, 1f);
-    //     }
-    // }
-
-    private void HandleRaceFinished()
+    private void HandleCartFinished(Cart cart, int pos)
     {
-        if (GameManager.Instance.PlayerCartWon())
+        if (cart.CartID == 0 && pos >= 1 && pos <= 3) // player cart and in top 3
         {
             PlaySFX(victoryMusic, 1f);
         }
@@ -214,6 +219,18 @@ public class AudioManager : MonoBehaviour
             PlaySFX(defeatMusic, 1f);
         }
     }
+
+    // private void HandleRaceFinished()
+    // {
+    //     if (GameManager.Instance.PlayerCartWon())
+    //     {
+    //         PlaySFX(victoryMusic, 1f);
+    //     }
+    //     else
+    //     {
+    //         PlaySFX(defeatMusic, 1f);
+    //     }
+    // }
 
     private void HandleItemPickup(Cart cart)
     {
@@ -290,7 +307,7 @@ public class AudioManager : MonoBehaviour
 
     #endregion
 
-    // item methods
+    #region Item SFX
     public void PlayTomatoHit()
     {
         PlaySFX(tomatoHitSound, 0.5f);
@@ -304,6 +321,14 @@ public class AudioManager : MonoBehaviour
     public void PlaySodaBlast()
     {
         PlaySFX(sodaBlastSound, 0.5f);
+    }
+
+    #endregion
+
+    // non item sfx methdods
+    public void PlayHitCone()
+    {
+        PlaySFX(hitConeSound, 0.5f);
     }
 
 

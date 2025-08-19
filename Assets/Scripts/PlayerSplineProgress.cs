@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.Splines;
-using Unity.Mathematics; 
+using Unity.Mathematics;
 
 public class PlayerSplineProgress : MonoBehaviour
 {
@@ -9,6 +9,7 @@ public class PlayerSplineProgress : MonoBehaviour
 
     void Start()
     {
+        spline = GameManager.Instance.raceTrack;
     }
 
     void Update()
@@ -26,5 +27,17 @@ public class PlayerSplineProgress : MonoBehaviour
         splineProgress = t; // Normalized spline progress (0–1)
 
         // Debug.Log($"Progress: {splineProgress:F3}  Distance: {distanceAlongSpline:F2}m");
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (spline == null) return;
+
+#if UNITY_EDITOR
+        UnityEditor.Handles.Label(
+        transform.position + Vector3.up * 2.5f,
+        $"Spline Progress: {splineProgress:P2}\n"
+    );
+#endif
     }
 }

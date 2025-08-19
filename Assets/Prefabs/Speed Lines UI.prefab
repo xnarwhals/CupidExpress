@@ -88,5 +88,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01ede662a2b8c744286529b50a5e0caa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  threshold: 0.99
+  threshold: 0.95
   flipWait: 0.25

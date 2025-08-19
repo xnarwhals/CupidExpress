@@ -14,9 +14,19 @@ public class KetchupEffect : MonoBehaviour
 
     private bool isEffectActive = false;
     private float effectTimer = 0f;
-    
 
 
+    private void Awake()
+    {
+        if (ketchupOverlay == null)
+        {
+            Debug.LogError("KetchupEffect script requires an Image component for the overlay.");
+        }
+        else
+        {
+            ketchupOverlay.gameObject.SetActive(false); 
+        }     
+    }
     private void Update()
     {
         if (isEffectActive)

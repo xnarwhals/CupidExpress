@@ -13,20 +13,20 @@ public class LapUI : MonoBehaviour
     public Cart playerCart;
 
     [Header("UI settings")]
-    public string lapTextFormat = "Lap {0}/{1}";
+    public string lapTextFormat = "{0}/{1}";
 
     public Color normalColor = Color.white;
     public Color finalLapColor = Color.yellow;
 
-    private int countdownNumber = -1;
+    private GameManager gm;
 
     private void Start()
     {
-        if (GameManager.Instance != null)
+        gm = GameManager.Instance;
+        if (gm != null)
         {
             GameManager.Instance.OnCartLapCompleted += OnLapCompleted;
             GameManager.Instance.OnRaceStateChanged += OnRaceStateChanged;
-            GameManager.Instance.OnCountdownUpdate += OnCountdownUpdate;
         }
 
         UpdateLapUI();
@@ -34,24 +34,23 @@ public class LapUI : MonoBehaviour
 
     private void Update()
     {
-        if (timerText == null || playerCart == null || GameManager.Instance == null)
+        if (timerText == null || playerCart == null || gm == null)
             return;
 
-        var raceState = GameManager.Instance.GetCurrentRaceState();
+        var raceState = gm.GetCurrentRaceState();
         if (raceState == GameManager.RaceState.Racing)
         {
-            float raceTime = GameManager.Instance.GetCartRaceTime(playerCart);
-            timerText.text = "Time: " + raceTime.ToString("F2") + "s";
+            float raceTime = gm.GetCartRaceTime(playerCart);
+            timerText.text = raceTime.ToString("F2") + "s";
         }
     }
 
     private void OnDestroy()
     {
-        if (GameManager.Instance != null)
+        if (gm != null)
         {
             GameManager.Instance.OnCartLapCompleted -= OnLapCompleted;
             GameManager.Instance.OnRaceStateChanged -= OnRaceStateChanged;
-            GameManager.Instance.OnCountdownUpdate -= OnCountdownUpdate;
         }
     }
 
@@ -60,8 +59,6 @@ public class LapUI : MonoBehaviour
         if (cart == playerCart) // bots dont have ui
         {
             UpdateLapUI();
-            UpdateRaceTimer();
-            // complete lap sound
         }
     }
 
@@ -75,19 +72,17 @@ public class LapUI : MonoBehaviour
         if (lapText == null || playerCart == null || GameManager.Instance == null) return;
 
 
-        int curLap = GameManager.Instance.GetCartLap(playerCart);
-        int totalLaps = GameManager.Instance.totalLaps;
-        var raceState = GameManager.Instance.GetCurrentRaceState();
+        int curLap = gm.GetCartLap(playerCart);
+        int totalLaps = gm.totalLaps;
+        var raceState = gm.GetCurrentRaceState();
 
         switch (raceState)
         {
             case GameManager.RaceState.WaitingToStart:
-                lapText.text = "Ready to Race!";
                 lapText.color = normalColor;
                 break;
 
             case GameManager.RaceState.CountDown:
-                lapText.text = countdownNumber.ToString();
                 lapText.color = normalColor;
                 break;
 
@@ -101,7 +96,7 @@ public class LapUI : MonoBehaviour
                 lapText.text = "Finished!";
                 lapText.color = finalLapColor;
                 if (timerText != null)
-                    timerText.text = "Time: " + GameManager.Instance.GetCartRaceTime(playerCart).ToString("F2") + "s";
+                    timerText.text = gm.GetCartRaceTime(playerCart).ToString("F2") + "s";
                 break;
 
             case GameManager.RaceState.Paused:
@@ -111,18 +106,12 @@ public class LapUI : MonoBehaviour
         }
     }
 
-    private void OnCountdownUpdate(int number)
-    {
-        countdownNumber = number;
-        UpdateLapUI();
-    }
-
     private void UpdateRaceTimer()
     {
         if (timerText == null || playerCart == null || GameManager.Instance == null) return;
 
         float raceTime = GameManager.Instance.GetCartRaceTime(playerCart);
-        timerText.text = "Time: " + raceTime.ToString("F2") + "s";
+        timerText.text = raceTime.ToString("F2") + "s";
     }
 
 }

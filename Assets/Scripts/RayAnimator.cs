@@ -4,21 +4,34 @@ using UnityEngine;
 
 public class RayAnimator : MonoBehaviour
 {
-    [SerializeField] Rigidbody PlayerRigidBody;
+    BallKart movement;
     [SerializeField] Animator animator;
+
+    [SerializeField, Range(0.0f, 1.0f)] float runPercentage = 0.95f;
+    [SerializeField] float stopDeadzone = 0.5f;
+
+    private void Awake()
+    {
+        movement = FindAnyObjectByType<BallKart>();
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        if (PlayerRigidBody == null) print("Set RB on Ray Animator!!!!");
+        if (movement == null) print("No ballkart found");
         if (animator == null) print("Set animator on Ray!");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!(PlayerRigidBody && animator)) return;
+        if (!(movement && animator)) return;
 
-        animator.SetFloat("Speed", PlayerRigidBody.velocity.magnitude);
+        int state = 0;
+
+        if (movement.currentSpeed > movement.maxSpeed * runPercentage) state = 2;
+        else if (Mathf.Abs(movement.currentSpeed) > stopDeadzone) state = 1;
+        
+        animator.SetInteger("State", state);
     }
 }

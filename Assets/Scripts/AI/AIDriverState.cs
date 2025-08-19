@@ -7,7 +7,8 @@ public enum AIDriverState
     SpinningOut,    // Currently spinning out from item hit
     Recovering,     // Reorienting after spinout
     Boosting,       // Under boost effect
-    Stunned         // Temporarily unable to move (future use)
+    Stunned,         // Temporarily unable to move (future use)
+    Rubberbanding
 }
 
 // State transition data
