@@ -293,11 +293,9 @@ public class CartPlayerInput : MonoBehaviour
 
     void Step (bool side)
     {
-        if (currentThrottle <= 0.01f && currentThrottle >= -0.01f)
+        if (currentThrottle <= 0.01f && currentThrottle >= -0.01f) //initial step
         {
             currentThrottle = initialStepThrottle;
-
-            print("initialStep");
         }
         else if (prevStep == !side)
         {
