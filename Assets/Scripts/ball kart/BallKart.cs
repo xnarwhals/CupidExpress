@@ -36,6 +36,7 @@ public class BallKart : CartPhysics
     [SerializeField] LayerMask floorLayerMask;
     [SerializeField] Transform resetTransform;
     private float spinOutDirection = 1f;
+    private GameManager gm;
 
     public float currentSpeed = 0.0f;
     float currentRotate = 0.0f;
@@ -56,6 +57,16 @@ public class BallKart : CartPhysics
         kartOffset = kartTransform.position - transform.position;
     }
 
+    private void Start()
+    {
+        gm = GameManager.Instance;
+        if (gm == null)
+        {
+            Debug.LogError("GameManager instance not found in BallKart.");
+            return;
+        }
+    }
+
     [SerializeField] float postBoostDecceleration = 1.5f; //accel
     [SerializeField] float postBoostDecay = 0.01f;
     bool postBoost = false;
@@ -68,7 +79,7 @@ public class BallKart : CartPhysics
         if (invertSteering) steerInput = -steerInput;
 
         //spinnout
-        if (isSpinningOut || GameManager.Instance.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
+        if (isSpinningOut || gm.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
 
         //setting inputs to be used in fixed
         inputSpeed = maxSpeed * throttleInput; //in case we want a more dynamic throttle system
@@ -102,7 +113,7 @@ public class BallKart : CartPhysics
     public override void FixedUpdate()
     {
 
-        if (GameManager.Instance.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
+        if (gm.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
 
         if (isSpinningOut)
         {

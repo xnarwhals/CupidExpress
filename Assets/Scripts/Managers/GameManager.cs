@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Splines;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -80,7 +79,7 @@ public class GameManager : MonoBehaviour
     {
         // PrintLeaderboardPositions();
         allCarts = FindObjectsOfType<Cart>()
-            .OrderBy(cart => cart.CartID) // sort by ID
+            .OrderByDescending(cart => cart.CartID) // sort by ID
             .ToArray();
     }
 

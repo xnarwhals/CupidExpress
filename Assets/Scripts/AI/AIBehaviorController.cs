@@ -46,6 +46,8 @@ public class AIBehaviorController : MonoBehaviour
 
     private void Update()
     {
+        aiDriver.SetBaseSpeed(personality.baseMaxSpeed);
+        
         if (personality == null || aiDriver == null) return;
 
         ApplyLaneOffset();

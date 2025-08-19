@@ -117,10 +117,10 @@ public class AudioManager : MonoBehaviour
         {
             GameManager.Instance.OnRaceStateChanged += HandleRaceStateChanged;
             GameManager.Instance.OnCartLapCompleted += HandleCartLapCompleted;
-            // GameManager.Instance.OnCartFinished += HandleCartFinished;
+            GameManager.Instance.OnCartFinished += HandleCartFinished;
             // GameManager.Instance.OnCountdownUpdate += HandleRaceTimeUpdate; // note
             GameManager.Instance.CountdownGO += HandleCountdownGO;
-            GameManager.Instance.OnRaceFinished += HandleRaceFinished;
+            // GameManager.Instance.OnRaceFinished += HandleRaceFinished;
         }
 
         if (ItemManager.Instance != null)
@@ -136,10 +136,10 @@ public class AudioManager : MonoBehaviour
         {
             GameManager.Instance.OnRaceStateChanged -= HandleRaceStateChanged;
             GameManager.Instance.OnCartLapCompleted -= HandleCartLapCompleted;
-            // GameManager.Instance.OnCartFinished -= HandleCartFinished;
+            GameManager.Instance.OnCartFinished -= HandleCartFinished;
             // GameManager.Instance.OnCountdownUpdate -= HandleRaceTimeUpdate;
             GameManager.Instance.CountdownGO -= HandleCountdownGO;
-            GameManager.Instance.OnRaceFinished -= HandleRaceFinished;
+            // GameManager.Instance.OnRaceFinished -= HandleRaceFinished;
         }
 
         if (ItemManager.Instance != null)
@@ -207,23 +207,9 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // private void HandleCartFinished(Cart cart)
-    // {
-    //     int cartPosition = GameManager.Instance.GetCartPosition(cart);
-
-    //     if (cart.CartID == 0 && cartPosition >= 1 && cartPosition <= 3) // player cart and in top 3
-    //     {
-    //         PlaySFX(victoryMusic, 1f);
-    //     }
-    //     else
-    //     {
-    //         PlaySFX(defeatMusic, 1f);
-    //     }
-    // }
-
-    private void HandleRaceFinished()
+    private void HandleCartFinished(Cart cart, int pos)
     {
-        if (GameManager.Instance.PlayerCartWon())
+        if (cart.CartID == 0 && pos >= 1 && pos <= 3) // player cart and in top 3
         {
             PlaySFX(victoryMusic, 1f);
         }
@@ -232,6 +218,18 @@ public class AudioManager : MonoBehaviour
             PlaySFX(defeatMusic, 1f);
         }
     }
+
+    // private void HandleRaceFinished()
+    // {
+    //     if (GameManager.Instance.PlayerCartWon())
+    //     {
+    //         PlaySFX(victoryMusic, 1f);
+    //     }
+    //     else
+    //     {
+    //         PlaySFX(defeatMusic, 1f);
+    //     }
+    // }
 
     private void HandleItemPickup(Cart cart)
     {

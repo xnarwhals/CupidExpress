@@ -24,8 +24,8 @@ public class EndAnimationTransition : MonoBehaviour
     private void Start()
     {
         spline = GameManager.Instance.raceTrack;
-
         GameManager.Instance.OnRaceFinished += OnRaceFinished;
+
         if (spline == null)
         {
             Debug.LogError("SplineContainer not found in GameManager!");
