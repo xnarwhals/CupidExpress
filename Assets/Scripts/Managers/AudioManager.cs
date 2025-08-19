@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class AudioManager : MonoBehaviour
 {
     private bool gameManagerSubscribed = false;
+    public bool isMenu = true;
     public static AudioManager Instance { get; private set; }
     public AudioMixer audioMixer;
 
@@ -12,6 +13,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource musicSource;
     public AudioSource sfxSource;
     public AudioSource uiSource;
+    public AudioSource eternalAmbience;
 
     [Header("Race Music")]
     public AudioClip menuMusic;
@@ -25,6 +27,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip raceStartSound;
     public AudioClip lapCompleteSound;
     public AudioClip hitConeSound;
+    public AudioClip environmental;
 
     [Header("Item SFX")]
     public AudioClip itemPickupSound;
@@ -67,10 +70,26 @@ public class AudioManager : MonoBehaviour
     {
         SubscribeToRaceStart();
         SceneManager.sceneLoaded += OnSceneLoaded;
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            isMenu = true;
+            PlayMusic(menuMusic);
+        }
+        else
+        PlayConstantAmbience();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.buildIndex == 1 || scene.buildIndex == 2) PauseMusic();
+        
+        if (scene.buildIndex == 0)
+        {
+            PauseMusic();
+            PlayMusic(menuMusic);
+        }
+        else PlayConstantAmbience();
+
         TrySubscribeManagers();
     }
 
@@ -328,6 +347,12 @@ public class AudioManager : MonoBehaviour
     public void PlayHitCone()
     {
         PlaySFX(hitConeSound, 0.5f);
+    }
+
+    public void PlayConstantAmbience()
+    {
+        eternalAmbience.clip = environmental;
+        eternalAmbience.Play();
     }
 
 

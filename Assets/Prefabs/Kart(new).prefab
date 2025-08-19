@@ -1075,25 +1075,10 @@ PrefabInstance:
       propertyPath: m_FollowOffset.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1216192436074074575, guid: 3cfd8734150b7884fa1e69108310776a,
-        type: 3}
-      propertyPath: m_FollowOffset.y
-      value: 1.55
-      objectReference: {fileID: 0}
-    - target: {fileID: 1216192436074074575, guid: 3cfd8734150b7884fa1e69108310776a,
-        type: 3}
-      propertyPath: m_FollowOffset.z
-      value: -4.43
-      objectReference: {fileID: 0}
     - target: {fileID: 1216192436074074576, guid: 3cfd8734150b7884fa1e69108310776a,
         type: 3}
       propertyPath: m_LookaheadTime
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1216192436074074576, guid: 3cfd8734150b7884fa1e69108310776a,
-        type: 3}
-      propertyPath: m_TrackedObjectOffset.y
-      value: 1.18
       objectReference: {fileID: 0}
     - target: {fileID: 1216192436407230105, guid: 3cfd8734150b7884fa1e69108310776a,
         type: 3}

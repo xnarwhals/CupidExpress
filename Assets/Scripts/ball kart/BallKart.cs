@@ -47,6 +47,8 @@ public class BallKart : CartPhysics
     bool grounded = false;
     Rigidbody kartTransformRb;
 
+    float unscaledSteerInput = 0.0f;
+
     Vector3 kartOffset; //makes it flush with the floor
 
     public override void Awake()
@@ -76,7 +78,12 @@ public class BallKart : CartPhysics
         kartModel.localScale = Vector3.Lerp(kartModel.localScale, targetModelScale, Time.deltaTime * scaleLerpSpeed);
 
         float dt = Time.deltaTime;
+
+        //steer
         if (invertSteering) steerInput = -steerInput;
+
+        unscaledSteerInput = steerInput;
+        if (!grounded) steerInput *= AirControl;
 
         //spinnout
         if (isSpinningOut || gm.GetCurrentRaceState() != GameManager.RaceState.Racing) return;
@@ -172,7 +179,7 @@ public class BallKart : CartPhysics
         catch { kartTransform.position = transform.position + kartOffset; }
 
         //model steering exaggeration/offset
-        float steerDir = steerInput;
+        float steerDir = unscaledSteerInput;
         steerDir *= DriftInput ? modelDriftOffset : modelSteerOffset;
         kartModel.localRotation = Quaternion.Lerp(kartModel.localRotation,
             Quaternion.Euler(new Vector3(0, (steerDir), kartModel.localEulerAngles.z)), modelSteerOffsetSmoothing); //model steering
