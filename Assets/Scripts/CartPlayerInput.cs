@@ -85,6 +85,15 @@ public class CartPlayerInput : MonoBehaviour
 
     private void Start()
     {
+        if (raceUI == null)
+        {
+            raceUI = FindObjectOfType<RaceUI>();
+        }
+        if (barcodeInputReader == null)
+        {
+            barcodeInputReader = FindObjectOfType<BarcodeInputReader>();
+        }
+        
         CartRoleManager.Instance.RegisterPlayer(this);
         GameManager.Instance.OnRaceStateChanged += OnRaceStateChanged;
     }
@@ -284,11 +293,9 @@ public class CartPlayerInput : MonoBehaviour
 
     void Step (bool side)
     {
-        if (currentThrottle <= 0.01f && currentThrottle >= -0.01f)
+        if (currentThrottle <= 0.01f && currentThrottle >= -0.01f) //initial step
         {
             currentThrottle = initialStepThrottle;
-
-            print("initialStep");
         }
         else if (prevStep == !side)
         {

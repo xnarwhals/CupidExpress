@@ -7,6 +7,7 @@ public class AIPersonality : ScriptableObject
     [Tooltip("higher impacts maxSpeed, acceleration, turnSpeed, cornering behavior")]
     [Range(0f, 1f)]
     public float aggressiveness = 0.5f; // 0 = passive, 1 = beefer mode
+    public float baseMaxSpeed;
 
     [Header("Driving Style")]
     public DrivingLane drivingLane = DrivingLane.Center;

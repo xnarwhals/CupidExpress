@@ -1,7 +1,7 @@
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Splines;
+using Unity.Profiling;
 
 public class SimpleAIDriver : MonoBehaviour
 {
@@ -15,14 +15,17 @@ public class SimpleAIDriver : MonoBehaviour
 
     // Spline and state management
     private SplineContainer spline;
+    private static SplineContainer sharedSpline;
     private SimpleAIStateController stateController;
     public AIDriverState CurrentState => stateController.currentState;
-    public Cart ThisCart => GetComponent<Cart>();
+
+    private GameManager gm;
     private Rigidbody rb;
 
     [Header("References")]
     public Transform modelTransform;
-    public Cart player => GameManager.Instance?.GetPlayerCart();
+    public Cart ThisCart;
+    public Cart player;
 
     [Header("Offset Settings")]
     public Vector3 localOffset = Vector3.zero;
@@ -38,31 +41,41 @@ public class SimpleAIDriver : MonoBehaviour
 
     [Header("Rubberbanding Settings")]
     [SerializeField] private float speedUpWhenPlayerFirst = 1.5f; // player leads → all CPUs speed up
-    [SerializeField] private float slowWhenCPUFirst     = 0.8f;  
+    [SerializeField] private float slowWhenCPUFirst = 0.8f;  
+    [SerializeField] private float rubberbandCheckInterval = 0.5f; // how often to check for rubberbanding
+    private float lastRubberBandCheckTime = 0f;
     private float rubberBandModifier = 1f;
-
     private bool shrinkOnShock = false;
-    
 
 
     private void OnEnable()
     {
-        stateController.OnStateChanged += HandleStateChanged;
+        if (stateController != null)
+            stateController.OnStateChanged += HandleStateChanged;
     }
 
     private void OnDisable()
     {
-        stateController.OnStateChanged -= HandleStateChanged;
+        if (stateController != null)
+            stateController.OnStateChanged -= HandleStateChanged;
     }
 
     private void Awake()
     {
-        spline = FindObjectOfType<SplineContainer>();
+        ThisCart = GetComponent<Cart>();
         rb = GetComponent<Rigidbody>();
+
+        if (spline == null)
+        {
+            if (sharedSpline == null)
+            {
+                sharedSpline = FindObjectOfType<SplineContainer>();
+            }
+            spline = sharedSpline;
+        }
+
         stateController = gameObject.AddComponent<SimpleAIStateController>();
         stateController.Initialize(this);
-
-        if (ThisCart == null) Debug.LogError("Cart component not found on SimpleAIDriver!");
 
         if (modelTransform != null)
         {
@@ -74,6 +87,9 @@ public class SimpleAIDriver : MonoBehaviour
 
     private void Start()
     {
+        gm = GameManager.Instance;
+        player = gm.GetPlayerCart();
+
         if (spline == null) Debug.LogError("SplineContainer component not found on car!");
         if (modelTransform == null) Debug.LogError("Model Transform not assigned on SimpleAIDriver!");
 
@@ -92,7 +108,8 @@ public class SimpleAIDriver : MonoBehaviour
 
     private void Update()
     {
-        if (spline == null || !GameManager.Instance.AICanMoveState()) return; // idk you can be more fancy for finish or smth
+
+        if (spline == null || gm == null || !gm.AICanMoveState()) return; // idk you can be more fancy for finish or smth
 
         // Handle scale and rotation lerping based on state
         if (modelTransform != null)
@@ -157,7 +174,11 @@ public class SimpleAIDriver : MonoBehaviour
             transform.position = offsetPos;
             transform.rotation = targetRot;
 
-            RubberBand();
+            if (Time.time - lastRubberBandCheckTime >= rubberbandCheckInterval)
+            {
+                RubberBand();
+                lastRubberBandCheckTime = Time.time;
+            }
         }
     }
 
@@ -201,15 +222,15 @@ public class SimpleAIDriver : MonoBehaviour
     // If THIS cpu is in first, slow down by a a factor
     private void RubberBand()
     {
-        if (GameManager.Instance == null || player == null || ThisCart == null) return;
+        if (gm == null || player == null || ThisCart == null) return;
         if (stateController == null) return;
 
         var s = stateController.currentState;
         // never rubberband while incapacitated
         if (s == AIDriverState.SpinningOut || s == AIDriverState.Stunned) return;
 
-        int playerPos = GameManager.Instance.GetCartPosition(player);
-        int myPos = GameManager.Instance.GetCartPosition(ThisCart);
+        int playerPos = gm.GetCartPosition(player);
+        int myPos = gm.GetCartPosition(ThisCart);
 
         // Player leads: speed up this CPU (if not already 1st)
           if (playerPos == 1 && myPos != 1)
@@ -243,8 +264,8 @@ public class SimpleAIDriver : MonoBehaviour
 
     public bool ShouldRubberBand()
     {
-        int playerPos = GameManager.Instance.GetCartPosition(player);
-        int myPos = GameManager.Instance.GetCartPosition(ThisCart);
+        int playerPos = gm.GetCartPosition(player);
+        int myPos = gm.GetCartPosition(ThisCart);
         return (playerPos == 1 && myPos != 1) || (myPos == 1 && playerPos != 1);
     }
 
@@ -295,6 +316,11 @@ public class SimpleAIDriver : MonoBehaviour
         float distance = toTarget.magnitude;
         float travelTime = distance / speed;
         return aimPoint + targetVelocity * travelTime;
+    }
+
+    public void SetBaseSpeed(float newSpeed)
+    {
+        speed = newSpeed;
     }
 
 

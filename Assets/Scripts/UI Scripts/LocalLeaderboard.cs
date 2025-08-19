@@ -5,12 +5,24 @@ public class LocalLeaderboard : MonoBehaviour
 {
     public static List<float> BestTimes = new List<float>();
     public static List<string> BestNames = new List<string>();
+    public const int MaxEntries = 8; // Maximum number of entries to keep
+
 
     public static void AddTime(float time, string playerName)
     {
         BestTimes.Add(time);
         BestNames.Add(playerName);
         SortLeaderboard();
+        TrimToMax();
+    }
+
+    private static void TrimToMax()
+    {
+        if (BestTimes.Count > MaxEntries)
+        {
+            BestTimes.RemoveRange(MaxEntries, BestTimes.Count - MaxEntries);
+            BestNames.RemoveRange(MaxEntries, BestNames.Count - MaxEntries);
+        }
     }
 
     private static void SortLeaderboard()

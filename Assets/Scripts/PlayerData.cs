@@ -1,6 +1,4 @@
-using UnityEngine;
-
-public class PlayerData : MonoBehaviour
+public class PlayerData 
 {
     public static string PlayerName = "Player";
 

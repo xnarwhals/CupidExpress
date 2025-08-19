@@ -24,8 +24,7 @@ public class ItemManager : MonoBehaviour
             itemQueue.Enqueue(item); // add item 
             UpdateItemVisuals(cart, cart.itemSlot);
             OnItemPickup?.Invoke(cart);
-
-            AudioManager.Instance.PlayUISFX(AudioManager.Instance.itemPickupSound, 1.0f);
+            if (cart.CartID == 0) AudioManager.Instance.PlayUISFX(AudioManager.Instance.itemPickupSound, 1.0f);
         }
         else
         {

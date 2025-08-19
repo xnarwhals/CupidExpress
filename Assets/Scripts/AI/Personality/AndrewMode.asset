@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e09f8e0690ed4803bdc79abd59627dc, type: 3}
   m_Name: AndrewMode
   m_EditorClassIdentifier: 
-  aggressiveness: 0.571
+  aggressiveness: 0.625
+  baseMaxSpeed: 24
   drivingLane: 0
   laneOffset: 0
   chanceToUseItem: 0.5

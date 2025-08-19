@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Splines;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -80,7 +79,7 @@ public class GameManager : MonoBehaviour
     {
         // PrintLeaderboardPositions();
         allCarts = FindObjectsOfType<Cart>()
-            .OrderBy(cart => cart.CartID) // sort by ID
+            .OrderByDescending(cart => cart.CartID) // sort by ID
             .ToArray();
     }
 
@@ -116,7 +115,7 @@ public class GameManager : MonoBehaviour
             lastCountdownNumber = currentNum;
             OnCountdownUpdate?.Invoke(currentNum);
 
-            AudioManager.Instance.PlayUISFX(AudioManager.Instance.countDownBeep, 1.0f);
+            // AudioManager.Instance.PlayUISFX(AudioManager.Instance.countDownBeep, 1.0f);
         }
 
         if (countdownTimer <= 0f)
@@ -125,7 +124,7 @@ public class GameManager : MonoBehaviour
             SetRaceState(RaceState.Racing);
             raceStartTime = Time.time;
 
-            AudioManager.Instance.PlayUISFX(AudioManager.Instance.raceStartSound, 1.0f);
+            // AudioManager.Instance.PlayUISFX(AudioManager.Instance.raceStartSound, 1.0f);
         }
     }
 
@@ -172,9 +171,9 @@ public class GameManager : MonoBehaviour
     public void RestartRace()
     {
         Time.timeScale = 1f; // Ensure time is running
-        // SceneLoader.Instance.LoadScene(0);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); 
+        // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); 
         InitializeRace();
+        SceneLoader.Instance.LoadScene(0);
     }
 
 
