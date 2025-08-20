@@ -6022,11 +6022,6 @@ PrefabInstance:
       propertyPath: m_YDamping
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4469715261451338294, guid: 8f7acc948d9052e45b9d50d83b857cf8,
-        type: 3}
-      propertyPath: m_Follow
-      value: 
-      objectReference: {fileID: 3771026360320765211}
     - target: {fileID: 4469715261451338295, guid: 8f7acc948d9052e45b9d50d83b857cf8,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -6206,12 +6201,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1023735270}
   m_SourcePrefab: {fileID: 100100000, guid: 8f7acc948d9052e45b9d50d83b857cf8, type: 3}
---- !u!4 &3771026360320765211 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7846623329250319345, guid: 8f7acc948d9052e45b9d50d83b857cf8,
-    type: 3}
-  m_PrefabInstance: {fileID: 3771026360320765210}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5212907357944713144 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8931734999363503700, guid: 8f7acc948d9052e45b9d50d83b857cf8,

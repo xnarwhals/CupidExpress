@@ -1089,7 +1089,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Follow
       value: 
-      objectReference: {fileID: 3081895025488656485}
+      objectReference: {fileID: 7846623329250319345}
     - target: {fileID: 1216192436407230106, guid: 3cfd8734150b7884fa1e69108310776a,
         type: 3}
       propertyPath: m_LookAt
