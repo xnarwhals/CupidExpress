@@ -12,6 +12,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource musicSource;
     public AudioSource sfxSource;
     public AudioSource uiSource;
+    public AudioSource eternalAmbience;
 
     [Header("Race Music")]
     public AudioClip menuMusic;
@@ -25,6 +26,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip raceStartSound;
     public AudioClip lapCompleteSound;
     public AudioClip hitConeSound;
+    public AudioClip environmental;
 
     [Header("Item SFX")]
     public AudioClip itemPickupSound;
@@ -71,6 +73,8 @@ public class AudioManager : MonoBehaviour
         {
             PlayMusic(menuMusic);
         }
+        else
+        PlayConstantAmbience();
     }
 
     public void StopAllAudio()
@@ -95,6 +99,7 @@ public class AudioManager : MonoBehaviour
             // Start/prepare race music as you wish; you currently call PlayMusic(raceMusic) in HandleCountdownGO.
             PauseMusic(); // if you want it paused until countdown GO
         }
+        else PlayConstantAmbience();
 
         TrySubscribeManagers();
     }
@@ -353,6 +358,12 @@ public class AudioManager : MonoBehaviour
     public void PlayHitCone()
     {
         PlaySFX(hitConeSound, 0.5f);
+    }
+
+    public void PlayConstantAmbience()
+    {
+        eternalAmbience.clip = environmental;
+        eternalAmbience.Play();
     }
 
 
