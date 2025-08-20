@@ -274,6 +274,7 @@ public class CartPlayerInput : MonoBehaviour
         if (input.Player.Restart.triggered && (GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Paused
         || GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.Finished))
         {
+            AudioManager.Instance.StopMusic();
             GameManager.Instance.RestartRace();
         }
 

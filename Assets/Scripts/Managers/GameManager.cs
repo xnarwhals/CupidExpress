@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Splines;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,6 +30,8 @@ public class GameManager : MonoBehaviour
     public float countDownDuration = 3f;
     private float countdownTimer;
     private int lastCountdownNumber = -1; 
+    public float startCountdownDelay = 4f; // delay before countdown starts
+    private float startCountdownTimer;
 
     public enum RaceState // add more if needed later
     {
@@ -85,6 +88,14 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (currentRaceState == RaceState.WaitingToStart)
+        {
+            startCountdownTimer += Time.deltaTime;
+            if (startCountdownTimer >= startCountdownDelay)
+            {
+                StartRace();
+            }
+        }
         
 
         if (currentRaceState == RaceState.CountDown)
@@ -104,6 +115,7 @@ public class GameManager : MonoBehaviour
             DebugRaceInfo();
         }
     }
+
 
     private void UpdateCountdown()
     {
@@ -173,7 +185,12 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f; // Ensure time is running
         // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); 
         InitializeRace();
-        SceneLoader.Instance.LoadScene(0);
+        // SceneLoader.Instance.LoadScene(0);
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.StopAllAudio();
+
+        SceneManager.LoadScene(0);
     }
 
 

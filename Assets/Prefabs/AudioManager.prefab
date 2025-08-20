@@ -55,7 +55,7 @@ MonoBehaviour:
   menuMusic: {fileID: 8300000, guid: 398767000cf9d4ca6941a1014bd20834, type: 3}
   raceMusic: {fileID: 8300000, guid: 663d55d9e0dd34ede97625cfc259c956, type: 3}
   lastLapMusic: {fileID: 8300000, guid: 447ef8fe24b724520aeabb43ba40874c, type: 3}
-  victoryMusic: {fileID: 8300000, guid: 3cd78ed29fe1e48faa72f1938466101e, type: 3}
+  victoryMusic: {fileID: 8300000, guid: 428052e7d5bc22f478f6b06b7add82f5, type: 3}
   defeatMusic: {fileID: 0}
   countDownBeep: {fileID: 8300000, guid: 96e2c4f572db3a044a59cbef84b7488c, type: 3}
   raceStartSound: {fileID: 0}
