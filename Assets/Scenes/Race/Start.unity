@@ -558,8 +558,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u200B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e2ec4dcdb012c4263ac9e132540a0d8d, type: 2}
+  m_sharedMaterial: {fileID: -6478901497035457103, guid: e2ec4dcdb012c4263ac9e132540a0d8d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -843,10 +844,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Enter Duo Name...
+  m_text: Enter Duo Initials...
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e2ec4dcdb012c4263ac9e132540a0d8d, type: 2}
+  m_sharedMaterial: {fileID: -6478901497035457103, guid: e2ec4dcdb012c4263ac9e132540a0d8d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1108,7 +1110,7 @@ MonoBehaviour:
   m_CaretWidth: 1
   m_ReadOnly: 0
   m_RichText: 1
-  m_GlobalFontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_GlobalFontAsset: {fileID: 11400000, guid: e2ec4dcdb012c4263ac9e132540a0d8d, type: 2}
   m_OnFocusSelectAll: 1
   m_ResetOnDeActivation: 1
   m_RestoreOriginalTextOnEscape: 1
@@ -1550,6 +1552,7 @@ MonoBehaviour:
   musicSource: {fileID: 3596848042944084355}
   sfxSource: {fileID: 4188217458829396440}
   uiSource: {fileID: 3236113983924293449}
+  eternalAmbience: {fileID: 0}
   menuMusic: {fileID: 8300000, guid: 398767000cf9d4ca6941a1014bd20834, type: 3}
   raceMusic: {fileID: 8300000, guid: 663d55d9e0dd34ede97625cfc259c956, type: 3}
   lastLapMusic: {fileID: 8300000, guid: 447ef8fe24b724520aeabb43ba40874c, type: 3}
@@ -1559,6 +1562,7 @@ MonoBehaviour:
   raceStartSound: {fileID: 0}
   lapCompleteSound: {fileID: 8300000, guid: 220bff249f995f4428492845a9ac8b48, type: 3}
   hitConeSound: {fileID: 8300000, guid: c76a2d34d21bc724fa0a820b723b4980, type: 3}
+  environmental: {fileID: 0}
   itemPickupSound: {fileID: 8300000, guid: f21a102e4c5228f49afd0d48667e6bc1, type: 3}
   tomatoThrowSound: {fileID: 0}
   tomatoHitSound: {fileID: 8300000, guid: bea246fc663b7514d8502e838e809231, type: 3}

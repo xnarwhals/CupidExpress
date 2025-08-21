@@ -40,7 +40,7 @@ public class RollingMelon : MonoBehaviour
                 splineAnimator.NormalizedTime = user.GetSplineProgress();
             }
         }
-        Debug.Log("Melon start progress: " + splineAnimator.NormalizedTime);
+        // Debug.Log("Melon start progress: " + splineAnimator.NormalizedTime);
     }
 
     // Collider to swap to homing behavior
