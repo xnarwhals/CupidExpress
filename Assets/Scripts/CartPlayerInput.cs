@@ -35,6 +35,7 @@ public class CartPlayerInput : MonoBehaviour
 
     float prevStepTime;
     bool prevStep; //false is left, true is right
+    bool initialStepped = false;
 
     /*int prevStepL = 0;
     int prevStepR = 0;
@@ -151,44 +152,45 @@ public class CartPlayerInput : MonoBehaviour
                     if (EnableArduinoReverse)
                         currentThrottle = -1.0f;
                 }
+                else initialStepped = false;
 
-                /*EdgeHelper.Edge edgeL = EdgeHelper.DetectEdge(prevStepL, stepL, stepDeadzone);
-                EdgeHelper.Edge edgeR = EdgeHelper.DetectEdge(prevStepR, stepR, stepDeadzone);
+                    /*EdgeHelper.Edge edgeL = EdgeHelper.DetectEdge(prevStepL, stepL, stepDeadzone);
+                    EdgeHelper.Edge edgeR = EdgeHelper.DetectEdge(prevStepR, stepR, stepDeadzone);
 
-                if (edgeL == EdgeHelper.Edge.positive && edgeR == EdgeHelper.Edge.positive)
-                {
-                    //step both
-                }
-                else if (edgeL == EdgeHelper.Edge.positive) Step(false); //left
-                else if (edgeR == EdgeHelper.Edge.positive) Step(true);  //right
+                    if (edgeL == EdgeHelper.Edge.positive && edgeR == EdgeHelper.Edge.positive)
+                    {
+                        //step both
+                    }
+                    else if (edgeL == EdgeHelper.Edge.positive) Step(false); //left
+                    else if (edgeR == EdgeHelper.Edge.positive) Step(true);  //right
 
-                prevStepL = stepL;
-                prevStepR = stepR;*/
+                    prevStepL = stepL;
+                    prevStepR = stepR;*/
 
-                /*
-                bool risingL = false, risingR = false;
-                if (stepL > stepThreshold && !stepLActive) risingL = true;
-                if (stepR > stepThreshold && !stepRActive) risingR = true;
+                    /*
+                    bool risingL = false, risingR = false;
+                    if (stepL > stepThreshold && !stepLActive) risingL = true;
+                    if (stepR > stepThreshold && !stepRActive) risingR = true;
 
-                if (risingL && risingR)
-                {
-                    bool coinFlip = Random.Range(0, 2) == 0;
-                    Step(coinFlip);
+                    if (risingL && risingR)
+                    {
+                        bool coinFlip = Random.Range(0, 2) == 0;
+                        Step(coinFlip);
 
-                    print("both");
-                }
-                else if (!risingL && !risingR) { print("neither");  }
-                else Step(risingR);
+                        print("both");
+                    }
+                    else if (!risingL && !risingR) { print("neither");  }
+                    else Step(risingR);
 
-                if (risingL) stepLActive = true; //in
-                if (risingR) stepRActive = true;
+                    if (risingL) stepLActive = true; //in
+                    if (risingR) stepRActive = true;
 
-                if (stepL < stepThreshold - stepDeadzoneLowerOffset) stepLActive = false; //out
-                if (stepR < stepThreshold - stepDeadzoneLowerOffset) stepRActive = false;
-                */
+                    if (stepL < stepThreshold - stepDeadzoneLowerOffset) stepLActive = false; //out
+                    if (stepR < stepThreshold - stepDeadzoneLowerOffset) stepRActive = false;
+                    */
 
-                //items
-                float itemL = messageHandler.input4;
+                    //items
+                    float itemL = messageHandler.input4;
                 if (itemL > itemLThreshold)
                 {
                     ItemManager.Instance.UseItem(cart, false);
@@ -294,20 +296,19 @@ public class CartPlayerInput : MonoBehaviour
 
     void Step (bool side)
     {
-        if (currentThrottle <= 0.01f && currentThrottle >= -0.01f) //initial step
+        float rnTime = Time.time;
+
+        if (currentThrottle <= 0.01f && currentThrottle >= -0.01f && !initialStepped) //initial step
         {
+            initialStepped = true;
+
             currentThrottle = initialStepThrottle;
         }
         else if (prevStep == !side)
         {
-            /*if (Time.time - prevStepTime <= (60.0f / stepBpm))
-            {
-                currentThrottle = 1f;
-            }*/
+            initialStepped = false;
 
-            currentThrottle = Mathf.Clamp((60.0f / stepBpm) / (Time.time - prevStepTime), 0.0f, 1.0f);
-
-            //print(side ? "right" : "left");
+            currentThrottle = Mathf.Clamp((60.0f / stepBpm) / (rnTime - prevStepTime), 0.0f, 1.0f);
         }
         else return;
 

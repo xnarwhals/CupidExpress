@@ -226,7 +226,10 @@ public class BallKart : CartPhysics
     float defaultAccel; //to store the max speed pre pad
     public void Boost(float speed, float accel, bool toggle)
     {
-        if (toggle)
+        if (toggle) { ApplyInstantBoost(speed); currentSpeed = speed; }
+
+
+        /*if (toggle)
         {
             defaultMaxSpeed = maxSpeed;
             defaultAccel = accel;
@@ -239,7 +242,7 @@ public class BallKart : CartPhysics
         {
             maxSpeed = defaultMaxSpeed;
             acceleration = defaultAccel;
-        }
+        }*/
     }
 
     public void ApplyInstantBoost(float force)
