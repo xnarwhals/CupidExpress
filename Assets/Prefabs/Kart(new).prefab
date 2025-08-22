@@ -341,7 +341,7 @@ MonoBehaviour:
   airGravity: 10
   steerAccelleration: 20
   steerAcceleration2: 6
-  idleDecelleration: 3
+  idleDecelleration: 50
   reverseAcceleration: 20
   reverseMaxSpeed: 15
   AirControl: 0
@@ -359,8 +359,8 @@ MonoBehaviour:
     m_Bits: 1
   resetTransform: {fileID: 0}
   currentSpeed: 0
-  postBoostDecceleration: 10
-  postBoostDecay: 100
+  postBoostDecceleration: 1
+  postBoostDecay: 1
 --- !u!114 &3271440801365079586
 MonoBehaviour:
   m_ObjectHideFlags: 0
