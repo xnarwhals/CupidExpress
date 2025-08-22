@@ -1581,13 +1581,18 @@ PrefabInstance:
     - target: {fileID: 4250338237031228565, guid: c95d6f7b48d5efd4992013b5e61a010e,
         type: 3}
       propertyPath: field of view
-      value: 30
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 4250338237031228565, guid: c95d6f7b48d5efd4992013b5e61a010e,
         type: 3}
       propertyPath: m_FocalLength
       value: 32.96973
       objectReference: {fileID: 0}
+    - target: {fileID: 4250338237031228565, guid: c95d6f7b48d5efd4992013b5e61a010e,
+        type: 3}
+      propertyPath: m_TargetTexture
+      value: 
+      objectReference: {fileID: 8400000, guid: 469c100e2f525c0468ef23d9c8ca67e7, type: 2}
     - target: {fileID: 4250338237031228565, guid: c95d6f7b48d5efd4992013b5e61a010e,
         type: 3}
       propertyPath: orthographic size
