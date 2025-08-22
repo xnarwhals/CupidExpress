@@ -135,7 +135,7 @@ MonoBehaviour:
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
-  m_Camera: {fileID: 3727235916689446091}
+  m_Camera: {fileID: 0}
 --- !u!114 &5524160064769919392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,12 +156,12 @@ MonoBehaviour:
   maxPressL: 35
   maxPressR: 150
   steerDeadzoneL: 10
-  steerDeadzoneR: 10
+  steerDeadzoneR: 14
   deadzoneScale: 0
   stepThreshold: 200
   itemLThreshold: 200
   stepDeadzoneLowerOffset: 10
-  stepBpm: 300
+  stepBpm: 250
   reverseStepCount: 1
   initialStepThrottle: 0.5
   idleTime: 0.5
