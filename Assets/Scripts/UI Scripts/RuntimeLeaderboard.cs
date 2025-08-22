@@ -1,56 +1,82 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class LocalLeaderboard1 : MonoBehaviour
+public class RuntimeLeaderboard : MonoBehaviour
 {
     public TMPro.TMP_Text leaderboardText;
+    [Tooltip("Optional: override which scene/track leaderboard to show. Leave empty to use active scene.")]
+    public string sceneNameOverride;
+
+    private GameManager gm;
+    private Coroutine waitForGM;
 
     private void Awake()
     {
         if (leaderboardText == null)
-        {
-            Debug.LogError("Leaderboard Text is not assigned in LocalLeaderboard1.");
-        }
+            Debug.LogError("[RuntimeLeaderboard] leaderboardText not assigned.");
     }
-     private void OnEnable()
+
+    private void OnEnable()
     {
-        if (GameManager.Instance != null)
-            GameManager.Instance.OnRaceFinished += UpdateLeaderboard;
+        gm = GameManager.Instance;
+        if (gm != null)
+            gm.OnRaceFinished += UpdateLeaderboard;
         else
-            Debug.LogWarning("GameManager.Instance is null in RuntimeLeaderboard.OnEnable.");
+        {
+            if (waitForGM != null) StopCoroutine(waitForGM);
+            waitForGM = StartCoroutine(WaitForGameManager());
+        }
+
         UpdateLeaderboard();
     }
 
     private void OnDisable()
     {
-        if (GameManager.Instance != null)
-            GameManager.Instance.OnRaceFinished -= UpdateLeaderboard;
+        if (waitForGM != null) { StopCoroutine(waitForGM); waitForGM = null; }
+        if (gm != null) gm.OnRaceFinished -= UpdateLeaderboard;
     }
 
-    private void Start()
+    private IEnumerator WaitForGameManager()
     {
-        GameManager.Instance.OnRaceFinished += UpdateLeaderboard;
-        UpdateLeaderboard();
+        float timeout = 5f;
+        float t = 0f;
+        while (GameManager.Instance == null && t < timeout)
+        {
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        gm = GameManager.Instance;
+        if (gm != null)
+            gm.OnRaceFinished += UpdateLeaderboard;
+        else
+            Debug.LogWarning("[RuntimeLeaderboard] GameManager not found to subscribe OnRaceFinished.");
+        waitForGM = null;
     }
 
     public void UpdateLeaderboard()
     {
-         if (leaderboardText == null) return;
+        if (leaderboardText == null) return;
 
-        leaderboardText.text = "";
+        string keyScene = string.IsNullOrEmpty(sceneNameOverride) ? SceneManager.GetActiveScene().name : sceneNameOverride;
+        var list = LocalLeaderboard.GetLeaderboard(keyScene);
 
-        if (LocalLeaderboard.BestTimes == null || LocalLeaderboard.BestTimes.Count == 0)
+        if (list == null || list.Count == 0)
         {
             leaderboardText.text = "No times recorded yet.";
             return;
         }
 
-        int count = Mathf.Min(LocalLeaderboard.BestTimes.Count, LocalLeaderboard.BestNames.Count);
-        for (int i = 0; i < count; i++)
+        var sb = new System.Text.StringBuilder();
+        int index = 1;
+        foreach (var entry in list)
         {
-            string name = string.IsNullOrEmpty(LocalLeaderboard.BestNames[i]) ? "Player" : LocalLeaderboard.BestNames[i];
-            leaderboardText.text += $"{i + 1}. {name}: {LocalLeaderboard.BestTimes[i]:F2} seconds\n";
+            string name = string.IsNullOrEmpty(entry.name) ? "Player" : entry.name;
+            sb.AppendFormat("{0}. {1}: {2:F2} seconds\n", index, name, entry.time);
+            index++;
         }
+
+        leaderboardText.text = sb.ToString();
     }
-
-
 }

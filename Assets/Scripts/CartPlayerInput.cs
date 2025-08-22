@@ -244,6 +244,13 @@ public class CartPlayerInput : MonoBehaviour
             ItemManager.Instance.UseItem(cart, throwItBack);
         }
 
+        // Dev Clear data
+        if (input.Player.DevClearData.triggered)
+        {
+            LocalLeaderboard.Clear();
+            Debug.Log("Cleared leaderboard data.");
+        }
+
         // START GAME 
         if (input.Player.StartGame.triggered && GameManager.Instance.GetCurrentRaceState() == GameManager.RaceState.WaitingToStart)
         {

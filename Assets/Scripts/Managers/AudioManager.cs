@@ -27,6 +27,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip lapCompleteSound;
     public AudioClip hitConeSound;
     public AudioClip environmental;
+    public AudioClip portal; 
 
     [Header("Item SFX")]
     public AudioClip itemPickupSound;
@@ -87,17 +88,15 @@ public class AudioManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         gameManagerSubscribed = false; 
+        StopAllAudio();
         if (scene.buildIndex == 0) // Main Menu
         {
-            StopAllAudio();
             isOnLastLap = false;        // reset any race state flags
             PlayMusic(menuMusic);       // explicitly start menu music
         }
         else if (scene.buildIndex == 1 || scene.buildIndex == 2)
         {
-            // Race scenes
-            // Start/prepare race music as you wish; you currently call PlayMusic(raceMusic) in HandleCountdownGO.
-            PauseMusic(); // if you want it paused until countdown GO
+            
         }
         else PlayConstantAmbience();
 
@@ -358,6 +357,11 @@ public class AudioManager : MonoBehaviour
     public void PlayHitCone()
     {
         PlaySFX(hitConeSound, 0.5f);
+    }
+
+    public void PlayPortalSound()
+    {
+        PlaySFX(portal, 0.5f);
     }
 
     public void PlayConstantAmbience()

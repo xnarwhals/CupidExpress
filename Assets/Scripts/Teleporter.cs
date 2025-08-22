@@ -21,6 +21,7 @@ public class Teleporter : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (targetTransform == null) { Debug.LogWarning("Target Transform not assigned on teleporter!"); return; }
+        if (AudioManager.Instance) AudioManager.Instance.PlayPortalSound();
 
         try
         {
