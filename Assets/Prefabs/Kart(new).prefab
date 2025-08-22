@@ -135,7 +135,7 @@ MonoBehaviour:
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
-  m_Camera: {fileID: 3727235916689446091}
+  m_Camera: {fileID: 0}
 --- !u!114 &5524160064769919392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,12 +156,12 @@ MonoBehaviour:
   maxPressL: 35
   maxPressR: 150
   steerDeadzoneL: 10
-  steerDeadzoneR: 10
+  steerDeadzoneR: 14
   deadzoneScale: 0
   stepThreshold: 200
   itemLThreshold: 200
   stepDeadzoneLowerOffset: 10
-  stepBpm: 300
+  stepBpm: 250
   reverseStepCount: 1
   initialStepThrottle: 0.5
   idleTime: 0.5
@@ -1581,13 +1581,18 @@ PrefabInstance:
     - target: {fileID: 4250338237031228565, guid: c95d6f7b48d5efd4992013b5e61a010e,
         type: 3}
       propertyPath: field of view
-      value: 30
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 4250338237031228565, guid: c95d6f7b48d5efd4992013b5e61a010e,
         type: 3}
       propertyPath: m_FocalLength
       value: 32.96973
       objectReference: {fileID: 0}
+    - target: {fileID: 4250338237031228565, guid: c95d6f7b48d5efd4992013b5e61a010e,
+        type: 3}
+      propertyPath: m_TargetTexture
+      value: 
+      objectReference: {fileID: 8400000, guid: 469c100e2f525c0468ef23d9c8ca67e7, type: 2}
     - target: {fileID: 4250338237031228565, guid: c95d6f7b48d5efd4992013b5e61a010e,
         type: 3}
       propertyPath: orthographic size

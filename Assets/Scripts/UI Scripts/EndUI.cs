@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EndUI : MonoBehaviour
 {
@@ -85,6 +86,20 @@ public class EndUI : MonoBehaviour
 
     public void BackToMenu()
     {
-        SceneLoader.Instance.LoadScene(0); // Assuming 0 is the main menu scene
+        SceneManager.LoadScene(0);
+    }
+    
+    public void NextRace()
+    {
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
+        {
+            SceneLoader.Instance.LoadScene(nextSceneIndex);
+        }
+        else
+        {
+            Debug.LogWarning("No next scene available, loading main menu instead.");
+            SceneLoader.Instance.LoadScene(0); // Load main menu if no next scene
+        }
     }
 }

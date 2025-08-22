@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class boostPad : MonoBehaviour
 {
-    [SerializeField] float boostSpeed = 100.0f;
-    [SerializeField] float boostAccelleration = 100.0f;
+    [SerializeField] float boost = 100.0f;
+    float boostAccelleration = 100.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +25,7 @@ public class boostPad : MonoBehaviour
         if (cartPhysics)
         {
             if (AudioManager.Instance != null) AudioManager.Instance.PlaySodaBlast();
-            cartPhysics.Boost(boostSpeed, boostAccelleration, true);
+            cartPhysics.Boost(boost, boostAccelleration, true);
         }
     }
 
@@ -34,7 +34,7 @@ public class boostPad : MonoBehaviour
         BallKart cartPhysics = other.gameObject.GetComponent<BallKart>();
         if (cartPhysics)
         {
-            cartPhysics.Boost(boostSpeed, boostAccelleration, false);
+            cartPhysics.Boost(boost, boostAccelleration, false);
         }
     }
 }
