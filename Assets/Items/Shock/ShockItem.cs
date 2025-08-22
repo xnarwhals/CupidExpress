@@ -14,6 +14,7 @@ public class ShockItem : KartItem
             for (int i = 0; i < leaderboard.Count; i++)
             {
                 var cart = leaderboard[i];
+
                 //cart != cartUsingItem
                 if (cart != null && cart != cartUsingItem)
                 {

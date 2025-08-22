@@ -1,7 +1,6 @@
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Splines;
-using Unity.Profiling;
 
 public class SimpleAIDriver : MonoBehaviour
 {
@@ -233,30 +232,25 @@ public class SimpleAIDriver : MonoBehaviour
         int myPos = gm.GetCartPosition(ThisCart);
 
         // Player leads: speed up this CPU (if not already 1st)
-          if (playerPos == 1 && myPos != 1)
+        if (playerPos == 1)
         {
-            // Player leads -> apply full speed-up
+            // Player leads -> apply full speed-up via rubberband state
             rubberBandModifier = speedUpWhenPlayerFirst;
-            speed = baseSpeed * rubberBandModifier;
-
             if (stateController.currentState != AIDriverState.Rubberbanding)
                 stateController.TryChangeState(AIDriverState.Rubberbanding);
         }
-        else if (myPos == 1 && playerPos != 1)
+        else if (myPos == 1)
         {
-            // This CPU leads -> apply fixed slow down
+            // This CPU leads -> apply fixed slow down via rubberband state
             rubberBandModifier = slowWhenCPUFirst;
-            speed = baseSpeed * rubberBandModifier;
-
-            if (stateController.currentState == AIDriverState.Rubberbanding)
-                stateController.TryChangeState(AIDriverState.Normal);
+            if (stateController.currentState != AIDriverState.Rubberbanding)
+                stateController.TryChangeState(AIDriverState.Rubberbanding);
         }
         else
         {
             // No rubberbanding
             rubberBandModifier = 1f;
             speed = baseSpeed;
-
             if (stateController.currentState == AIDriverState.Rubberbanding)
                 stateController.TryChangeState(AIDriverState.Normal);
         }
@@ -266,7 +260,7 @@ public class SimpleAIDriver : MonoBehaviour
     {
         int playerPos = gm.GetCartPosition(player);
         int myPos = gm.GetCartPosition(ThisCart);
-        return (playerPos == 1 && myPos != 1) || (myPos == 1 && playerPos != 1);
+        return (playerPos == 1) || (myPos == 1);
     }
 
     #region Public Methods
@@ -335,11 +329,13 @@ public class SimpleAIDriver : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.Handles.Label(
         transform.position + Vector3.up * 2.5f,
+        $"{ThisCart.name}\n" +
         $"Position: {pos}\n" +
         $"Lap: {GameManager.Instance.GetCartLap(ThisCart)}\n" +
-        $"Checkpoint: {GameManager.Instance.GetCartCheckpoint(ThisCart)}\n" +
-        $"Spline Progress: {GetSplineProgress():P2}\n"
-
+        // $"Checkpoint: {GameManager.Instance.GetCartCheckpoint(ThisCart)}\n" +
+        $"Spline Progress: {GetSplineProgress():P2}\n" +
+        $"Speed: {speed:F2}\n" +
+        $"BaseSpeed: {baseSpeed:F2}\n"
     );
 #endif
 

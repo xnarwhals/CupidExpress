@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 public class AudioManager : MonoBehaviour
 {
     private bool gameManagerSubscribed = false;
-    public bool isMenu = true;
     public static AudioManager Instance { get; private set; }
     public AudioMixer audioMixer;
 
@@ -28,6 +27,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip lapCompleteSound;
     public AudioClip hitConeSound;
     public AudioClip environmental;
+    public AudioClip portal; 
 
     [Header("Item SFX")]
     public AudioClip itemPickupSound;
@@ -72,21 +72,31 @@ public class AudioManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            isMenu = true;
             PlayMusic(menuMusic);
         }
         else
         PlayConstantAmbience();
     }
 
+    public void StopAllAudio()
+    {
+        StopMusic();
+        if (sfxSource != null) sfxSource.Stop();   // stops any PlayOneShot currently playing
+        if (uiSource  != null) uiSource.Stop();
+    }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.buildIndex == 1 || scene.buildIndex == 2) PauseMusic();
-        
-        if (scene.buildIndex == 0)
+        gameManagerSubscribed = false; 
+        StopAllAudio();
+        if (scene.buildIndex == 0) // Main Menu
         {
-            PauseMusic();
-            PlayMusic(menuMusic);
+            isOnLastLap = false;        // reset any race state flags
+            PlayMusic(menuMusic);       // explicitly start menu music
+        }
+        else if (scene.buildIndex == 1 || scene.buildIndex == 2)
+        {
+            
         }
         else PlayConstantAmbience();
 
@@ -178,7 +188,6 @@ public class AudioManager : MonoBehaviour
             // Menu
             case GameManager.RaceState.WaitingToStart:
                 isOnLastLap = false;
-                PlayMusic(menuMusic);
                 break;
             case GameManager.RaceState.CountDown:
                 PlaySFX(countDownBeep);
@@ -195,6 +204,7 @@ public class AudioManager : MonoBehaviour
                 break;
             case GameManager.RaceState.Finished:
                 PauseMusic();
+
                 // win/lose music 
                 break;
         }
@@ -349,6 +359,11 @@ public class AudioManager : MonoBehaviour
         PlaySFX(hitConeSound, 0.5f);
     }
 
+    public void PlayPortalSound()
+    {
+        PlaySFX(portal, 0.5f);
+    }
+
     public void PlayConstantAmbience()
     {
         eternalAmbience.clip = environmental;
@@ -393,6 +408,8 @@ public class AudioManager : MonoBehaviour
             musicSource.volume = musicVolume * masterVolume;
         }
     }
+
+
 
     #endregion
 

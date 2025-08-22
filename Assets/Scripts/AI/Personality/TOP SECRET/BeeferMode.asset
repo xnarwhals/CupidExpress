@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BeeferMode
   m_EditorClassIdentifier: 
   aggressiveness: 0.8
-  baseMaxSpeed: 30
+  baseMaxSpeed: 34
   drivingLane: 1
   laneOffset: 7.9
   chanceToUseItem: 0.81
