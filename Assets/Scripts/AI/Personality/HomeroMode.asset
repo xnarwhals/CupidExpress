@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HomeroMode
   m_EditorClassIdentifier: 
   aggressiveness: 0.239
-  baseMaxSpeed: 14.3
+  baseMaxSpeed: 32
   drivingLane: 0
   laneOffset: 0
   chanceToUseItem: 0.278

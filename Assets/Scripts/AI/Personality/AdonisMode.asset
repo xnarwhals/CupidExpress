@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AdonisMode
   m_EditorClassIdentifier: 
   aggressiveness: 0.672
-  baseMaxSpeed: 28
+  baseMaxSpeed: 38
   drivingLane: 2
   laneOffset: 3.7
   chanceToUseItem: 0.618
