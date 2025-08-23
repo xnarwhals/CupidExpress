@@ -11,7 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Race/Start.unity
     guid: 31ae33b0a141f4be48cf488f2eeaee61
-  - enabled: 0
+  - enabled: 1
+    path: Assets/Scenes/Race/Kai's Final Track.unity
+    guid: 89d9bc5a33edee14fb82c3414c4d6682
+  - enabled: 1
     path: Assets/Scenes/Race/GameheadsCircuit.unity
     guid: 69ff179c7d5684e8f9d4e5fffaca5b3c
   - enabled: 0

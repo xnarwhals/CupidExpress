@@ -1563,6 +1563,7 @@ MonoBehaviour:
   lapCompleteSound: {fileID: 8300000, guid: 220bff249f995f4428492845a9ac8b48, type: 3}
   hitConeSound: {fileID: 8300000, guid: c76a2d34d21bc724fa0a820b723b4980, type: 3}
   environmental: {fileID: 0}
+  portal: {fileID: 8300000, guid: 2233060713e12624fa4bbb9ee40130b6, type: 3}
   itemPickupSound: {fileID: 8300000, guid: f21a102e4c5228f49afd0d48667e6bc1, type: 3}
   tomatoThrowSound: {fileID: 0}
   tomatoHitSound: {fileID: 8300000, guid: bea246fc663b7514d8502e838e809231, type: 3}
