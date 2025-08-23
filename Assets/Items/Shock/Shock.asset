@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b7a78d573c574df09218062caeca9e3, type: 3}
   m_Name: Shock
   m_EditorClassIdentifier: 
-  itemName: Thunda
+  itemName: -sh0ck
   icon: {fileID: 21300000, guid: 967392150b49e1d438f5b7d76705055c, type: 3}
   visualPrefab: {fileID: 3694981861136816911, guid: e98c37bbb855e4ec991782916df72e5c,
     type: 3}

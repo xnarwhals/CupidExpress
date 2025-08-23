@@ -1568,6 +1568,7 @@ MonoBehaviour:
   tomatoThrowSound: {fileID: 0}
   tomatoHitSound: {fileID: 8300000, guid: bea246fc663b7514d8502e838e809231, type: 3}
   sodaBlastSound: {fileID: 8300000, guid: 3b0fa48052df73f4daa7a092f6da0929, type: 3}
+  wrongItem: {fileID: 8300000, guid: 597f3b2f5b0e1594caadabd746f6262d, type: 3}
   pauseSound: {fileID: 8300000, guid: 4f76e26f5ce0cd34f93e688b76423f12, type: 3}
   unpauseSound: {fileID: 8300000, guid: 7dc88569d7fe64644ba1a9121f7a72da, type: 3}
   masterVolume: 1

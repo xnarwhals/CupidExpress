@@ -34,6 +34,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip tomatoThrowSound; // optional
     public AudioClip tomatoHitSound;
     public AudioClip sodaBlastSound;
+    public AudioClip wrongItem;
 
     [Header("UI Sounds")]
     public AudioClip pauseSound;

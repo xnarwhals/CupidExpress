@@ -39,7 +39,7 @@ public class ItemManager : MonoBehaviour
         {
             if (barcode != "" && barcode != "Override" && barcode != heldItems[cart].Peek().itemName)//wrong item
             {
-                //sound
+                AudioManager.Instance.PlayUISFX(AudioManager.Instance.wrongItem);
                 return;
             }
 
