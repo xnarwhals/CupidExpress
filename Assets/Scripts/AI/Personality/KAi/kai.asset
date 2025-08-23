@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: kai
   m_EditorClassIdentifier: 
   aggressiveness: 0.556
-  baseMaxSpeed: 45
+  baseMaxSpeed: 30
   drivingLane: 2
   laneOffset: 0
   chanceToUseItem: 0.5
