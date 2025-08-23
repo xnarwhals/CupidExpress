@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e09f8e0690ed4803bdc79abd59627dc, type: 3}
   m_Name: kai
   m_EditorClassIdentifier: 
-  aggressiveness: 0.382
-  baseMaxSpeed: 30
+  aggressiveness: 0.556
+  baseMaxSpeed: 45
   drivingLane: 2
   laneOffset: 0
   chanceToUseItem: 0.5
