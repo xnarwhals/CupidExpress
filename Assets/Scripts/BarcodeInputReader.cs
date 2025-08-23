@@ -49,7 +49,7 @@ public class BarcodeInputReader : MonoBehaviour
 
     private void ProcessBarcode()
     {
-     if (buffer.Length == 0) return;
+        if (buffer.Length == 0) return;
 
         string result = buffer.ToString().Trim();
         Debug.Log("Scanned: " + result);

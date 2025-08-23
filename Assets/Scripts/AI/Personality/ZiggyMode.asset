@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ZiggyMode
   m_EditorClassIdentifier: 
   aggressiveness: 0.65
-  baseMaxSpeed: 16.7
+  baseMaxSpeed: 30
   drivingLane: 1
   laneOffset: 8
   chanceToUseItem: 0.625

@@ -177,7 +177,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a987f4e76820b43f99592c925f43bae3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMenu: 1
   audioMixer: {fileID: 24100000, guid: f338961b41dd34f25990a316d8bbea09, type: 2}
   musicSource: {fileID: 2044023493841187076}
   sfxSource: {fileID: 1704840212281344351}
@@ -193,6 +192,7 @@ MonoBehaviour:
   lapCompleteSound: {fileID: 8300000, guid: 220bff249f995f4428492845a9ac8b48, type: 3}
   hitConeSound: {fileID: 8300000, guid: 458691c2e79bb6e4e9e6894b6d20b147, type: 3}
   environmental: {fileID: 8300000, guid: 9e22b6ee3e514cc40ba998a6b5edfe54, type: 3}
+  portal: {fileID: 8300000, guid: 2233060713e12624fa4bbb9ee40130b6, type: 3}
   itemPickupSound: {fileID: 8300000, guid: f21a102e4c5228f49afd0d48667e6bc1, type: 3}
   tomatoThrowSound: {fileID: 8300000, guid: 00dade7d804e5324cb1145b093db6ebd, type: 3}
   tomatoHitSound: {fileID: 8300000, guid: bea246fc663b7514d8502e838e809231, type: 3}

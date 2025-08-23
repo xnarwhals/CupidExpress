@@ -73,7 +73,7 @@ public class RuntimeLeaderboard : MonoBehaviour
         foreach (var entry in list)
         {
             string name = string.IsNullOrEmpty(entry.name) ? "Player" : entry.name;
-            sb.AppendFormat("{0}. {1}: {2:F2} seconds\n", index, name, entry.time);
+            sb.AppendFormat("{0}. {1}: {2:F2}s\n", index, name, entry.time);
             index++;
         }
 

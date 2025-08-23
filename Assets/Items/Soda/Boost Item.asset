@@ -16,6 +16,6 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 528f31087e7788e4e87ad67e480998f1, type: 3}
   visualPrefab: {fileID: 6728221610405830611, guid: d29635c8cba9d4126b630a78131fe2aa,
     type: 3}
-  boostForce: 60
-  boostDuration: 2
+  boostForce: 75
+  boostDuration: 3
   speedMultiplier: 1.5

@@ -33,15 +33,25 @@ public class ItemManager : MonoBehaviour
 
     }
 
-    public void UseItem(Cart cart, bool throwBackward)
+    public void UseItem(Cart cart, bool throwBackward, string barcode = "")
     {
-        if (heldItems.ContainsKey(cart) && heldItems[cart].Count > 0)
+        if (heldItems.ContainsKey(cart) && heldItems[cart].Count > 0) //has item
         {
+            if (barcode != "" && barcode != "Override" && barcode != heldItems[cart].Peek().itemName)//wrong item
+            {
+                //sound
+                return;
+            }
+
             var item = heldItems[cart].Dequeue();
             item.Use(cart, throwBackward);
 
             UpdateItemVisuals(cart, cart.itemSlot);
             OnItemUse?.Invoke(cart);
+        }
+        else
+        {
+            //sound
         }
     }
 
