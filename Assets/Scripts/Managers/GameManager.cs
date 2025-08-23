@@ -157,7 +157,11 @@ public class GameManager : MonoBehaviour
             SetRaceState(RaceState.Paused);
             Time.timeScale = 0f; // assuming we used delta time correctly elsewhere
 
-            AudioManager.Instance.PlayUISFX(AudioManager.Instance.pauseSound, 1.0f);
+            if (AudioManager.Instance)
+            {
+                AudioManager.Instance.PauseMusic();
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.pauseSound, 1.0f);
+            }
         }
     }
 
@@ -168,7 +172,11 @@ public class GameManager : MonoBehaviour
             SetRaceState(RaceState.Racing);
             Time.timeScale = 1f;
 
-            AudioManager.Instance.PlayUISFX(AudioManager.Instance.unpauseSound, 1.0f);
+            if (AudioManager.Instance)
+            {
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.unpauseSound, 1.0f);
+                AudioManager.Instance.ResumeMusic();
+            }
         }
     }
 

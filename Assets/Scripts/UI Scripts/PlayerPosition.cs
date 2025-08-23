@@ -5,6 +5,7 @@ public class PlayerPosition : MonoBehaviour
 {
     // public TextMeshProUGUI positionText;
     public Cart playerCart;
+    public bool useEffect = false;
     private Image positionIcon;
     public Sprite[] placeIcons; // Assign in Inspector: 0 = 1st, 1 = 2nd, etc.
     
@@ -81,11 +82,11 @@ public class PlayerPosition : MonoBehaviour
             {
                 bool changed = previousSprite != newSprite;
                 positionIcon.sprite = newSprite;
-                // if (!onlyOnChange || changed)
-                // {
-                //     if (splatCoroutine != null) StopCoroutine(splatCoroutine);
-                //     splatCoroutine = StartCoroutine(DoSplat());
-                // }
+                if ((!onlyOnChange || changed) && useEffect)
+                {
+                    if (splatCoroutine != null) StopCoroutine(splatCoroutine);
+                    splatCoroutine = StartCoroutine(DoSplat());
+                }
                 previousSprite = newSprite;
             }
         }

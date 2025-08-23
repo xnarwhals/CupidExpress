@@ -199,8 +199,6 @@ public class AudioManager : MonoBehaviour
                     PlayMusic(raceMusic);
                 break;
             case GameManager.RaceState.Paused:
-                PauseMusic();
-                PlayUISFX(pauseSound);
                 break;
             case GameManager.RaceState.Finished:
                 PauseMusic();
