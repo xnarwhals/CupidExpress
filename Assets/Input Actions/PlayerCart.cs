@@ -534,7 +534,7 @@ public partial class @PlayerCart: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""0c5352ef-3689-4fb6-bc3d-335882e1f54e"",
-                    ""path"": ""<Keyboard>/c"",
+                    ""path"": ""<Keyboard>/b"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
